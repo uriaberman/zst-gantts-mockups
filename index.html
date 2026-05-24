@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZST Gantts System | 3 הצעות Master View</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* === Zeliger Theme — copied verbatim from gantt-viewer skill === */
+      --bg:        #07101F;
+      --paper:     #0F1A2E;
+      --paper-2:   #14223A;
+      --paper-3:   #0C1828;
+      --paper-4:   #18253F;
+      --ink:       #F1F5F9;
+      --ink-soft:  #94A3B8;
+      --ink-faint: #475569;
+      --ink-mute:  #64748B;
+      --border:    #1E2D45;
+      --border-soft: #182338;
+      --accent-cyan: #67E8F9;
+      --accent-primary: #67E8F9;
+      --accent-secondary: #A78BFA;
+      --accent-warm: #FB7185;
+      --gold:      #FACC15;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+      --shadow-md: 0 4px 20px rgba(0,0,0,0.35);
+      --shadow-lg: 0 20px 60px rgba(0,0,0,0.5);
+      --font-he: 'Rubik', system-ui, -apple-system, sans-serif;
+      --font-en: 'Inter', system-ui, -apple-system, sans-serif;
+      --font: 'Inter', 'Rubik', system-ui, sans-serif;
+
+      /* Status colors */
+      --status-work:     #3B82F6;
+      --status-design:   #F97316;
+      --status-pending:  #EAB308;
+      --status-approved: #22C55E;
+      --status-archived: #6B7280;
+
+      /* Type colors — same as skill */
+      --type-post:     #67E8F9;
+      --type-carousel: #5EEAD4;
+      --type-story:    #C4B5FD;
+      --type-reel:     #FDA4AF;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font);
+      direction: rtl;
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 14px;
+      line-height: 1.55;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    .page {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 24px 32px 48px;
+    }
+
+    /* ====== HEADER — replicates skill header ====== */
+    .header {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 30px;
+      gap: 24px;
+      background:
+        linear-gradient(90deg, rgba(103,232,249,0.07) 0%, rgba(103,232,249,0.02) 50%, transparent 100%),
+        var(--paper);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: var(--shadow-md), 0 0 40px rgba(103,232,249,0.04);
+      margin-bottom: 18px;
+      overflow: hidden;
+      flex-wrap: wrap;
+    }
+    .header::before {
+      content: '';
+      position: absolute;
+      inset-inline-start: 0;
+      inset-block-start: 0;
+      inset-block-end: 0;
+      width: 3px;
+      background: linear-gradient(180deg, var(--accent-cyan) 0%, rgba(103,232,249,0.3) 100%);
+      box-shadow: 0 0 14px rgba(103,232,249,0.55);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .brand-logo {
+      width: 46px;
+      height: 46px;
+      background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--gold) 100%);
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      color: var(--bg);
+      font-weight: 800;
+      font-size: 1.05rem;
+      letter-spacing: -0.02em;
+    }
+    .brand-text h1 {
+      font-family: var(--font-he);
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      line-height: 1.1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand-text h1 .label {
+      color: var(--accent-cyan);
+      font-weight: 700;
+    }
+    .brand-text h1 .sep {
+      width: 6px;
+      height: 6px;
+      background: var(--accent-cyan);
+      border-radius: 2px;
+      box-shadow: 0 0 12px rgba(103,232,249,0.55);
+    }
+    .brand-text .header-meta-label {
+      font-family: var(--font-en);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--accent-cyan);
+      opacity: 0.95;
+      margin-block-end: 4px;
+      display: block;
+    }
+    .brand-text .hint {
+      font-size: 11px;
+      color: var(--ink-mute);
+      margin-block-start: 4px;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .month-picker {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--paper-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 6px 14px;
+    }
+    .month-picker-label {
+      font-family: var(--font-he);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-mute);
+    }
+    .month-picker-value {
+      font-family: var(--font-he);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .month-picker-arrow {
+      color: var(--accent-cyan);
+    }
+
+    .stats-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--ink-soft);
+      background: var(--paper-2);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 6px 14px;
+    }
+    .stats-chip strong {
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    /* ====== CONTROLS ROW — view switcher + legend ====== */
+    .controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .view-switcher {
+      display: flex;
+      gap: 4px;
+      background: var(--paper);
+      padding: 5px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .view-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--ink-soft);
+      padding: 9px 16px;
+      font-family: var(--font-he);
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .view-btn:hover {
+      color: var(--ink);
+      background: var(--paper-2);
+    }
+    .view-btn.active {
+      background: var(--accent-cyan);
+      color: var(--bg);
+    }
+    .view-btn-letter {
+      width: 22px;
+      height: 22px;
+      display: grid;
+      place-items: center;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.12);
+      font-size: 10px;
+      font-weight: 800;
+      font-family: var(--font-he);
+    }
+    .view-btn.active .view-btn-letter {
+      background: var(--bg);
+      color: var(--accent-cyan);
+    }
+    .view-btn-tag {
+      font-size: 9px;
+      font-weight: 800;
+      color: var(--gold);
+      background: rgba(250,204,21,0.12);
+      border: 1px solid rgba(250,204,21,0.35);
+      padding: 1px 6px;
+      border-radius: 999px;
+      letter-spacing: 0.04em;
+    }
+    .view-btn.active .view-btn-tag {
+      background: var(--bg);
+      color: var(--gold);
+      border-color: rgba(11,18,32,0.3);
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px 14px;
+      padding: 8px 16px;
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+    }
+    .legend-divider {
+      width: 1px;
+      height: 18px;
+      background: var(--border);
+    }
+    .legend-label {
+      font-family: var(--font-he);
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--ink-mute);
+      letter-spacing: 0.08em;
+      padding: 3px 9px;
+      background: rgba(148,163,184,0.08);
+      border-radius: 8px;
+    }
+    .legend-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11.5px;
+      color: var(--ink);
+    }
+    .legend-chip .sw {
+      width: 11px;
+      height: 11px;
+      border-radius: 3px;
+    }
+    .legend-chip .sw.round { border-radius: 50%; }
+
+    /* ====== INTRO BLOCK ====== */
+    .view-intro {
+      margin-block-end: 16px;
+      padding: 16px 22px;
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+    }
+    .view-intro-text { flex: 1; }
+    .view-intro h2 {
+      font-family: var(--font-he);
+      font-size: 17px;
+      font-weight: 700;
+      margin-block-end: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .view-intro h2 .badge {
+      background: var(--gold);
+      color: var(--bg);
+      font-size: 10px;
+      font-weight: 800;
+      padding: 3px 9px;
+      border-radius: 6px;
+      letter-spacing: 0.06em;
+    }
+    .view-intro p {
+      color: var(--ink-soft);
+      font-size: 13px;
+      line-height: 1.55;
+      max-width: 880px;
+    }
+    .pros-cons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      min-width: 380px;
+      max-width: 460px;
+    }
+    .pros-cons div {
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 11.5px;
+      line-height: 1.45;
+    }
+    .pros-cons .pro {
+      background: rgba(34,197,94,0.08);
+      border: 1px solid rgba(34,197,94,0.25);
+      color: #BBF7D0;
+    }
+    .pros-cons .con {
+      background: rgba(250,204,21,0.06);
+      border: 1px solid rgba(250,204,21,0.25);
+      color: #FDE68A;
+    }
+    .pros-cons .label {
+      font-weight: 800;
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      display: block;
+      margin-block-end: 4px;
+      opacity: 0.9;
+    }
+
+    /* ====== VIEW FRAME ====== */
+    .view-frame {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+    }
+    .view-section { display: none; }
+    .view-section.active { display: block; }
+
+    /* ============================================================== */
+    /* OPTION A: MINI MONTH GRIDS — closest to skill experience       */
+    /* ============================================================== */
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+      gap: 14px;
+      padding: 18px;
+    }
+
+    .mini-card {
+      background: var(--paper-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 14px 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .mini-card::before {
+      content: '';
+      position: absolute;
+      inset-inline-start: 0;
+      inset-block-start: 0;
+      inset-block-end: 0;
+      width: 3px;
+      background: linear-gradient(180deg, var(--client-color) 0%, transparent 100%);
+      opacity: 0.85;
+    }
+    .mini-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(103,232,249,0.4);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.4), 0 0 24px rgba(103,232,249,0.1);
+    }
+
+    .mini-card-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-block-end: 10px;
+    }
+    .mini-mono {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 12px;
+      color: var(--bg);
+      font-family: var(--font-he);
+      flex-shrink: 0;
+    }
+    .mini-title {
+      flex: 1;
+      font-family: var(--font-he);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.2;
+    }
+    .mini-count {
+      font-family: var(--font-en);
+      font-size: 11px;
+      color: var(--ink-mute);
+      background: rgba(148,163,184,0.08);
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+
+    /* Weekday header inside mini card */
+    .mini-weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 3px;
+      margin-block-end: 4px;
+    }
+    .mini-wd {
+      text-align: center;
+      font-family: var(--font-he);
+      font-size: 9px;
+      font-weight: 600;
+      color: var(--ink-mute);
+      letter-spacing: 0.04em;
+      padding-block: 3px;
+    }
+    .mini-wd.weekend { color: var(--gold); opacity: 0.7; }
+
+    /* Month grid */
+    .mini-month {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 3px;
+    }
+    .mini-day {
+      aspect-ratio: 1;
+      background: var(--paper-3);
+      border: 1px solid var(--border-soft);
+      border-radius: 5px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      font-size: 10px;
+      color: var(--ink-mute);
+      font-family: var(--font-en);
+      position: relative;
+      transition: all 0.15s ease;
+    }
+    .mini-day.outside { opacity: 0.25; }
+    .mini-day.saturday {
+      background: rgba(250,204,21,0.04);
+      border-color: rgba(250,204,21,0.18);
+      color: var(--gold);
+    }
+    .mini-day.has-content {
+      background: linear-gradient(155deg, rgba(103,232,249,0.30) 0%, rgba(103,232,249,0.10) 100%);
+      border-color: rgba(103,232,249,0.50);
+      color: var(--ink);
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .mini-day.has-content:hover {
+      background: linear-gradient(155deg, rgba(103,232,249,0.45) 0%, rgba(103,232,249,0.20) 100%);
+      border-color: var(--accent-cyan);
+      transform: scale(1.08);
+      z-index: 5;
+    }
+    .mini-day.is-today {
+      border-color: var(--gold) !important;
+      box-shadow: 0 0 0 1px var(--gold), 0 0 8px rgba(250,204,21,0.4);
+      color: var(--gold);
+      font-weight: 800;
+    }
+    .mini-day-num {
+      line-height: 1;
+    }
+    .mini-day-dots {
+      display: flex;
+      gap: 1px;
+      margin-block-start: 1px;
+    }
+    .mini-day-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+    }
+
+    /* Stats footer inside mini card */
+    .mini-stats {
+      display: flex;
+      gap: 6px;
+      margin-block-start: 10px;
+      padding-block-start: 9px;
+      border-block-start: 1px solid var(--border-soft);
+    }
+    .mini-stat {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      padding: 4px 2px;
+      border-radius: 6px;
+      background: var(--paper-3);
+    }
+    .mini-stat-val {
+      font-family: var(--font-en);
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1;
+    }
+    .mini-stat-lbl {
+      font-family: var(--font-he);
+      font-size: 9px;
+      font-weight: 600;
+      color: var(--ink-mute);
+      letter-spacing: 0.02em;
+    }
+    .mini-stat-val.work { color: var(--status-work); }
+    .mini-stat-val.pending { color: var(--status-pending); }
+    .mini-stat-val.approved { color: var(--status-approved); }
+
+    /* ============================================================== */
+    /* OPTION B: SWIMLANE GRID                                        */
+    /* ============================================================== */
+    .swimlane-wrapper {
+      overflow-x: auto;
+      max-block-size: 80vh;
+      overflow-y: auto;
+    }
+    .swimlane-table {
+      border-collapse: collapse;
+      min-inline-size: 100%;
+      font-size: 12px;
+    }
+    .swimlane-table thead th {
+      background: var(--paper-2);
+      color: var(--ink-soft);
+      font-family: var(--font-en);
+      font-weight: 500;
+      padding: 8px 4px;
+      border-block-end: 1px solid var(--border);
+      position: sticky;
+      inset-block-start: 0;
+      z-index: 10;
+      text-align: center;
+      min-inline-size: 52px;
+      font-size: 11px;
+    }
+    .swimlane-table thead th.client-col {
+      inset-inline-end: 0;
+      position: sticky;
+      z-index: 11;
+      min-inline-size: 200px;
+      max-inline-size: 200px;
+      text-align: start;
+      padding-inline: 14px;
+      background: var(--paper-2);
+    }
+    .swimlane-table thead th.weekend {
+      color: var(--gold);
+      background: rgba(250,204,21,0.05);
+    }
+    .swimlane-table thead th.today {
+      background: var(--gold);
+      color: var(--bg);
+      font-weight: 700;
+    }
+    .swimlane-table thead th .day-name {
+      display: block;
+      font-family: var(--font-he);
+      font-size: 9.5px;
+      opacity: 0.75;
+      font-weight: 500;
+      margin-block-end: 1px;
+    }
+    .swimlane-table tbody tr {
+      border-block-end: 1px solid var(--border-soft);
+    }
+    .swimlane-table tbody tr:hover {
+      background: rgba(103,232,249,0.03);
+    }
+    .swimlane-table tbody td {
+      padding: 7px 3px;
+      vertical-align: middle;
+      text-align: center;
+      min-block-size: 56px;
+      border-inline-start: 1px solid var(--border-soft);
+    }
+    .swimlane-table tbody td.client-cell {
+      inset-inline-end: 0;
+      position: sticky;
+      z-index: 5;
+      background: var(--paper);
+      text-align: start;
+      padding: 9px 14px;
+      border-inline-start: none;
+      border-inline-end: 1px solid var(--border);
+    }
+    .swimlane-table tbody td.weekend {
+      background: rgba(250,204,21,0.03);
+    }
+    .swimlane-table tbody td.today-col {
+      background: rgba(250,204,21,0.05);
+    }
+    .client-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .client-mono-sm {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border-radius: 7px;
+      font-weight: 800;
+      font-size: 11px;
+      color: var(--bg);
+      font-family: var(--font-he);
+      flex-shrink: 0;
+    }
+    .client-name {
+      font-family: var(--font-he);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.2;
+    }
+    .client-count-sm {
+      font-family: var(--font-en);
+      font-size: 10.5px;
+      color: var(--ink-mute);
+      margin-block-start: 2px;
+    }
+
+    /* item chip — cyan glow like the skill */
+    .item-chip {
+      width: 30px;
+      height: 30px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 7px;
+      font-size: 11px;
+      font-weight: 700;
+      margin: 1px;
+      cursor: pointer;
+      transition: transform 0.15s ease;
+      position: relative;
+      font-family: var(--font-he);
+      background: linear-gradient(155deg, rgba(103,232,249,0.30) 0%, rgba(103,232,249,0.10) 100%);
+      border: 1px solid rgba(103,232,249,0.45);
+      color: var(--ink);
+      box-shadow: 0 0 12px rgba(103,232,249,0.15);
+    }
+    .item-chip:hover {
+      transform: scale(1.15);
+      z-index: 20;
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 18px rgba(103,232,249,0.35);
+    }
+    .item-chip-dot {
+      position: absolute;
+      inset-block-end: -3px;
+      inset-inline-end: -3px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 2px solid var(--paper);
+    }
+    .item-chip.type-carousel { border-color: rgba(94,234,212,0.5); background: linear-gradient(155deg, rgba(94,234,212,0.28), rgba(94,234,212,0.08)); }
+    .item-chip.type-story    { border-color: rgba(196,181,253,0.5); background: linear-gradient(155deg, rgba(196,181,253,0.28), rgba(196,181,253,0.08)); }
+    .item-chip.type-reel     { border-color: rgba(253,164,175,0.5); background: linear-gradient(155deg, rgba(253,164,175,0.28), rgba(253,164,175,0.08)); }
+
+    .status-work { background: var(--status-work); }
+    .status-design { background: var(--status-design); }
+    .status-pending { background: var(--status-pending); }
+    .status-approved { background: var(--status-approved); }
+    .status-archived { background: var(--status-archived); opacity: 0.7; }
+
+    /* ============================================================== */
+    /* OPTION C: CALENDAR ROWS                                        */
+    /* ============================================================== */
+    .calendar-wrapper {
+      overflow-x: auto;
+      max-block-size: 80vh;
+      overflow-y: auto;
+    }
+    .calendar-table {
+      border-collapse: collapse;
+      min-inline-size: 100%;
+      font-size: 12.5px;
+    }
+    .calendar-table thead th {
+      background: var(--paper-2);
+      color: var(--ink-soft);
+      font-family: var(--font-he);
+      font-weight: 600;
+      padding: 12px 8px;
+      border-block-end: 1px solid var(--border);
+      position: sticky;
+      inset-block-start: 0;
+      z-index: 10;
+      min-inline-size: 150px;
+      text-align: start;
+    }
+    .calendar-table thead th.day-col {
+      inset-inline-end: 0;
+      position: sticky;
+      z-index: 11;
+      min-inline-size: 90px;
+      max-inline-size: 90px;
+      text-align: center;
+      background: var(--paper-2);
+    }
+    .client-mini-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .calendar-table tbody tr {
+      border-block-end: 1px solid var(--border-soft);
+    }
+    .calendar-table tbody tr.weekend {
+      background: rgba(250,204,21,0.03);
+    }
+    .calendar-table tbody tr.today {
+      background: rgba(250,204,21,0.06);
+    }
+    .calendar-table tbody td {
+      padding: 6px;
+      vertical-align: top;
+      border-inline-start: 1px solid var(--border-soft);
+      min-block-size: 62px;
+    }
+    .calendar-table tbody td.day-cell {
+      inset-inline-end: 0;
+      position: sticky;
+      background: var(--paper);
+      text-align: center;
+      padding: 10px 6px;
+      border-inline-start: none;
+      border-inline-end: 1px solid var(--border);
+      font-weight: 600;
+    }
+    .calendar-table tbody td.day-cell.today {
+      background: var(--gold);
+      color: var(--bg);
+    }
+    .day-number {
+      font-family: var(--font-en);
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .day-name-small {
+      font-family: var(--font-he);
+      font-size: 10.5px;
+      color: var(--ink-mute);
+      margin-block-start: 3px;
+    }
+    .day-cell.today .day-name-small {
+      color: var(--bg);
+      opacity: 0.7;
+    }
+    .calendar-item {
+      background: linear-gradient(155deg, rgba(103,232,249,0.18) 0%, rgba(103,232,249,0.04) 100%);
+      border: 1px solid rgba(103,232,249,0.35);
+      border-inline-start-width: 3px;
+      padding: 6px 8px;
+      border-radius: 7px;
+      margin-block-end: 5px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .calendar-item:hover {
+      background: linear-gradient(155deg, rgba(103,232,249,0.30) 0%, rgba(103,232,249,0.10) 100%);
+      border-color: var(--accent-cyan);
+      transform: translateX(-1px);
+    }
+    .calendar-item.type-carousel { border-color: rgba(94,234,212,0.4); border-inline-start-color: var(--type-carousel); }
+    .calendar-item.type-story    { border-color: rgba(196,181,253,0.4); border-inline-start-color: var(--type-story); }
+    .calendar-item.type-reel     { border-color: rgba(253,164,175,0.4); border-inline-start-color: var(--type-reel); }
+
+    .calendar-item-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+    .calendar-item-title {
+      font-family: var(--font-he);
+      font-weight: 600;
+      color: var(--ink);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+    }
+    .calendar-item-status {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .calendar-item-type {
+      font-size: 9.5px;
+      color: var(--ink-mute);
+      margin-block-start: 2px;
+    }
+
+    /* ====== DECISION BAR ====== */
+    .decision-bar {
+      margin-block-start: 24px;
+      padding: 18px 22px;
+      background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .decision-bar-text h3 {
+      font-family: var(--font-he);
+      font-size: 15px;
+      font-weight: 700;
+      margin-block-end: 4px;
+    }
+    .decision-bar-text p {
+      font-size: 12.5px;
+      color: var(--ink-soft);
+      max-width: 700px;
+      line-height: 1.5;
+    }
+    .decision-actions {
+      display: flex;
+      gap: 10px;
+    }
+    .decision-btn {
+      background: var(--accent-cyan);
+      color: var(--bg);
+      border: none;
+      padding: 10px 20px;
+      font-family: var(--font-he);
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .decision-btn:hover {
+      background: #22D3EE;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(103,232,249,0.3);
+    }
+    .decision-btn.secondary {
+      background: transparent;
+      color: var(--ink-soft);
+      border: 1px solid var(--border);
+    }
+    .decision-btn.secondary:hover {
+      color: var(--ink);
+      border-color: var(--accent-cyan);
+      background: rgba(103,232,249,0.05);
+    }
+
+    @media (max-width: 768px) {
+      .page { padding: 14px; }
+      .header { padding: 18px 20px; }
+      .view-intro { flex-direction: column; }
+      .pros-cons { grid-template-columns: 1fr; min-width: 0; max-width: 100%; }
+      .view-switcher { width: 100%; justify-content: stretch; }
+      .view-btn { flex: 1; justify-content: center; padding: 8px 8px; font-size: 11px; }
+      .mini-grid { grid-template-columns: 1fr; padding: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page">
+
+    <!-- ====== HEADER ====== -->
+    <div class="header">
+      <div class="brand">
+        <div class="brand-logo">ZG</div>
+        <div class="brand-text">
+          <span class="header-meta-label">ZST · GANTTS SYSTEM</span>
+          <h1>
+            <span class="label">מערכת הגאנטים</span>
+            <span class="sep"></span>
+            <span>Master View</span>
+          </h1>
+          <div class="hint">3 הצעות עיצוב — בחירת אוריה לפני Phase 4</div>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <div class="month-picker">
+          <span class="month-picker-label">חודש</span>
+          <span class="month-picker-value">סיוון תשפ״ו · מאי 2026</span>
+          <svg class="month-picker-arrow" width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span class="stats-chip"><strong>19</strong> לקוחות · <strong>78</strong> פריטים</span>
+      </div>
+    </div>
+
+    <!-- ====== CONTROLS ====== -->
+    <div class="controls">
+      <div class="view-switcher">
+        <button class="view-btn active" data-view="mini">
+          <span class="view-btn-letter">א</span>
+          <span>לוחות שנה קלאסיים</span>
+          <span class="view-btn-tag">דומה לסקיל</span>
+        </button>
+        <button class="view-btn" data-view="swimlane">
+          <span class="view-btn-letter">ב</span>
+          <span>Swimlane Grid</span>
+        </button>
+        <button class="view-btn" data-view="calendar">
+          <span class="view-btn-letter">ג</span>
+          <span>Calendar Rows</span>
+        </button>
+      </div>
+
+      <div class="legend">
+        <span class="legend-label">סוגים</span>
+        <span class="legend-chip"><span class="sw" style="background:var(--type-post)"></span>פוסט</span>
+        <span class="legend-chip"><span class="sw" style="background:var(--type-carousel)"></span>קרוסלה</span>
+        <span class="legend-chip"><span class="sw" style="background:var(--type-story)"></span>סטורי</span>
+        <span class="legend-chip"><span class="sw" style="background:var(--type-reel)"></span>ריל</span>
+        <span class="legend-divider"></span>
+        <span class="legend-label">סטטוס</span>
+        <span class="legend-chip"><span class="sw round" style="background:var(--status-work)"></span>בעבודה</span>
+        <span class="legend-chip"><span class="sw round" style="background:var(--status-design)"></span>בעיצוב</span>
+        <span class="legend-chip"><span class="sw round" style="background:var(--status-pending)"></span>לאישור</span>
+        <span class="legend-chip"><span class="sw round" style="background:var(--status-approved)"></span>אושר</span>
+        <span class="legend-chip"><span class="sw round" style="background:var(--status-archived)"></span>נגנז</span>
+      </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- OPTION A: MINI MONTH GRIDS                     -->
+    <!-- ============================================== -->
+    <section class="view-section active" id="view-mini">
+      <div class="view-intro">
+        <div class="view-intro-text">
+          <h2>אופציה א' — לוחות שנה קלאסיים <span class="badge">דומה לסקיל · דיפולט</span></h2>
+          <p>כל לקוח מקבל לוח שנה חודשי משלו — בדיוק כמו שהסקיל מציג, רק בקטן. 19 לוחות שנה זה לצד זה במסך אחד. לחיצה על לוח של לקוח → פותח את הגאנט המלא שלו. לחיצה על יום ספציפי → קופץ ישר לאותו יום. הכי קרוב לחוויה שאתה כבר מכיר מהסקיל.</p>
+        </div>
+        <div class="pros-cons">
+          <div class="pro">
+            <span class="label">✓ יתרון</span>
+            המוח שלך כבר מכיר את הצורה הזאת מהסקיל. כל לקוח עומד בפני עצמו עם החודש המלא. לוחות שנה הם השפה של כולם.
+          </div>
+          <div class="con">
+            <span class="label">⚠ חיסרון</span>
+            דורש scroll אנכי לראות את כל 19. אין השוואה ישירה של "מה היום אצל כל הלקוחות".
+          </div>
+        </div>
+      </div>
+
+      <div class="view-frame">
+        <div class="mini-grid" id="mini-content"></div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- OPTION B: SWIMLANE                             -->
+    <!-- ============================================== -->
+    <section class="view-section" id="view-swimlane">
+      <div class="view-intro">
+        <div class="view-intro-text">
+          <h2>אופציה ב' — Swimlane Grid</h2>
+          <p>שורות = 19 לקוחות, עמודות = ימי החודש. עמודה ראשונה sticky, אפשר לגלול אופקית. תמונת מצב יומית של כל המחלקה במבט אחד. כל chip = פריט תוכן עם צבע לפי סוג + נקודת סטטוס בפינה.</p>
+        </div>
+        <div class="pros-cons">
+          <div class="pro">
+            <span class="label">✓ יתרון</span>
+            מבט מהיר על "מה היום אצל כל לקוח" בעמודה אחת. דחיסות גבוהה. דומה לחוויית Sheets שאתה רגיל אליה.
+          </div>
+          <div class="con">
+            <span class="label">⚠ חיסרון</span>
+            ב-19 לקוחות × 30 ימים התאים מצומצמים. שונה מהעיצוב המוכר של הסקיל.
+          </div>
+        </div>
+      </div>
+
+      <div class="view-frame">
+        <div class="swimlane-wrapper" id="swimlane-content"></div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- OPTION C: CALENDAR ROWS                        -->
+    <!-- ============================================== -->
+    <section class="view-section" id="view-calendar">
+      <div class="view-intro">
+        <div class="view-intro-text">
+          <h2>אופציה ג' — Calendar Rows</h2>
+          <p>שורות = ימי החודש, עמודות = לקוחות. כל cell מציג כותרת מלאה של הפריט עם סטטוס. גלילה אופקית ללקוחות נוספים. מתאים למסכים גבוהים ולעבודה ממוקדת ביום ספציפי.</p>
+        </div>
+        <div class="pros-cons">
+          <div class="pro">
+            <span class="label">✓ יתרון</span>
+            כותרות מלאות, לא רק chips. כל יום הוא יחידה אחת אופקית. נוח לסקירת יום ספציפי על פני לקוחות.
+          </div>
+          <div class="con">
+            <span class="label">⚠ חיסרון</span>
+            רק 8 לקוחות גלויים בו-זמנית — השאר ב-scroll. לא דומה לעיצוב המוכר של הסקיל.
+          </div>
+        </div>
+      </div>
+
+      <div class="view-frame">
+        <div class="calendar-wrapper" id="calendar-content"></div>
+      </div>
+    </section>
+
+    <!-- ====== DECISION BAR ====== -->
+    <div class="decision-bar">
+      <div class="decision-bar-text">
+        <h3>איזו אופציה מתאימה לדרך העבודה שלכם?</h3>
+        <p>אופציה א' (לוחות שנה קלאסיים) היא הקרובה ביותר לחוויה המוכרת של הסקיל. אופציות ב'-ג' הן גישות חלופיות. אפשר גם לשלב — לדוגמה: לוחות שנה כברירת מחדל + Swimlane כתצוגת toggle.</p>
+      </div>
+      <div class="decision-actions">
+        <button class="decision-btn secondary">צריך עוד הדמיה</button>
+        <button class="decision-btn">בחרתי - נמשיך לבניה</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // ====== DATA ======
+    const CLIENTS = [
+      { slug: 'adavot', name: 'עמותת אדוות', mono: 'אד', color: '#67E8F9', items: 8 },
+      { slug: 'haim-plus', name: 'חיים בפלוס', mono: 'חב', color: '#5EEAD4', items: 6 },
+      { slug: 'shlichut', name: 'שליחות הוראה', mono: 'שה', color: '#FACC15', items: 5 },
+      { slug: 'forum-takana', name: 'פורום תקנה', mono: 'פת', color: '#FB923C', items: 6 },
+      { slug: 'merkaz-shazar', name: 'מרכז שזר', mono: 'מש', color: '#C4B5FD', items: 4 },
+      { slug: 'meshek-ahia', name: 'משק אחיה', mono: 'מא', color: '#86EFAC', items: 5 },
+      { slug: 'agada', name: 'אגדה', mono: 'אג', color: '#F0ABFC', items: 3 },
+      { slug: 'emuna', name: 'תנועת אמונה', mono: 'אמ', color: '#FDA4AF', items: 4 },
+      { slug: 'yba78', name: 'ישיבות בני עקיבא', mono: 'יב', color: '#67E8F9', items: 5 },
+      { slug: 'liver', name: 'מושתלי כבד', mono: 'מכ', color: '#FACC15', items: 3 },
+      { slug: 'nevo', name: 'נבו תיירות', mono: 'נב', color: '#5EEAD4', items: 4 },
+      { slug: 'yba-merkaz', name: 'יבע - מרכז', mono: 'יב', color: '#C4B5FD', items: 4 },
+      { slug: 'nitzcha', name: 'ניצחה הרוח', mono: 'נר', color: '#86EFAC', items: 3 },
+      { slug: 'merkaz-katif', name: 'מרכז קטיף', mono: 'מק', color: '#FB923C', items: 5 },
+      { slug: 'charedim-tzava', name: 'חרדים לצבא', mono: 'חצ', color: '#F0ABFC', items: 4 },
+      { slug: 'dugri', name: 'דוגרי · משרד החוץ', mono: 'דג', color: '#FDA4AF', items: 5 },
+      { slug: 'gush-katif', name: 'מורשת גוש קטיף', mono: 'גק', color: '#67E8F9', items: 3 },
+      { slug: 'farmina', name: 'פרמינה', mono: 'פר', color: '#5EEAD4', items: 6 },
+      { slug: 'echad-bachodesh', name: 'אחד בחודש', mono: 'אב', color: '#FACC15', items: 5 },
+    ];
+
+    const TYPES = ['post', 'carousel', 'story', 'reel'];
+    const STATUSES = ['work', 'design', 'pending', 'approved', 'archived'];
+    const TYPE_LABELS = { post: 'פ', carousel: 'ק', story: 'ס', reel: 'R' };
+    const STATUS_WEIGHTS = [0.30, 0.25, 0.20, 0.20, 0.05];
+
+    const SAMPLE_TITLES = [
+      'תקציב 2026', 'חג השבועות', 'סיכום שבועי', 'מבצע קיץ', 'הכרזה רשמית',
+      'ראיון מיוחד', 'תוכן לקהל', 'הזמנה לאירוע', 'תודה לתורמים', 'אחורי הקלעים',
+      '5 טיפים', 'מה חדש?', 'גלריה', 'סדנת קיץ', 'מסר חשוב',
+      'עדות אישית', 'הקדמה לפרק', 'שאלה לקהל', 'משחק וזכייה', 'יום ירושלים'
+    ];
+
+    function weightedRandom(items, weights) {
+      const total = weights.reduce((a, b) => a + b, 0);
+      let r = Math.random() * total;
+      for (let i = 0; i < items.length; i++) {
+        r -= weights[i];
+        if (r <= 0) return items[i];
+      }
+      return items[items.length - 1];
+    }
+
+    const HEBREW_DAYS_SHORT = ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ש'];
+    const HEBREW_DAYS_FULL = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
+    const TODAY = 24;
+
+    // May 2026: May 1 = Friday (so dow 5)
+    function dayOfWeek(day) { return (5 + (day - 1)) % 7; }
+    function isWeekend(day) {
+      const dow = dayOfWeek(day);
+      return dow === 5 || dow === 6;
+    }
+    function isSaturday(day) { return dayOfWeek(day) === 6; }
+
+    // generate items for each client
+    function generateMonth() {
+      const items = {};
+      CLIENTS.forEach(client => {
+        items[client.slug] = {};
+        const daysWithContent = new Set();
+        let attempts = 0;
+        while (daysWithContent.size < client.items && attempts < 100) {
+          const d = Math.floor(Math.random() * 30) + 1;
+          if (!isSaturday(d)) daysWithContent.add(d);
+          attempts++;
+        }
+        daysWithContent.forEach(day => {
+          items[client.slug][day] = {
+            type: TYPES[Math.floor(Math.random() * TYPES.length)],
+            status: weightedRandom(STATUSES, STATUS_WEIGHTS),
+            title: SAMPLE_TITLES[Math.floor(Math.random() * SAMPLE_TITLES.length)],
+          };
+        });
+      });
+      return items;
+    }
+
+    const MONTH_DATA = generateMonth();
+
+    // ====== RENDER MINI MONTH GRIDS (Option A — default) ======
+    function renderMini() {
+      const container = document.getElementById('mini-content');
+      let html = '';
+
+      // build the month grid for one client
+      function buildMonthGrid(slug) {
+        const data = MONTH_DATA[slug];
+        let weeksHtml = '';
+
+        // Find first day of month dow (May 1 = Friday = 5)
+        const firstDow = 5;
+        const daysInMonth = 31;
+        const totalCells = Math.ceil((firstDow + daysInMonth) / 7) * 7;
+
+        let cellsHtml = '';
+        for (let i = 0; i < totalCells; i++) {
+          const dayNum = i - firstDow + 1;
+          const inMonth = dayNum >= 1 && dayNum <= daysInMonth;
+          const classes = ['mini-day'];
+          let dotsHtml = '';
+          let numText = inMonth ? dayNum : '';
+
+          if (!inMonth) {
+            classes.push('outside');
+            numText = dayNum < 1 ? (30 + dayNum) : (dayNum - daysInMonth);
+          } else {
+            const item = data[dayNum];
+            if (isSaturday(dayNum)) classes.push('saturday');
+            if (item) {
+              classes.push('has-content');
+              dotsHtml = `<div class="mini-day-dots"><span class="mini-day-dot status-${item.status}"></span></div>`;
+            }
+            if (dayNum === TODAY) classes.push('is-today');
+          }
+
+          cellsHtml += `<div class="${classes.join(' ')}" title="${inMonth && data[dayNum] ? data[dayNum].title : ''}">
+            <span class="mini-day-num">${numText}</span>
+            ${dotsHtml}
+          </div>`;
+        }
+        return cellsHtml;
+      }
+
+      CLIENTS.forEach(client => {
+        const itemsList = Object.values(MONTH_DATA[client.slug]);
+        const work = itemsList.filter(i => i.status === 'work').length;
+        const pending = itemsList.filter(i => i.status === 'pending').length;
+        const approved = itemsList.filter(i => i.status === 'approved').length;
+
+        html += `<div class="mini-card" style="--client-color:${client.color}">
+          <div class="mini-card-head">
+            <div class="mini-mono" style="background:${client.color}">${client.mono}</div>
+            <div class="mini-title">${client.name}</div>
+            <div class="mini-count">${client.items}</div>
+          </div>
+          <div class="mini-weekdays">
+            ${HEBREW_DAYS_SHORT.map((d, i) => `<div class="mini-wd ${i >= 5 ? 'weekend' : ''}">${d}</div>`).join('')}
+          </div>
+          <div class="mini-month">
+            ${buildMonthGrid(client.slug)}
+          </div>
+          <div class="mini-stats">
+            <div class="mini-stat">
+              <div class="mini-stat-val work">${work}</div>
+              <div class="mini-stat-lbl">בעבודה</div>
+            </div>
+            <div class="mini-stat">
+              <div class="mini-stat-val pending">${pending}</div>
+              <div class="mini-stat-lbl">לאישור</div>
+            </div>
+            <div class="mini-stat">
+              <div class="mini-stat-val approved">${approved}</div>
+              <div class="mini-stat-lbl">אושרו</div>
+            </div>
+          </div>
+        </div>`;
+      });
+
+      container.innerHTML = html;
+    }
+
+    // ====== RENDER SWIMLANE ======
+    function renderSwimlane() {
+      const container = document.getElementById('swimlane-content');
+      const days = 31;
+      let html = '<table class="swimlane-table"><thead><tr>';
+      html += '<th class="client-col">לקוח</th>';
+      for (let d = 1; d <= days; d++) {
+        const dow = dayOfWeek(d);
+        const isToday = d === TODAY;
+        const weekend = isWeekend(d);
+        html += `<th class="${weekend ? 'weekend' : ''} ${isToday ? 'today' : ''}">
+          <span class="day-name">${HEBREW_DAYS_SHORT[dow]}</span>
+          ${d}
+        </th>`;
+      }
+      html += '</tr></thead><tbody>';
+
+      CLIENTS.forEach(client => {
+        html += '<tr>';
+        html += `<td class="client-cell">
+          <div class="client-info">
+            <div class="client-mono-sm" style="background:${client.color}">${client.mono}</div>
+            <div>
+              <div class="client-name">${client.name}</div>
+              <div class="client-count-sm">${client.items} פריטים החודש</div>
+            </div>
+          </div>
+        </td>`;
+        for (let d = 1; d <= days; d++) {
+          const item = MONTH_DATA[client.slug][d];
+          const weekend = isWeekend(d);
+          const isToday = d === TODAY;
+          html += `<td class="${weekend ? 'weekend' : ''} ${isToday ? 'today-col' : ''}">`;
+          if (item) {
+            html += `<span class="item-chip type-${item.type}" title="${item.title}">
+              ${TYPE_LABELS[item.type]}
+              <span class="item-chip-dot status-${item.status}"></span>
+            </span>`;
+          }
+          html += '</td>';
+        }
+        html += '</tr>';
+      });
+
+      html += '</tbody></table>';
+      container.innerHTML = html;
+    }
+
+    // ====== RENDER CALENDAR ROWS ======
+    function renderCalendar() {
+      const container = document.getElementById('calendar-content');
+      const visibleClients = CLIENTS.slice(0, 8);
+      const days = 31;
+      let html = '<table class="calendar-table"><thead><tr>';
+      html += '<th class="day-col">יום</th>';
+      visibleClients.forEach(c => {
+        html += `<th><div class="client-mini-head">
+          <div class="client-mono-sm" style="background:${c.color};width:24px;height:24px;font-size:9.5px">${c.mono}</div>
+          ${c.name}
+        </div></th>`;
+      });
+      html += '<th style="min-inline-size:140px;color:var(--ink-mute);font-weight:500">← עוד 11 לקוחות</th>';
+      html += '</tr></thead><tbody>';
+
+      for (let d = 1; d <= days; d++) {
+        const dow = dayOfWeek(d);
+        const weekend = isWeekend(d);
+        const isToday = d === TODAY;
+        html += `<tr class="${weekend ? 'weekend' : ''} ${isToday ? 'today' : ''}">`;
+        html += `<td class="day-cell ${isToday ? 'today' : ''}">
+          <div class="day-number">${d}</div>
+          <div class="day-name-small">יום ${HEBREW_DAYS_SHORT[dow]}</div>
+        </td>`;
+        visibleClients.forEach(c => {
+          const item = MONTH_DATA[c.slug][d];
+          html += '<td>';
+          if (item) {
+            const typeLabel = item.type === 'post' ? 'פוסט' : item.type === 'carousel' ? 'קרוסלה' : item.type === 'story' ? 'סטורי' : 'ריל';
+            html += `<div class="calendar-item type-${item.type}">
+              <div class="calendar-item-row">
+                <span class="calendar-item-title">${item.title}</span>
+                <span class="calendar-item-status status-${item.status}"></span>
+              </div>
+              <div class="calendar-item-type">${typeLabel}</div>
+            </div>`;
+          }
+          html += '</td>';
+        });
+        html += '<td style="background:rgba(255,255,255,0.01)"></td>';
+        html += '</tr>';
+      }
+
+      html += '</tbody></table>';
+      container.innerHTML = html;
+    }
+
+    // ====== VIEW SWITCHER ======
+    document.querySelectorAll('.view-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const view = btn.dataset.view;
+        document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+        document.getElementById(`view-${view}`).classList.add('active');
+      });
+    });
+
+    renderMini();
+    renderSwimlane();
+    renderCalendar();
+  </script>
+</body>
+</html>
