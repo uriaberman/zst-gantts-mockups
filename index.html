@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZST Gantts System | Master View — Final</title>
+  <title>ZST Gantts System | Master View v5 — Tiles vs List</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -42,45 +42,268 @@
     .stats-chip { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: var(--ink-soft); background: var(--paper-2); border: 1px solid var(--border); border-radius: 999px; padding: 6px 14px; }
     .stats-chip strong { color: var(--ink); font-weight: 700; }
 
-    /* IMPROVEMENTS NOTE */
-    .improvements-note {
-      background: linear-gradient(180deg, rgba(34,197,94,0.06) 0%, rgba(34,197,94,0.02) 100%);
-      border: 1px solid rgba(34,197,94,0.25);
-      border-radius: 12px;
-      padding: 14px 18px;
+    /* PRO RECOMMENDATION BLOCK */
+    .pro-recommendation {
+      background: linear-gradient(180deg, rgba(103,232,249,0.08) 0%, rgba(103,232,249,0.02) 100%);
+      border: 1px solid rgba(103,232,249,0.3);
+      border-radius: 14px;
+      padding: 22px 26px;
       margin-block-end: 18px;
+      position: relative;
+      overflow: hidden;
     }
-    .improvements-title {
+    .pro-recommendation::before {
+      content: '';
+      position: absolute;
+      inset-block-start: 0; inset-inline-start: 0; inset-block-end: 0;
+      width: 4px;
+      background: linear-gradient(180deg, var(--accent-cyan), transparent);
+    }
+    .pro-recommendation-title {
+      font-family: var(--font-he);
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--accent-cyan);
+      margin-block-end: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .pro-recommendation-title .badge {
+      background: var(--accent-cyan);
+      color: var(--bg);
+      font-size: 10px;
+      font-weight: 800;
+      padding: 3px 9px;
+      border-radius: 6px;
+      letter-spacing: 0.06em;
+    }
+    .pro-recommendation-lead {
+      font-size: 13px;
+      color: var(--ink);
+      line-height: 1.55;
+      margin-block-end: 16px;
+      max-width: 980px;
+    }
+    .pro-recommendation-lead strong { color: var(--accent-cyan); }
+
+    .explanation-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 12px;
+      margin-block-start: 8px;
+    }
+    .explain-card {
+      background: var(--paper-3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      position: relative;
+    }
+    .explain-card-num {
+      position: absolute;
+      inset-block-start: -8px;
+      inset-inline-end: 12px;
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      background: var(--accent-cyan);
+      color: var(--bg);
+      display: grid;
+      place-items: center;
+      font-family: var(--font-en);
+      font-size: 12px;
+      font-weight: 800;
+      box-shadow: 0 4px 12px rgba(103,232,249,0.35);
+    }
+    .explain-card-title {
       font-family: var(--font-he);
       font-size: 13px;
       font-weight: 700;
-      color: #BBF7D0;
-      margin-block-end: 10px;
+      color: var(--ink);
+      margin-block-end: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .explain-card-title .emoji { font-size: 16px; }
+    .explain-card ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .explain-card li {
+      font-size: 11.5px;
+      color: var(--ink-soft);
+      line-height: 1.45;
+      padding-inline-start: 14px;
+      position: relative;
+    }
+    .explain-card li::before {
+      content: '◆';
+      position: absolute;
+      inset-inline-start: 0;
+      color: var(--accent-cyan);
+      font-size: 7px;
+      top: 5px;
+    }
+    .explain-card li strong { color: var(--ink); font-weight: 600; }
+
+    .scenarios-block {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 22px;
+      margin-block-end: 18px;
+    }
+    .scenarios-title {
+      font-family: var(--font-he);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-block-end: 12px;
       display: flex;
       align-items: center;
       gap: 8px;
     }
-    .improvements-list {
+    .scenarios-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 6px 14px;
+      gap: 10px;
+    }
+    .scenario {
+      background: var(--paper-3);
+      border: 1px solid var(--border);
+      border-inline-start: 3px solid var(--accent-cyan);
+      border-radius: 8px;
+      padding: 10px 14px;
       font-size: 11.5px;
       color: var(--ink-soft);
-    }
-    .improvements-list li {
-      list-style: none;
-      padding-inline-start: 22px;
-      position: relative;
       line-height: 1.5;
     }
-    .improvements-list li::before {
-      content: '✓';
-      position: absolute;
-      inset-inline-start: 2px;
-      color: #22C55E;
-      font-weight: 700;
+    .scenario.tile { border-inline-start-color: var(--accent-cyan); }
+    .scenario.list { border-inline-start-color: var(--gold); }
+    .scenario-when {
+      font-family: var(--font-he);
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--ink);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-block-end: 4px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
     }
-    .improvements-list strong { color: var(--ink); }
+    .scenario-when .badge-mode {
+      font-size: 9px;
+      padding: 1px 6px;
+      border-radius: 4px;
+      background: rgba(103,232,249,0.15);
+      color: var(--accent-cyan);
+      border: 1px solid rgba(103,232,249,0.3);
+    }
+    .scenario.list .badge-mode { background: rgba(250,204,21,0.15); color: var(--gold); border-color: rgba(250,204,21,0.3); }
+
+    /* Anatomy labels (numbered annotations on the grid) */
+    .anatomy-floating {
+      position: absolute;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: var(--accent-cyan);
+      color: var(--bg);
+      display: grid;
+      place-items: center;
+      font-family: var(--font-en);
+      font-size: 11px;
+      font-weight: 800;
+      z-index: 8;
+      pointer-events: none;
+      box-shadow: 0 0 0 3px var(--paper), 0 4px 12px rgba(103,232,249,0.4);
+      animation: pulse-soft 2.5s ease-in-out infinite;
+    }
+    @keyframes pulse-soft {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.12); }
+    }
+
+    /* MODE SWITCHER */
+    .mode-switcher-bar {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 18px;
+      margin-block-end: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+    .mode-switcher-info {
+      flex: 1;
+      min-width: 280px;
+    }
+    .mode-switcher-info-title {
+      font-family: var(--font-he);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-block-end: 3px;
+    }
+    .mode-switcher-info-desc {
+      font-size: 11.5px;
+      color: var(--ink-soft);
+      line-height: 1.45;
+    }
+    .mode-switcher {
+      display: flex;
+      gap: 4px;
+      background: var(--paper-3);
+      padding: 5px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .mode-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--ink-soft);
+      padding: 9px 18px;
+      font-family: var(--font-he);
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .mode-btn:hover { color: var(--ink); background: var(--paper-2); }
+    .mode-btn.active { background: var(--accent-cyan); color: var(--bg); font-weight: 700; }
+    .mode-btn-icon {
+      width: 18px; height: 18px;
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+    }
+    .mode-btn-tag {
+      font-size: 9px;
+      font-weight: 800;
+      color: var(--gold);
+      background: rgba(250,204,21,0.12);
+      border: 1px solid rgba(250,204,21,0.35);
+      padding: 1px 6px;
+      border-radius: 999px;
+      letter-spacing: 0.04em;
+    }
+    .mode-btn.active .mode-btn-tag {
+      background: var(--bg);
+      color: var(--gold);
+      border-color: rgba(11,18,32,0.3);
+    }
 
     /* CONTROLS */
     .controls { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; flex-wrap: wrap; }
@@ -131,12 +354,8 @@
     .cell.outside .cell-body { display: none; }
     .cell.friday { background: var(--paper-3); }
     .cell.saturday { background: rgba(250,204,21,0.04); border-color: rgba(251,191,36,0.18); }
-
-    /* IMPROVEMENT #6: Smart sizing — busy days grow */
     .cell.busy { min-height: 320px; }
     .cell.very-busy { min-height: 380px; }
-
-    /* IMPROVEMENT #6 cont: Today expanded (no pulse anymore) */
     .cell.is-today {
       border-color: var(--gold);
       box-shadow: 0 0 0 2px var(--gold), 0 0 20px rgba(250,204,21,0.25);
@@ -172,7 +391,7 @@
 
     .cell-body { display: flex; flex-direction: column; gap: 4px; flex: 1; padding-top: 2px; overflow: hidden; }
 
-    /* IMPROVEMENT #5: Add-task button (appears on hover) */
+    /* + button on hover */
     .cell-add-btn {
       position: absolute;
       inset-block-end: 6px;
@@ -197,28 +416,22 @@
     .cell-add-btn:hover { transform: scale(1.15); }
     .cell.outside .cell-add-btn { display: none !important; }
 
-    /* SHARED: Status group header */
+    /* =================================================== */
+    /* LIST MODE (v4 — for reference / fallback)           */
+    /* =================================================== */
     .status-group { display: flex; flex-direction: column; gap: 3px; }
     .status-group + .status-group { margin-block-start: 5px; }
     .status-group-head {
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      display: flex; align-items: center; gap: 6px;
       font-family: var(--font-he);
-      font-size: 10px;
-      font-weight: 800;
+      font-size: 10px; font-weight: 800;
       color: var(--status-color);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      padding: 2px 4px;
-      margin-block-start: 2px;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      padding: 2px 4px; margin-block-start: 2px;
     }
     .status-group-head .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--status-color); box-shadow: 0 0 6px var(--status-color); }
     .status-group-items { display: flex; flex-direction: column; gap: 4px; }
 
-    /* IMPROVEMENT #1: Thicker color stripe (5px) + tint background */
-    /* IMPROVEMENT #3: Bigger fonts (11/13) */
-    /* IMPROVEMENT #2: Hebrew type letter (פ/ק/ס/ר) */
     .task-chip {
       display: flex;
       flex-direction: column;
@@ -230,75 +443,107 @@
       border-radius: 6px;
       cursor: pointer;
       transition: all 0.12s ease;
-      position: relative;
     }
     .task-chip:hover {
       background: linear-gradient(155deg, var(--client-tint-strong) 0%, var(--client-tint) 100%);
       border-color: var(--client-color);
       transform: translateX(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
-    .task-chip.is-archived {
-      opacity: 0.5;
-      filter: grayscale(0.5);
+    .task-chip.is-archived { opacity: 0.5; filter: grayscale(0.5); }
+    .task-chip-row1 { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+    .task-client { font-family: var(--font-he); font-size: 11px; font-weight: 500; color: var(--ink-soft); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+    .task-status { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; box-shadow: 0 0 0 2px var(--paper-2); }
+    .task-chip-row2 { display: flex; align-items: center; gap: 6px; }
+    .task-type-letter { width: 18px; height: 18px; display: grid; place-items: center; border-radius: 4px; background: rgba(255,255,255,0.06); color: var(--ink); font-family: var(--font-he); font-size: 11px; font-weight: 800; flex-shrink: 0; line-height: 1; }
+    .task-title { font-family: var(--font-he); font-size: 13px; font-weight: 600; color: var(--ink); line-height: 1.25; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+
+    /* =================================================== */
+    /* TILE MODE (NEW — what Uria asked for)               */
+    /* =================================================== */
+    .tile-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 4px;
+      flex: 1;
+      align-content: start;
     }
-    .task-chip-row1 {
+    .cell.is-today .tile-grid,
+    .cell.very-busy .tile-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .tile {
+      background: linear-gradient(155deg, var(--client-tint) 0%, var(--client-tint-strong) 100%);
+      border: 1px solid var(--client-color);
+      border-radius: 6px;
+      padding: 5px 6px 5px 7px;
+      cursor: pointer;
+      transition: all 0.12s ease;
+      position: relative;
+      min-height: 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 2px;
+      overflow: hidden;
+    }
+    .tile::before {
+      content: '';
+      position: absolute;
+      inset-inline-start: 0;
+      inset-block-start: 0;
+      inset-block-end: 0;
+      width: 3px;
+      background: var(--client-color);
+    }
+    .tile:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.4), 0 0 0 1px var(--client-color);
+      z-index: 10;
+    }
+    .tile.is-archived { opacity: 0.4; filter: grayscale(0.6); }
+    .tile-client {
+      font-family: var(--font-he);
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.2;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      padding-inline-start: 4px;
+    }
+    .tile-footer {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 6px;
+      gap: 4px;
+      padding-inline-start: 4px;
     }
-    .task-client {
-      font-family: var(--font-he);
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--ink-soft);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      flex: 1;
-      letter-spacing: 0.01em;
-    }
-    .task-status {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      box-shadow: 0 0 0 2px var(--paper-2);
-    }
-    .task-chip-row2 {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .task-type-letter {
-      width: 18px;
-      height: 18px;
-      display: grid;
-      place-items: center;
-      border-radius: 4px;
-      background: rgba(255,255,255,0.06);
+    .tile-type {
+      width: 16px; height: 16px;
+      display: grid; place-items: center;
+      border-radius: 3px;
+      background: rgba(255,255,255,0.15);
       color: var(--ink);
       font-family: var(--font-he);
-      font-size: 11px;
+      font-size: 9px;
       font-weight: 800;
-      flex-shrink: 0;
       line-height: 1;
     }
-    .task-title {
-      font-family: var(--font-he);
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--ink);
-      line-height: 1.25;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      flex: 1;
+    .tile-status {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      box-shadow: 0 0 0 1.5px rgba(0,0,0,0.3);
     }
-    .task-more-archived {
+
+    /* Archived collapsible (tile mode) */
+    .tile-more-archived {
+      grid-column: 1 / -1;
       font-family: var(--font-he);
-      font-size: 10.5px;
+      font-size: 10px;
       font-weight: 600;
       color: var(--ink-mute);
       text-align: center;
@@ -306,12 +551,84 @@
       background: rgba(148,163,184,0.04);
       border-radius: 5px;
       cursor: pointer;
-      transition: all 0.15s ease;
       border: 1px dashed rgba(148,163,184,0.15);
     }
-    .task-more-archived:hover {
+    .tile-more-archived:hover {
       color: var(--ink-soft);
       background: rgba(148,163,184,0.08);
+    }
+
+    /* =================================================== */
+    /* TOOLTIP (custom hover popup — works in TILE mode)   */
+    /* =================================================== */
+    .tile-tooltip {
+      position: fixed;
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      z-index: 100;
+      min-width: 220px;
+      max-width: 320px;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity 0.15s ease, transform 0.15s ease;
+    }
+    .tile-tooltip.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .tile-tooltip::before {
+      content: '';
+      position: absolute;
+      inset-block-start: 0;
+      inset-inline-end: 0;
+      inset-inline-start: 0;
+      block-size: 3px;
+      background: var(--client-color);
+      border-radius: 10px 10px 0 0;
+    }
+    .tooltip-client {
+      font-family: var(--font-he);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-block-end: 4px;
+    }
+    .tooltip-title {
+      font-family: var(--font-he);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--accent-cyan);
+      margin-block-end: 10px;
+      line-height: 1.3;
+    }
+    .tooltip-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11.5px;
+      color: var(--ink-soft);
+      margin-block-end: 4px;
+    }
+    .tooltip-row strong {
+      color: var(--ink-mute);
+      font-weight: 700;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      min-width: 50px;
+    }
+    .tooltip-hint {
+      margin-block-start: 8px;
+      padding-block-start: 8px;
+      border-block-start: 1px solid var(--border);
+      font-size: 10.5px;
+      color: var(--ink-mute);
+      text-align: center;
+      letter-spacing: 0.02em;
     }
 
     /* MODAL */
@@ -337,13 +654,13 @@
       <div class="brand">
         <div class="brand-logo">ZG</div>
         <div class="brand-text">
-          <span class="header-meta-label">ZST · GANTTS SYSTEM · v4 FINAL</span>
+          <span class="header-meta-label">ZST · GANTTS SYSTEM · v5</span>
           <h1>
-            <span class="label">לוח שנה מאוחד</span>
+            <span class="label">Tiles vs List</span>
             <span class="sep"></span>
-            <span>Master View</span>
+            <span>2 modes זה לצד זה</span>
           </h1>
-          <div class="hint">לוח שנה אחד · 6 שיפורים מוטמעים · מוכן ל-Phase 4</div>
+          <div class="hint">החלף בין מצבי תצוגה · Hover על tile מציג tooltip · Click נכנס למשימה</div>
         </div>
       </div>
       <div class="header-right">
@@ -355,23 +672,130 @@
       </div>
     </div>
 
-    <!-- IMPROVEMENTS NOTE -->
-    <div class="improvements-note">
-      <div class="improvements-title">
-        <span>✨</span>
-        6 שיפורים מוטמעים בגרסה זו
+    <!-- PRO RECOMMENDATION -->
+    <div class="pro-recommendation">
+      <div class="pro-recommendation-title">
+        <span>🎯</span>
+        <span>הפתרון המקצועי שאני ממליץ עליו</span>
+        <span class="badge">RECOMMENDED</span>
       </div>
-      <ul class="improvements-list">
-        <li><strong>1. פס צבע עבה (5px) + tint רקע</strong> — הלקוח מזוהה בעין אחת לפי הצבע</li>
-        <li><strong>2. אותיות עברית פ/ק/ס/ר</strong> — סוג התוכן נראה ללא קליק (פוסט/קרוסלה/סטורי/ריל)</li>
-        <li><strong>3. גופנים גדולים יותר (11/13)</strong> — עומד ב-WCAG AA, נוח לעיניים</li>
-        <li><strong>4. שום סטטוס פעיל לא נחתך</strong> — רק "נגנז" נכנס ל"+N עוד" (collapsible)</li>
-        <li><strong>5. כפתור "+" ב-hover על cell</strong> — הוספת משימה ליום ספציפי</li>
-        <li><strong>6. Smart sizing</strong> — היום=440px · יום עמוס=380px · רגיל=200px · ≤2 משימות=flat (בלי group)</li>
-      </ul>
+      <div class="pro-recommendation-lead">
+        לוח שנה חודשי אחד (כמו שאתה רגיל מהסקיל) — עם <strong>2 מצבי תצוגה</strong> שאתה מחליף ביניהם בלחיצה. <strong>Tile View</strong> (ברירת מחדל) — קוביות קטנות צבעוניות עם tooltip ב-hover, לסקירה מהירה של חודש שלם. <strong>List View</strong> — chips אופקיים עם כותרת מלאה, לעבודה עמוקה על משימה ספציפית. שני המודים על אותו לוח, אותם נתונים — רק התצוגה משתנה.
+      </div>
+
+      <div class="explanation-grid">
+        <div class="explain-card">
+          <span class="explain-card-num">1</span>
+          <div class="explain-card-title"><span class="emoji">▣</span> מה זה Tile View</div>
+          <ul>
+            <li>קוביה <strong>קומפקטית</strong> לכל משימה (~60×50px)</li>
+            <li><strong>שם הלקוח</strong> בולט (חיים בפלוס)</li>
+            <li><strong>אות סוג</strong> מעוצבת (פ/ק/ס/ר)</li>
+            <li><strong>נקודת סטטוס</strong> בפינה</li>
+            <li><strong>2-3 קוביות בשורה</strong> בתוך כל יום</li>
+            <li><strong>Hover</strong> → tooltip עם פרטים מלאים</li>
+            <li><strong>Click</strong> → פותח את המשימה</li>
+          </ul>
+        </div>
+
+        <div class="explain-card">
+          <span class="explain-card-num">2</span>
+          <div class="explain-card-title"><span class="emoji">≡</span> מה זה List View</div>
+          <ul>
+            <li>Chip אופקי לכל משימה</li>
+            <li><strong>כותרת המשימה גלויה</strong> בלי hover</li>
+            <li><strong>קיבוץ לפי סטטוס</strong> (לאישור → בעבודה → אושר)</li>
+            <li>שם לקוח בקטן + כותרת בולטת</li>
+            <li>הכי קריא לעבודה ממוקדת</li>
+            <li>בימים שקטים (≤2 משימות) - flat, בלי group</li>
+          </ul>
+        </div>
+
+        <div class="explain-card">
+          <span class="explain-card-num">3</span>
+          <div class="explain-card-title"><span class="emoji">📅</span> מה משותף לשני המצבים</div>
+          <ul>
+            <li>לוח שנה <strong>חודשי אחד</strong> (כמו בסקיל)</li>
+            <li><strong>היום (24.5)</strong> בולט עם gold border</li>
+            <li><strong>היום מורחב</strong> אוטומטית ל-440px</li>
+            <li><strong>ימים עמוסים</strong> גם גדלים (5+ → 320px, 8+ → 380px)</li>
+            <li><strong>שבת</strong> מסומנת בזהב</li>
+            <li><strong>+N נגנזים</strong> מתחת (collapsible — לא תופס מקום)</li>
+            <li><strong>+ כפתור</strong> ב-hover על cell להוסיף משימה</li>
+          </ul>
+        </div>
+
+        <div class="explain-card">
+          <span class="explain-card-num">4</span>
+          <div class="explain-card-title"><span class="emoji">📱</span> איך זה עובד בנייד</div>
+          <ul>
+            <li>נייד = אין hover</li>
+            <li><strong>Tile mode</strong>: tap על קוביה → preview popup</li>
+            <li><strong>Double-tap</strong> → פותח את המשימה</li>
+            <li><strong>List mode</strong>: כל המידע גלוי, tap → modal</li>
+            <li>הצוות בנייד עובד יותר ב-List View</li>
+            <li>אתה בלפטופ - בעיקר Tile View</li>
+          </ul>
+        </div>
+      </div>
     </div>
 
-    <!-- CONTROLS -->
+    <!-- SCENARIOS -->
+    <div class="scenarios-block">
+      <div class="scenarios-title">
+        <span>💼</span>
+        <span>מתי להשתמש בכל מצב? (תרחישי שימוש)</span>
+      </div>
+      <div class="scenarios-grid">
+        <div class="scenario tile">
+          <div class="scenario-when"><span class="badge-mode">Tile</span> תכנון שבועי</div>
+          סוקרים את החודש הקרוב. רוצים לראות "איפה יש פערים? איפה יש עומס?". המבט הקומפקטי מאפשר לזהות דפוסים מהר.
+        </div>
+        <div class="scenario tile">
+          <div class="scenario-when"><span class="badge-mode">Tile</span> פגישת צוות</div>
+          מציגים על מסך גדול. הצבעים מספרים את הסיפור — כולם רואים מה קורה השבוע בלי לקרוא טקסטים.
+        </div>
+        <div class="scenario tile">
+          <div class="scenario-when"><span class="badge-mode">Tile</span> שיתוף ללקוח</div>
+          הלקוח רואה את הלוח שלו (לא את כולם). המבט הוויזואלי הראשון הוא קל ולא מבלבל.
+        </div>
+        <div class="scenario list">
+          <div class="scenario-when"><span class="badge-mode">List</span> אישור תכנים</div>
+          ליטל עוברת על "ממתין לאישור" של היום. רוצה לראות את הכותרות בלי קליק. List View נותן את זה.
+        </div>
+        <div class="scenario list">
+          <div class="scenario-when"><span class="badge-mode">List</span> כתיבת קופי</div>
+          חגי מתכנן את השבוע - רוצה לראות את הכותרות של כל המשימות שלו ולתכנן מה הוא כותב ראשון.
+        </div>
+        <div class="scenario list">
+          <div class="scenario-when"><span class="badge-mode">List</span> מעבר מהר בנייד</div>
+          בנייד, hover לא עובד. List View מציג הכל בלי צורך לגעת במשהו.
+        </div>
+      </div>
+    </div>
+
+    <!-- MODE SWITCHER -->
+    <div class="mode-switcher-bar">
+      <div class="mode-switcher-info">
+        <div class="mode-switcher-info-title">בחר מצב תצוגה</div>
+        <div class="mode-switcher-info-desc" id="mode-desc">
+          <strong>Tile View</strong> — קוביות קטנות, 2-3 בשורה. רואים שם לקוח + סוג + סטטוס. <strong>Hover</strong> על קוביה מציג tooltip עם פרטים מלאים. <strong>Click</strong> נכנס למשימה. דחיסות מקסימלית.
+        </div>
+      </div>
+      <div class="mode-switcher">
+        <button class="mode-btn active" data-mode="tile">
+          <span class="mode-btn-icon">▣</span>
+          <span>Tile View</span>
+          <span class="mode-btn-tag">חדש</span>
+        </button>
+        <button class="mode-btn" data-mode="list">
+          <span class="mode-btn-icon">≡</span>
+          <span>List View</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- LEGEND -->
     <div class="controls">
       <div class="legend">
         <span class="legend-label">סוג</span>
@@ -397,6 +821,16 @@
 
   </div>
 
+  <!-- TOOLTIP -->
+  <div class="tile-tooltip" id="tooltip">
+    <div class="tooltip-client" id="tooltip-client"></div>
+    <div class="tooltip-title" id="tooltip-title"></div>
+    <div class="tooltip-row"><strong>סוג</strong><span id="tooltip-type"></span></div>
+    <div class="tooltip-row"><strong>סטטוס</strong><span id="tooltip-status"></span></div>
+    <div class="tooltip-row"><strong>תאריך</strong><span id="tooltip-date"></span></div>
+    <div class="tooltip-hint">לחץ לפתיחת המשימה המלאה</div>
+  </div>
+
   <!-- MODAL -->
   <div class="modal-backdrop" id="modal">
     <div class="modal">
@@ -409,9 +843,9 @@
       </div>
       <div class="modal-row"><strong>סטטוס</strong>ממתין לאישור</div>
       <div class="modal-row"><strong>קופי נלווה</strong>תקציב 2026 מאושר - חלוקת המשאבים לפי תוכניות העבודה...</div>
-      <div class="modal-row"><strong>שקפים</strong>3 שקפים בקרוסלה · כל שקף עם קופי משלו</div>
+      <div class="modal-row"><strong>שקפים</strong>3 שקפים בקרוסלה</div>
       <div class="modal-row"><strong>מדיה</strong>3 תמונות הועלו (1.2 MB)</div>
-      <button class="modal-close" onclick="document.getElementById('modal').classList.remove('open')">סגור · במערכת האמיתית יהיו עריכה + רטיב + שיתוף</button>
+      <button class="modal-close" onclick="document.getElementById('modal').classList.remove('open')">סגור</button>
     </div>
   </div>
 
@@ -449,12 +883,12 @@
     const STATUS_LABELS = { work: 'בעבודה', design: 'בעיצוב', pending: 'ממתין לאישור', approved: 'אושר', archived: 'נגנז' };
     const STATUS_LABELS_SHORT = { work: 'בעבודה', design: 'בעיצוב', pending: 'לאישור', approved: 'אושר', archived: 'נגנז' };
     const STATUS_COLORS = { work: '#3B82F6', design: '#F97316', pending: '#EAB308', approved: '#22C55E', archived: '#6B7280' };
-    const STATUS_ORDER = ['pending', 'work', 'design', 'approved', 'archived']; // archived LAST
+    const STATUS_ORDER = ['pending', 'work', 'design', 'approved', 'archived'];
     const STATUS_WEIGHTS = [0.30, 0.25, 0.20, 0.20, 0.05];
 
     const TYPES = ['post', 'carousel', 'story', 'reel'];
     const TYPE_LABELS = { post: 'פוסט', carousel: 'קרוסלה', story: 'סטורי', reel: 'ריל' };
-    const TYPE_LETTERS = { post: 'פ', carousel: 'ק', story: 'ס', reel: 'ר' }; // Hebrew letters
+    const TYPE_LETTERS = { post: 'פ', carousel: 'ק', story: 'ס', reel: 'ר' };
 
     const SAMPLE_TITLES = [
       'תקציב 2026', 'חג השבועות', 'סיכום שבועי', 'מבצע קיץ', 'הכרזה רשמית',
@@ -519,51 +953,28 @@
           });
         });
       });
-      // Today (24) — many tasks (showcase expanded today)
       const todayClients = [0, 2, 4, 6, 8, 10, 12, 14, 16];
       todayClients.forEach(idx => {
-        tasks.push({
-          day: 24, client: CLIENTS[idx],
-          title: SAMPLE_TITLES[Math.floor(Math.random() * SAMPLE_TITLES.length)],
-          type: TYPES[Math.floor(Math.random() * TYPES.length)],
-          status: weightedRandom(STATUSES, STATUS_WEIGHTS),
-        });
+        tasks.push({ day: 24, client: CLIENTS[idx], title: SAMPLE_TITLES[Math.floor(Math.random() * SAMPLE_TITLES.length)], type: TYPES[Math.floor(Math.random() * TYPES.length)], status: weightedRandom(STATUSES, STATUS_WEIGHTS) });
       });
-      // 25 = very busy
       [1, 3, 5, 7, 9, 11].forEach(idx => {
-        tasks.push({
-          day: 25, client: CLIENTS[idx],
-          title: SAMPLE_TITLES[Math.floor(Math.random() * SAMPLE_TITLES.length)],
-          type: TYPES[Math.floor(Math.random() * TYPES.length)],
-          status: weightedRandom(STATUSES, STATUS_WEIGHTS),
-        });
+        tasks.push({ day: 25, client: CLIENTS[idx], title: SAMPLE_TITLES[Math.floor(Math.random() * SAMPLE_TITLES.length)], type: TYPES[Math.floor(Math.random() * TYPES.length)], status: weightedRandom(STATUSES, STATUS_WEIGHTS) });
       });
-      // 26 = busy
       [2, 4, 6].forEach(idx => {
-        tasks.push({
-          day: 26, client: CLIENTS[idx],
-          title: SAMPLE_TITLES[Math.floor(Math.random() * SAMPLE_TITLES.length)],
-          type: TYPES[Math.floor(Math.random() * TYPES.length)],
-          status: weightedRandom(STATUSES, STATUS_WEIGHTS),
-        });
+        tasks.push({ day: 26, client: CLIENTS[idx], title: SAMPLE_TITLES[Math.floor(Math.random() * SAMPLE_TITLES.length)], type: TYPES[Math.floor(Math.random() * TYPES.length)], status: weightedRandom(STATUSES, STATUS_WEIGHTS) });
       });
-      // Add a few archived for testing the collapse logic
       [10, 14, 18, 22, 25].forEach(day => {
         for (let i = 0; i < 2; i++) {
-          tasks.push({
-            day, client: CLIENTS[Math.floor(Math.random() * CLIENTS.length)],
-            title: SAMPLE_TITLES[Math.floor(Math.random() * SAMPLE_TITLES.length)],
-            type: TYPES[Math.floor(Math.random() * TYPES.length)],
-            status: 'archived',
-          });
+          tasks.push({ day, client: CLIENTS[Math.floor(Math.random() * CLIENTS.length)], title: SAMPLE_TITLES[Math.floor(Math.random() * SAMPLE_TITLES.length)], type: TYPES[Math.floor(Math.random() * TYPES.length)], status: 'archived' });
         }
       });
       return tasks;
     }
 
     const TASKS = generateMonthTasks();
+    let CURRENT_MODE = 'tile';
+
     function tasksForDay(day) {
-      // Active tasks (everything except archived) come first
       return TASKS.filter(t => t.day === day);
     }
 
@@ -572,8 +983,46 @@
         HEBREW_DAYS.map((d, i) => `<div class="wd ${i >= 5 ? 'weekend' : ''}">${d}</div>`).join('');
     }
 
-    // IMPROVEMENT #2 + #1 + #3: chip with type-letter, fat color stripe, bigger fonts
-    function renderChip(t, dayNum) {
+    // ============== TILE RENDERER ==============
+    function renderTile(t, dayNum) {
+      const isArchived = t.status === 'archived';
+      const tooltipData = JSON.stringify({
+        client: t.client.name,
+        clientColor: t.client.color,
+        title: t.title,
+        type: TYPE_LABELS[t.type],
+        status: STATUS_LABELS[t.status],
+        day: dayNum,
+      }).replace(/"/g, '&quot;');
+      return `<div class="tile ${isArchived ? 'is-archived' : ''}"
+        style="--client-color:${t.client.color};--client-tint:${tint(t.client.color, 0.12)};--client-tint-strong:${tint(t.client.color, 0.20)}"
+        data-tooltip="${tooltipData}"
+        onclick="event.stopPropagation(); openModal('${t.client.name}','${t.client.color}','${t.title}',${dayNum},'${t.status}','${t.type}')"
+        onmouseenter="showTooltip(event, this)"
+        onmouseleave="hideTooltip()"
+        onmousemove="moveTooltip(event)">
+        <div class="tile-client">${t.client.name}</div>
+        <div class="tile-footer">
+          <span class="tile-type">${TYPE_LETTERS[t.type]}</span>
+          <span class="tile-status" style="background:${STATUS_COLORS[t.status]}"></span>
+        </div>
+      </div>`;
+    }
+
+    function renderCellBodyTile(tasks, dayNum) {
+      const active = tasks.filter(t => t.status !== 'archived');
+      const archived = tasks.filter(t => t.status === 'archived');
+      let html = '<div class="tile-grid">';
+      html += active.map(t => renderTile(t, dayNum)).join('');
+      if (archived.length > 0) {
+        html += `<div class="tile-more-archived" onclick="event.stopPropagation(); alert('פתיחת ${archived.length} פריטים נגנזים')">+${archived.length} נגנזים</div>`;
+      }
+      html += '</div>';
+      return html;
+    }
+
+    // ============== LIST RENDERER (v4) ==============
+    function renderChipList(t, dayNum) {
       const isArchived = t.status === 'archived';
       return `<div class="task-chip ${isArchived ? 'is-archived' : ''}"
         style="--client-color:${t.client.color};--client-tint:${tint(t.client.color, 0.10)};--client-tint-strong:${tint(t.client.color, 0.20)}"
@@ -589,56 +1038,42 @@
       </div>`;
     }
 
-    // IMPROVEMENT #4 + #6: smart rendering — flat for ≤2, grouped for ≥3, archived collapsible
-    function renderCellBody(tasks, dayNum) {
-      // separate active vs archived
+    function renderCellBodyList(tasks, dayNum) {
       const active = tasks.filter(t => t.status !== 'archived');
       const archived = tasks.filter(t => t.status === 'archived');
-
       let html = '';
-
       if (active.length <= 2) {
-        // FLAT: no status grouping for quiet days
-        html += active.map(t => renderChip(t, dayNum)).join('');
+        html += active.map(t => renderChipList(t, dayNum)).join('');
       } else {
-        // GROUPED BY STATUS — all active tasks visible, no truncation
         const grouped = {};
         STATUS_ORDER.forEach(s => grouped[s] = []);
         active.forEach(t => grouped[t.status].push(t));
-
         STATUS_ORDER.forEach(status => {
           const items = grouped[status];
-          if (items.length === 0) return;
-          if (status === 'archived') return; // archived handled separately
-          const color = STATUS_COLORS[status];
+          if (items.length === 0 || status === 'archived') return;
           html += `<div class="status-group">
-            <div class="status-group-head" style="--status-color:${color}">
+            <div class="status-group-head" style="--status-color:${STATUS_COLORS[status]}">
               <span class="dot"></span>
               ${STATUS_LABELS_SHORT[status]} · ${items.length}
             </div>
-            <div class="status-group-items">
-              ${items.map(t => renderChip(t, dayNum)).join('')}
-            </div>
+            <div class="status-group-items">${items.map(t => renderChipList(t, dayNum)).join('')}</div>
           </div>`;
         });
       }
-
-      // IMPROVEMENT #4: archived items in collapsible row at bottom
       if (archived.length > 0) {
-        html += `<div class="task-more-archived" onclick="event.stopPropagation(); alert('פתיחת ${archived.length} פריטים נגנזים')">
-          +${archived.length} נגנזים
-        </div>`;
+        html += `<div class="task-more-archived" onclick="event.stopPropagation(); alert('פתיחת ${archived.length} פריטים נגנזים')">+${archived.length} נגנזים</div>`;
       }
-
       return html;
     }
 
+    // ============== GRID ==============
     function renderGrid() {
       const container = document.getElementById('grid');
       const firstDow = 5;
       const daysInMonth = 31;
       const totalCells = Math.ceil((firstDow + daysInMonth) / 7) * 7;
       const weeksCount = totalCells / 7;
+      const renderer = CURRENT_MODE === 'tile' ? renderCellBodyTile : renderCellBodyList;
 
       let html = '';
       for (let w = 0; w < weeksCount; w++) {
@@ -659,7 +1094,7 @@
             else if (dayNum !== TODAY && activeCount >= 5) classes.push('busy');
           }
           const dataAttr = inMonth && dayNum === TODAY ? `data-date="${dayNum}.5"` : '';
-          html += `<div class="${classes.join(' ')}" ${dataAttr} onclick="cellClicked(${inMonth ? dayNum : 'null'})">`;
+          html += `<div class="${classes.join(' ')}" ${dataAttr}>`;
           if (inMonth) {
             const dayTasks = tasksForDay(dayNum);
             const activeCount = dayTasks.filter(t => t.status !== 'archived').length;
@@ -668,8 +1103,7 @@
               ${activeCount > 0 ? `<span class="cell-count">${activeCount}</span>` : ''}
               <span class="cell-heb">${hebrewDate(dayNum)}</span>
             </div>`;
-            html += `<div class="cell-body">${renderCellBody(dayTasks, dayNum)}</div>`;
-            // IMPROVEMENT #5: + button on hover
+            html += `<div class="cell-body">${renderer(dayTasks, dayNum)}</div>`;
             html += `<button class="cell-add-btn" onclick="event.stopPropagation(); addTask(${dayNum})" title="הוסף משימה ליום ${dayNum}">+</button>`;
           } else {
             const displayNum = dayNum < 1 ? (30 + dayNum) : (dayNum - daysInMonth);
@@ -682,10 +1116,37 @@
       container.innerHTML = html;
     }
 
-    window.cellClicked = function(day) {
-      if (day === null) return;
-      // Just a visual feedback — in real system this could open a day-detail modal
-    };
+    // ============== TOOLTIP ==============
+    const tooltip = document.getElementById('tooltip');
+    function showTooltip(e, el) {
+      const data = JSON.parse(el.dataset.tooltip.replace(/&quot;/g, '"'));
+      document.getElementById('tooltip-client').textContent = data.client;
+      document.getElementById('tooltip-title').textContent = data.title;
+      document.getElementById('tooltip-type').textContent = data.type;
+      document.getElementById('tooltip-status').textContent = data.status;
+      document.getElementById('tooltip-date').textContent = `${data.day}.5.2026`;
+      tooltip.style.setProperty('--client-color', data.clientColor);
+      tooltip.classList.add('visible');
+      moveTooltip(e);
+    }
+    function moveTooltip(e) {
+      const padding = 14;
+      let x = e.clientX + padding;
+      let y = e.clientY + padding;
+      const rect = tooltip.getBoundingClientRect();
+      if (x + rect.width > window.innerWidth - 10) x = e.clientX - rect.width - padding;
+      if (y + rect.height > window.innerHeight - 10) y = e.clientY - rect.height - padding;
+      tooltip.style.left = x + 'px';
+      tooltip.style.top = y + 'px';
+    }
+    function hideTooltip() {
+      tooltip.classList.remove('visible');
+    }
+    window.showTooltip = showTooltip;
+    window.moveTooltip = moveTooltip;
+    window.hideTooltip = hideTooltip;
+
+    // ============== ACTIONS ==============
     window.addTask = function(day) {
       alert(`הוסף משימה ליום ${day}.5.2026\n\nבמערכת האמיתית יפתח כאן form להוספת רעיון חדש.`);
     };
@@ -697,6 +1158,23 @@
     };
     document.getElementById('modal').addEventListener('click', (e) => {
       if (e.target.id === 'modal') document.getElementById('modal').classList.remove('open');
+    });
+
+    // ============== MODE SWITCHER ==============
+    document.querySelectorAll('.mode-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        CURRENT_MODE = btn.dataset.mode;
+        const desc = document.getElementById('mode-desc');
+        if (CURRENT_MODE === 'tile') {
+          desc.innerHTML = '<strong>Tile View</strong> — קוביות קטנות, 2-3 בשורה. רואים שם לקוח + סוג + סטטוס. <strong>Hover</strong> על קוביה מציג tooltip עם פרטים מלאים. <strong>Click</strong> נכנס למשימה. דחיסות מקסימלית.';
+        } else {
+          desc.innerHTML = '<strong>List View</strong> — chips אופקיים, שורה אחת לכל משימה. שם הלקוח + סוג + כותרת המשימה גלויים בלי hover. מקובץ לפי סטטוס. הכי קריא לעבודה עמוקה.';
+        }
+        renderGrid();
+        hideTooltip();
+      });
     });
 
     renderWeekdays();
