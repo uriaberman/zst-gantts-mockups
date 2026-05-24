@@ -3,504 +3,107 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZST Gantts System | Master View — לוח שנה מאוחד</title>
+  <title>ZST Gantts System | Master View v3</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      /* === Zeliger Theme — copied verbatim from gantt-viewer skill === */
-      --bg:        #07101F;
-      --paper:     #0F1A2E;
-      --paper-2:   #14223A;
-      --paper-3:   #0C1828;
-      --paper-4:   #18253F;
-      --ink:       #F1F5F9;
-      --ink-soft:  #94A3B8;
-      --ink-faint: #475569;
-      --ink-mute:  #64748B;
-      --border:    #1E2D45;
-      --border-soft: #182338;
-      --accent-cyan: #67E8F9;
-      --gold:      #FACC15;
-      --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+      --bg: #07101F; --paper: #0F1A2E; --paper-2: #14223A; --paper-3: #0C1828; --paper-4: #18253F;
+      --ink: #F1F5F9; --ink-soft: #94A3B8; --ink-faint: #475569; --ink-mute: #64748B;
+      --border: #1E2D45; --border-soft: #182338;
+      --accent-cyan: #67E8F9; --gold: #FACC15;
       --shadow-md: 0 4px 20px rgba(0,0,0,0.35);
       --shadow-lg: 0 20px 60px rgba(0,0,0,0.5);
-      --font-he: 'Rubik', system-ui, -apple-system, sans-serif;
-      --font-en: 'Inter', system-ui, -apple-system, sans-serif;
+      --font-he: 'Rubik', system-ui, sans-serif;
+      --font-en: 'Inter', system-ui, sans-serif;
       --font: 'Inter', 'Rubik', system-ui, sans-serif;
-
-      --status-work:     #3B82F6;
-      --status-design:   #F97316;
-      --status-pending:  #EAB308;
-      --status-approved: #22C55E;
-      --status-archived: #6B7280;
+      --status-work: #3B82F6; --status-design: #F97316;
+      --status-pending: #EAB308; --status-approved: #22C55E; --status-archived: #6B7280;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font); direction: rtl; background: var(--bg); color: var(--ink); font-size: 14px; line-height: 1.55; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+    .page { max-width: 1680px; margin: 0 auto; padding: 24px 28px 48px; }
 
-    body {
-      font-family: var(--font);
-      direction: rtl;
-      background: var(--bg);
-      color: var(--ink);
-      font-size: 14px;
-      line-height: 1.55;
-      min-height: 100vh;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    .page {
-      max-width: 1680px;
-      margin: 0 auto;
-      padding: 24px 28px 48px;
-    }
-
-    /* ====== HEADER ====== */
-    .header {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 22px 30px;
-      gap: 24px;
-      background:
-        linear-gradient(90deg, rgba(103,232,249,0.07) 0%, rgba(103,232,249,0.02) 50%, transparent 100%),
-        var(--paper);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      box-shadow: var(--shadow-md), 0 0 40px rgba(103,232,249,0.04);
-      margin-bottom: 18px;
-      overflow: hidden;
-      flex-wrap: wrap;
-    }
-    .header::before {
-      content: '';
-      position: absolute;
-      inset-inline-start: 0;
-      inset-block-start: 0;
-      inset-block-end: 0;
-      width: 3px;
-      background: linear-gradient(180deg, var(--accent-cyan) 0%, rgba(103,232,249,0.3) 100%);
-      box-shadow: 0 0 14px rgba(103,232,249,0.55);
-    }
+    /* HEADER */
+    .header { position: relative; display: flex; align-items: center; justify-content: space-between; padding: 22px 30px; gap: 24px; background: linear-gradient(90deg, rgba(103,232,249,0.07) 0%, rgba(103,232,249,0.02) 50%, transparent 100%), var(--paper); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow-md); margin-bottom: 18px; overflow: hidden; flex-wrap: wrap; }
+    .header::before { content: ''; position: absolute; inset-inline-start: 0; inset-block-start: 0; inset-block-end: 0; width: 3px; background: linear-gradient(180deg, var(--accent-cyan) 0%, rgba(103,232,249,0.3) 100%); box-shadow: 0 0 14px rgba(103,232,249,0.55); }
     .brand { display: flex; align-items: center; gap: 14px; }
-    .brand-logo {
-      width: 46px;
-      height: 46px;
-      background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--gold) 100%);
-      border-radius: 11px;
-      display: grid;
-      place-items: center;
-      color: var(--bg);
-      font-weight: 800;
-      font-size: 1.05rem;
-    }
-    .brand-text h1 {
-      font-family: var(--font-he);
-      font-size: 22px;
-      font-weight: 700;
-      letter-spacing: -0.015em;
-      line-height: 1.1;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .brand-logo { width: 46px; height: 46px; background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--gold) 100%); border-radius: 11px; display: grid; place-items: center; color: var(--bg); font-weight: 800; font-size: 1.05rem; }
+    .brand-text h1 { font-family: var(--font-he); font-size: 22px; font-weight: 700; letter-spacing: -0.015em; line-height: 1.1; display: flex; align-items: center; gap: 10px; }
     .brand-text h1 .label { color: var(--accent-cyan); font-weight: 700; }
-    .brand-text h1 .sep {
-      width: 6px; height: 6px;
-      background: var(--accent-cyan);
-      border-radius: 2px;
-      box-shadow: 0 0 12px rgba(103,232,249,0.55);
-    }
-    .brand-text .header-meta-label {
-      font-family: var(--font-en);
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: 0.32em;
-      text-transform: uppercase;
-      color: var(--accent-cyan);
-      opacity: 0.95;
-      margin-block-end: 4px;
-      display: block;
-    }
-    .brand-text .hint {
-      font-size: 11px;
-      color: var(--ink-mute);
-      margin-block-start: 4px;
-    }
-
+    .brand-text h1 .sep { width: 6px; height: 6px; background: var(--accent-cyan); border-radius: 2px; box-shadow: 0 0 12px rgba(103,232,249,0.55); }
+    .brand-text .header-meta-label { font-family: var(--font-en); font-size: 10px; font-weight: 500; letter-spacing: 0.32em; text-transform: uppercase; color: var(--accent-cyan); margin-block-end: 4px; display: block; }
+    .brand-text .hint { font-size: 11px; color: var(--ink-mute); margin-block-start: 4px; }
     .header-right { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
-    .month-picker {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--paper-2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 6px 14px;
-    }
-    .month-picker-label {
-      font-family: var(--font-he);
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--ink-mute);
-    }
-    .month-picker-value {
-      font-family: var(--font-he);
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--ink);
-    }
-    .stats-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 12px;
-      color: var(--ink-soft);
-      background: var(--paper-2);
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 6px 14px;
-    }
+    .month-picker { display: inline-flex; align-items: center; gap: 8px; background: var(--paper-2); border: 1px solid var(--border); border-radius: 10px; padding: 6px 14px; }
+    .month-picker-label { font-family: var(--font-he); font-size: 10px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-mute); }
+    .month-picker-value { font-family: var(--font-he); font-size: 14px; font-weight: 700; color: var(--ink); }
+    .stats-chip { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: var(--ink-soft); background: var(--paper-2); border: 1px solid var(--border); border-radius: 999px; padding: 6px 14px; }
     .stats-chip strong { color: var(--ink); font-weight: 700; }
 
-    /* ====== CONTROLS ====== */
-    .controls {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 18px;
-      flex-wrap: wrap;
-    }
-    .view-switcher {
-      display: flex;
-      gap: 4px;
-      background: var(--paper);
-      padding: 5px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-    }
-    .view-btn {
-      background: transparent;
-      border: 1px solid transparent;
-      color: var(--ink-soft);
-      padding: 9px 16px;
-      font-family: var(--font-he);
-      font-size: 13px;
-      font-weight: 600;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+    /* CONTROLS */
+    .controls { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; flex-wrap: wrap; }
+    .view-switcher { display: flex; gap: 4px; background: var(--paper); padding: 5px; border-radius: 12px; border: 1px solid var(--border); }
+    .view-btn { background: transparent; border: 1px solid transparent; color: var(--ink-soft); padding: 9px 16px; font-family: var(--font-he); font-size: 13px; font-weight: 600; border-radius: 8px; cursor: pointer; transition: all 0.15s ease; display: flex; align-items: center; gap: 8px; }
     .view-btn:hover { color: var(--ink); background: var(--paper-2); }
     .view-btn.active { background: var(--accent-cyan); color: var(--bg); }
-    .view-btn-letter {
-      width: 22px; height: 22px;
-      display: grid; place-items: center;
-      border-radius: 6px;
-      background: rgba(255,255,255,0.12);
-      font-size: 10px;
-      font-weight: 800;
-      font-family: var(--font-he);
-    }
+    .view-btn-letter { width: 22px; height: 22px; display: grid; place-items: center; border-radius: 6px; background: rgba(255,255,255,0.12); font-size: 10px; font-weight: 800; font-family: var(--font-he); }
     .view-btn.active .view-btn-letter { background: var(--bg); color: var(--accent-cyan); }
-    .view-btn-tag {
-      font-size: 9px;
-      font-weight: 800;
-      color: var(--gold);
-      background: rgba(250,204,21,0.12);
-      border: 1px solid rgba(250,204,21,0.35);
-      padding: 1px 6px;
-      border-radius: 999px;
-      letter-spacing: 0.04em;
-    }
-    .view-btn.active .view-btn-tag {
-      background: var(--bg);
-      color: var(--gold);
-      border-color: rgba(11,18,32,0.3);
-    }
-
-    .legend {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 8px 14px;
-      padding: 8px 16px;
-      background: var(--paper);
-      border: 1px solid var(--border);
-      border-radius: 999px;
-    }
-    .legend-divider { width: 1px; height: 18px; background: var(--border); }
-    .legend-label {
-      font-family: var(--font-he);
-      font-size: 10.5px;
-      font-weight: 600;
-      color: var(--ink-mute);
-      letter-spacing: 0.08em;
-      padding: 3px 9px;
-      background: rgba(148,163,184,0.08);
-      border-radius: 8px;
-    }
+    .view-btn-tag { font-size: 9px; font-weight: 800; color: var(--gold); background: rgba(250,204,21,0.12); border: 1px solid rgba(250,204,21,0.35); padding: 1px 6px; border-radius: 999px; letter-spacing: 0.04em; }
+    .view-btn.active .view-btn-tag { background: var(--bg); color: var(--gold); border-color: rgba(11,18,32,0.3); }
+    .legend { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; padding: 8px 16px; background: var(--paper); border: 1px solid var(--border); border-radius: 999px; }
+    .legend-label { font-family: var(--font-he); font-size: 10.5px; font-weight: 600; color: var(--ink-mute); letter-spacing: 0.08em; padding: 3px 9px; background: rgba(148,163,184,0.08); border-radius: 8px; }
     .legend-chip { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--ink); }
-    .legend-chip .sw { width: 11px; height: 11px; border-radius: 3px; }
-    .legend-chip .sw.round { border-radius: 50%; }
+    .legend-chip .sw { width: 11px; height: 11px; border-radius: 50%; }
 
-    /* ====== INTRO ====== */
-    .view-intro {
-      margin-block-end: 16px;
-      padding: 16px 22px;
-      background: var(--paper);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      display: flex;
-      gap: 24px;
-      align-items: flex-start;
-    }
+    /* INTRO */
+    .view-intro { margin-block-end: 16px; padding: 16px 22px; background: var(--paper); border: 1px solid var(--border); border-radius: 12px; display: flex; gap: 24px; align-items: flex-start; }
     .view-intro-text { flex: 1; }
-    .view-intro h2 {
-      font-family: var(--font-he);
-      font-size: 17px;
-      font-weight: 700;
-      margin-block-end: 6px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .view-intro h2 .badge {
-      background: var(--gold);
-      color: var(--bg);
-      font-size: 10px;
-      font-weight: 800;
-      padding: 3px 9px;
-      border-radius: 6px;
-      letter-spacing: 0.06em;
-    }
-    .view-intro p {
-      color: var(--ink-soft);
-      font-size: 13px;
-      line-height: 1.55;
-      max-width: 880px;
-    }
-    .pros-cons {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      min-width: 380px;
-      max-width: 460px;
-    }
-    .pros-cons div {
-      padding: 8px 12px;
-      border-radius: 8px;
-      font-size: 11.5px;
-      line-height: 1.45;
-    }
-    .pros-cons .pro {
-      background: rgba(34,197,94,0.08);
-      border: 1px solid rgba(34,197,94,0.25);
-      color: #BBF7D0;
-    }
-    .pros-cons .con {
-      background: rgba(250,204,21,0.06);
-      border: 1px solid rgba(250,204,21,0.25);
-      color: #FDE68A;
-    }
-    .pros-cons .label {
-      font-weight: 800;
-      font-size: 10px;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      display: block;
-      margin-block-end: 4px;
-      opacity: 0.9;
-    }
+    .view-intro h2 { font-family: var(--font-he); font-size: 17px; font-weight: 700; margin-block-end: 6px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .view-intro h2 .badge { background: var(--gold); color: var(--bg); font-size: 10px; font-weight: 800; padding: 3px 9px; border-radius: 6px; letter-spacing: 0.06em; }
+    .view-intro h2 .badge.alt { background: var(--accent-cyan); }
+    .view-intro p { color: var(--ink-soft); font-size: 13px; line-height: 1.55; max-width: 880px; }
+    .pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; min-width: 380px; max-width: 460px; }
+    .pros-cons div { padding: 8px 12px; border-radius: 8px; font-size: 11.5px; line-height: 1.45; }
+    .pros-cons .pro { background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.25); color: #BBF7D0; }
+    .pros-cons .con { background: rgba(250,204,21,0.06); border: 1px solid rgba(250,204,21,0.25); color: #FDE68A; }
+    .pros-cons .label { font-weight: 800; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; display: block; margin-block-end: 4px; opacity: 0.9; }
 
-    /* ====== TOOLBAR (above grid) ====== */
-    .toolbar {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 16px;
-      background: var(--paper);
-      border: 1px solid var(--border);
-      border-block-end: none;
-      border-radius: 14px 14px 0 0;
-      flex-wrap: wrap;
-    }
-    .toolbar-label {
-      font-family: var(--font-he);
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--ink-mute);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-    .density-btn-group {
-      display: flex;
-      background: var(--paper-3);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 3px;
-    }
-    .density-btn {
-      background: transparent;
-      border: none;
-      color: var(--ink-mute);
-      padding: 5px 12px;
-      font-family: var(--font-he);
-      font-size: 11px;
-      font-weight: 600;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-    .density-btn:hover { color: var(--ink); }
-    .density-btn.active {
-      background: var(--accent-cyan);
-      color: var(--bg);
-      font-weight: 700;
-    }
-    .filter-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 10px;
-      background: var(--paper-3);
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      font-size: 11px;
-      color: var(--ink-soft);
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-    .filter-chip:hover { color: var(--ink); border-color: var(--accent-cyan); }
-    .filter-chip.active {
-      background: rgba(103,232,249,0.15);
-      border-color: var(--accent-cyan);
-      color: var(--accent-cyan);
-      font-weight: 600;
-    }
-    .filter-chip .x {
-      font-size: 14px;
-      opacity: 0.6;
-    }
-    .filter-chip-mono {
-      width: 16px; height: 16px;
-      display: grid; place-items: center;
-      border-radius: 4px;
-      font-size: 8px;
-      font-weight: 800;
-      color: var(--bg);
-    }
-    .toolbar-divider {
-      width: 1px;
-      height: 24px;
-      background: var(--border);
-      margin-inline: 4px;
-    }
-    .toolbar-right {
-      margin-inline-start: auto;
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-    .toolbar-action {
-      background: var(--paper-3);
-      border: 1px solid var(--border);
-      color: var(--ink-soft);
-      padding: 6px 12px;
-      font-family: var(--font-he);
-      font-size: 11px;
-      font-weight: 600;
-      border-radius: 8px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-    }
-    .toolbar-action:hover {
-      color: var(--ink);
-      border-color: var(--accent-cyan);
-    }
-
-    /* ====== VIEW FRAME ====== */
-    .view-frame {
-      background: var(--paper);
-      border: 1px solid var(--border);
-      border-radius: 0 0 14px 14px;
-      overflow: hidden;
-      box-shadow: var(--shadow-md);
-      padding: 16px;
-    }
+    /* VIEW FRAME */
+    .view-frame { background: var(--paper); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow-md); padding: 16px; }
     .view-section { display: none; }
     .view-section.active { display: block; }
 
-    /* ====== MONTH GRID (shared by all 3 options — like the skill) ====== */
-    .weekdays {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 6px;
-      margin-bottom: 6px;
-    }
-    .wd {
-      text-align: center;
-      font-family: var(--font);
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--ink-soft);
-      padding: 6px 0;
-      letter-spacing: 0.04em;
-    }
+    /* WEEKDAYS */
+    .weekdays { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-bottom: 6px; }
+    .wd { text-align: center; font-family: var(--font); font-size: 12px; font-weight: 600; color: var(--ink-soft); padding: 6px 0; letter-spacing: 0.04em; }
     .wd.weekend { color: var(--gold); }
 
-    .month-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    .week {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 6px;
-    }
+    /* MONTH GRID — cells stretch within their row */
+    .month-grid { display: flex; flex-direction: column; gap: 6px; }
+    .week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; align-items: stretch; }
 
-    .cell {
-      position: relative;
-      background: var(--paper-2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      min-height: 178px;
-      padding: 10px 9px 9px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      overflow: hidden;
-      transition: all 0.15s ease;
-    }
-    .cell.outside {
-      background: transparent;
-      border-color: var(--border-soft);
-    }
+    .cell { position: relative; background: var(--paper-2); border: 1px solid var(--border); border-radius: 10px; min-height: 200px; padding: 10px 9px 9px; display: flex; flex-direction: column; gap: 6px; overflow: hidden; transition: min-height 0.2s ease; }
+    .cell.outside { background: transparent; border-color: var(--border-soft); min-height: 80px; }
     .cell.outside .cell-head { opacity: 0.35; }
     .cell.outside .cell-body { display: none; }
     .cell.friday { background: var(--paper-3); }
-    .cell.saturday {
-      background: rgba(250,204,21,0.04);
-      border-color: rgba(251,191,36,0.18);
-    }
+    .cell.saturday { background: rgba(250,204,21,0.04); border-color: rgba(251,191,36,0.18); }
+
+    /* BUSY DAY = 5+ tasks → cell grows */
+    .cell.busy { min-height: 320px; }
+
+    /* TODAY = always expanded, gold border, pulse */
     .cell.is-today {
       border-color: var(--gold);
       box-shadow: 0 0 0 2px var(--gold), 0 0 24px rgba(250,204,21,0.4);
       overflow: visible;
+      min-height: 420px;
+      background: linear-gradient(180deg, rgba(250,204,21,0.04) 0%, var(--paper-2) 30%);
     }
     .cell.is-today::after {
-      content: 'היום';
+      content: 'היום · ' attr(data-date);
       position: absolute;
       top: -10px;
       left: 50%;
@@ -508,107 +111,99 @@
       background: var(--gold);
       color: var(--bg);
       font-family: var(--font-he);
-      font-size: 10px;
+      font-size: 10.5px;
       font-weight: 800;
-      padding: 2px 12px;
+      padding: 3px 14px;
       border-radius: 999px;
       letter-spacing: 0.05em;
       z-index: 3;
       box-shadow: 0 2px 8px rgba(250,204,21,0.45);
+      white-space: nowrap;
     }
 
-    .cell-head {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 6px;
-      padding-bottom: 6px;
-      border-bottom: 1px solid rgba(148,163,184,0.1);
-      min-height: 26px;
-    }
-    .cell-num {
-      font-family: var(--font-en);
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--ink);
-      line-height: 1;
-    }
-    .cell.is-today .cell-num { color: var(--gold); font-weight: 700; }
-    .cell-heb {
-      font-family: var(--font-he);
-      font-size: 10.5px;
-      color: var(--ink-soft);
-      font-weight: 500;
-      text-align: end;
-      line-height: 1.3;
-    }
-    .cell-count {
-      font-family: var(--font-en);
-      font-size: 9.5px;
-      font-weight: 700;
-      color: var(--accent-cyan);
-      background: rgba(103,232,249,0.10);
-      border: 1px solid rgba(103,232,249,0.25);
-      padding: 1px 6px;
-      border-radius: 999px;
-    }
+    .cell-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 6px; padding-bottom: 6px; border-bottom: 1px solid rgba(148,163,184,0.1); min-height: 26px; }
+    .cell-num { font-family: var(--font-en); font-size: 16px; font-weight: 600; color: var(--ink); line-height: 1; }
+    .cell.is-today .cell-num { color: var(--gold); font-weight: 800; font-size: 18px; }
+    .cell-heb { font-family: var(--font-he); font-size: 10.5px; color: var(--ink-soft); font-weight: 500; text-align: end; line-height: 1.3; }
+    .cell-count { font-family: var(--font-en); font-size: 9.5px; font-weight: 700; color: var(--accent-cyan); background: rgba(103,232,249,0.10); border: 1px solid rgba(103,232,249,0.25); padding: 1px 6px; border-radius: 999px; }
+    .cell.busy .cell-count, .cell.is-today .cell-count { background: var(--gold); color: var(--bg); border-color: var(--gold); }
 
-    .cell-body {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      flex: 1;
-      padding-top: 2px;
-      overflow: hidden;
-    }
+    .cell-body { display: flex; flex-direction: column; gap: 4px; flex: 1; padding-top: 2px; overflow: hidden; }
 
-    /* ====================================================== */
-    /* OPTION A (DEFAULT) — Task chips stacked linearly       */
-    /* ====================================================== */
-    .task-chip {
+    /* ===================================================== */
+    /* SHARED: Status group header                            */
+    /* ===================================================== */
+    .status-group { display: flex; flex-direction: column; gap: 3px; }
+    .status-group + .status-group { margin-block-start: 4px; }
+    .status-group-head {
       display: flex;
       align-items: center;
       gap: 6px;
-      padding: 5px 7px;
-      background: linear-gradient(155deg, var(--client-tint, rgba(103,232,249,0.20)) 0%, var(--client-tint-soft, rgba(103,232,249,0.06)) 100%);
-      border: 1px solid var(--client-color, rgba(103,232,249,0.4));
-      border-inline-start-width: 3px;
+      font-family: var(--font-he);
+      font-size: 9.5px;
+      font-weight: 800;
+      color: var(--status-color);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 2px 4px;
+      margin-block-start: 2px;
+    }
+    .status-group-head .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--status-color); box-shadow: 0 0 6px var(--status-color); }
+    .status-group-items { display: flex; flex-direction: column; gap: 3px; }
+
+    /* ===================================================== */
+    /* OPTION A (DEFAULT): 2-row chip — client + task         */
+    /* ===================================================== */
+    .task-chip {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      padding: 6px 8px 6px 9px;
+      background: var(--paper-3);
+      border: 1px solid var(--border);
+      border-inline-start: 3px solid var(--client-color);
       border-radius: 6px;
       cursor: pointer;
       transition: all 0.12s ease;
-      min-height: 24px;
       position: relative;
     }
     .task-chip:hover {
+      background: var(--paper-4);
+      border-color: var(--accent-cyan);
       transform: translateX(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      filter: brightness(1.15);
     }
-    .task-mono {
-      width: 18px; height: 18px;
-      display: grid; place-items: center;
-      border-radius: 4px;
-      font-family: var(--font-he);
-      font-size: 9px;
-      font-weight: 800;
-      color: var(--bg);
-      flex-shrink: 0;
+    .task-chip-row1 {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
     }
-    .task-title {
-      flex: 1;
+    .task-client {
       font-family: var(--font-he);
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 500;
-      color: var(--ink);
+      color: var(--ink-mute);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      line-height: 1.2;
+      flex: 1;
+      letter-spacing: 0.01em;
     }
     .task-status {
-      width: 6px; height: 6px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
       flex-shrink: 0;
+    }
+    .task-title {
+      font-family: var(--font-he);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.25;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
     .task-more {
       font-family: var(--font-he);
@@ -616,310 +211,228 @@
       font-weight: 600;
       color: var(--ink-mute);
       text-align: center;
-      padding: 3px 0;
+      padding: 4px 0;
       background: rgba(148,163,184,0.06);
       border-radius: 5px;
       cursor: pointer;
       transition: all 0.15s ease;
     }
-    .task-more:hover {
-      color: var(--accent-cyan);
-      background: rgba(103,232,249,0.08);
+    .task-more:hover { color: var(--accent-cyan); background: rgba(103,232,249,0.08); }
+
+    /* ===================================================== */
+    /* OPTION B: Avatar chip (color circle + 2-row text)      */
+    /* ===================================================== */
+    .task-chip-avatar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 8px;
+      background: var(--paper-3);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.12s ease;
+      position: relative;
+    }
+    .task-chip-avatar:hover {
+      background: var(--paper-4);
+      border-color: var(--accent-cyan);
+      transform: translateX(-2px);
+    }
+    .task-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--client-color);
+      display: grid;
+      place-items: center;
+      font-family: var(--font-he);
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--bg);
+      flex-shrink: 0;
+      position: relative;
+    }
+    .task-avatar::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      box-shadow: inset 0 0 0 1.5px rgba(255,255,255,0.25);
+    }
+    .task-text { flex: 1; min-width: 0; }
+    .task-text-client {
+      font-family: var(--font-he);
+      font-size: 9.5px;
+      font-weight: 500;
+      color: var(--ink-mute);
+      line-height: 1.15;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      letter-spacing: 0.01em;
+    }
+    .task-text-title {
+      font-family: var(--font-he);
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.2;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-block-start: 1px;
+    }
+    .task-status-large {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
     }
 
-    /* Density compact */
-    .density-compact .task-chip {
-      padding: 3px 5px;
-      min-height: 20px;
-      gap: 4px;
-    }
-    .density-compact .task-mono { width: 14px; height: 14px; font-size: 8px; }
-    .density-compact .task-title { font-size: 10px; }
-    .density-compact .cell { min-height: 160px; }
-
-    /* Density spacious */
-    .density-spacious .task-chip {
+    /* ===================================================== */
+    /* OPTION C: Card chip (compact 2-line, fuller layout)    */
+    /* ===================================================== */
+    .task-card {
       padding: 7px 9px;
-      min-height: 32px;
+      background: linear-gradient(155deg, var(--client-tint), transparent);
+      border: 1px solid var(--client-color);
+      border-radius: 7px;
+      cursor: pointer;
+      transition: all 0.12s ease;
+      display: flex;
       flex-direction: column;
-      align-items: flex-start;
       gap: 3px;
     }
-    .density-spacious .task-chip-row {
+    .task-card:hover {
+      background: linear-gradient(155deg, var(--client-tint-strong), var(--client-tint));
+      transform: translateX(-2px);
+    }
+    .task-card-head {
       display: flex;
       align-items: center;
       gap: 6px;
-      width: 100%;
+      justify-content: space-between;
     }
-    .density-spacious .task-meta {
-      font-family: var(--font-he);
-      font-size: 9.5px;
-      color: var(--ink-mute);
-    }
-    .density-spacious .cell { min-height: 220px; }
-
-    /* ====================================================== */
-    /* OPTION B — Grouped by Client (strip per client)        */
-    /* ====================================================== */
-    .client-group {
-      display: flex;
-      align-items: stretch;
-      gap: 4px;
-      background: rgba(148,163,184,0.03);
-      border-radius: 5px;
-      padding: 3px 5px 3px 3px;
-      border-inline-start: 3px solid var(--client-color);
-      cursor: pointer;
-      transition: all 0.12s ease;
-    }
-    .client-group:hover {
-      background: rgba(148,163,184,0.08);
-    }
-    .client-group-head {
-      width: 22px;
-      display: grid;
-      place-items: center;
-      flex-shrink: 0;
-    }
-    .client-group-mono {
-      width: 18px; height: 18px;
-      display: grid; place-items: center;
-      border-radius: 4px;
-      font-family: var(--font-he);
-      font-size: 9px;
-      font-weight: 800;
-      color: var(--bg);
-    }
-    .client-group-items {
-      flex: 1;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 3px;
-      align-items: center;
-      min-height: 24px;
-    }
-    .group-task {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 3px 6px;
-      background: var(--paper-3);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      font-family: var(--font-he);
-      font-size: 10px;
-      color: var(--ink);
-      max-width: 100%;
-      cursor: pointer;
-      transition: all 0.12s ease;
-    }
-    .group-task:hover {
-      border-color: var(--accent-cyan);
-      background: var(--paper-2);
-    }
-    .group-task-title {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    .group-task-status {
-      width: 5px; height: 5px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-
-    /* ====================================================== */
-    /* OPTION C — Status Grouped (kanban-in-cell)             */
-    /* ====================================================== */
-    .status-group {
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-    .status-group-head {
+    .task-card-client {
       display: flex;
       align-items: center;
       gap: 5px;
-      font-family: var(--font-he);
-      font-size: 9px;
-      font-weight: 700;
-      color: var(--status-color);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      padding: 1px 3px;
+      flex: 1;
+      min-width: 0;
     }
-    .status-group-head .dot {
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      background: var(--status-color);
-    }
-    .status-group-items {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 3px;
-    }
-    .status-task {
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
-      padding: 2px 5px;
-      background: var(--paper-3);
-      border: 1px solid var(--border);
-      border-inline-start: 2px solid var(--client-color);
-      border-radius: 4px;
-      font-family: var(--font-he);
-      font-size: 10px;
-      cursor: pointer;
-      transition: all 0.12s ease;
-      max-width: 100%;
-    }
-    .status-task:hover {
-      background: var(--paper-2);
-      border-color: var(--accent-cyan);
-    }
-    .status-task-mono {
-      width: 12px; height: 12px;
-      display: grid; place-items: center;
-      border-radius: 3px;
-      font-family: var(--font-he);
-      font-size: 7px;
-      font-weight: 800;
-      color: var(--bg);
+    .task-card-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+      background: var(--client-color);
       flex-shrink: 0;
     }
-    .status-task-title {
+    .task-card-client-name {
+      font-family: var(--font-he);
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--ink);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      color: var(--ink);
     }
-
-    /* ====== DECISION BAR ====== */
-    .decision-bar {
-      margin-block-start: 24px;
-      padding: 18px 22px;
-      background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);
-      border: 1px solid var(--border);
-      border-radius: 14px;
+    .task-card-type {
+      font-family: var(--font-he);
+      font-size: 8.5px;
+      font-weight: 700;
+      color: var(--ink-mute);
+      background: rgba(255,255,255,0.05);
+      padding: 1px 5px;
+      border-radius: 999px;
+      letter-spacing: 0.02em;
+    }
+    .task-card-title {
+      font-family: var(--font-he);
+      font-size: 11.5px;
+      font-weight: 500;
+      color: var(--ink-soft);
+      line-height: 1.3;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .task-card-footer {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-      flex-wrap: wrap;
-    }
-    .decision-bar-text h3 {
-      font-family: var(--font-he);
-      font-size: 15px;
-      font-weight: 700;
-      margin-block-end: 4px;
-    }
-    .decision-bar-text p {
-      font-size: 12.5px;
-      color: var(--ink-soft);
-      max-width: 700px;
-      line-height: 1.5;
-    }
-
-    /* ====== MODAL (preview only) ====== */
-    .modal-backdrop {
-      position: fixed; inset: 0;
-      background: rgba(7,16,31,0.85);
-      backdrop-filter: blur(8px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      padding: 24px;
-    }
-    .modal-backdrop.open { display: flex; }
-    .modal {
-      background: var(--paper);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      max-width: 560px;
-      width: 100%;
-      padding: 28px;
-      box-shadow: var(--shadow-lg);
-    }
-    .modal-head {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-block-end: 16px;
-    }
-    .modal-mono {
-      width: 40px; height: 40px;
-      display: grid; place-items: center;
-      border-radius: 10px;
-      font-family: var(--font-he);
-      font-size: 14px;
-      font-weight: 800;
-      color: var(--bg);
-    }
-    .modal-title {
-      font-family: var(--font-he);
-      font-size: 18px;
-      font-weight: 700;
-    }
-    .modal-subtitle {
-      font-size: 12px;
-      color: var(--ink-soft);
+      gap: 4px;
       margin-block-start: 2px;
     }
-    .modal-row {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      margin-block-end: 12px;
-      padding: 10px 14px;
-      background: var(--paper-2);
-      border-radius: 8px;
-      font-size: 13px;
-      color: var(--ink);
+    .task-card-status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
     }
-    .modal-row strong {
-      color: var(--ink-mute);
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      min-width: 80px;
-    }
-    .modal-close {
-      background: var(--accent-cyan);
-      color: var(--bg);
-      border: none;
-      padding: 10px 20px;
+    .task-card-status-text {
       font-family: var(--font-he);
-      font-size: 13px;
-      font-weight: 700;
-      border-radius: 10px;
-      cursor: pointer;
-      width: 100%;
-      margin-top: 8px;
+      font-size: 9px;
+      font-weight: 600;
+      color: var(--ink-mute);
+      letter-spacing: 0.02em;
     }
+
+    /* DECISION BAR */
+    .decision-bar { margin-block-start: 24px; padding: 18px 22px; background: linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%); border: 1px solid var(--border); border-radius: 14px; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+    .decision-bar-text h3 { font-family: var(--font-he); font-size: 15px; font-weight: 700; margin-block-end: 4px; }
+    .decision-bar-text p { font-size: 12.5px; color: var(--ink-soft); max-width: 700px; line-height: 1.5; }
+
+    /* MODAL */
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(7,16,31,0.85); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 24px; }
+    .modal-backdrop.open { display: flex; }
+    .modal { background: var(--paper); border: 1px solid var(--border); border-radius: 16px; max-width: 560px; width: 100%; padding: 28px; box-shadow: var(--shadow-lg); }
+    .modal-head { display: flex; align-items: center; gap: 14px; margin-block-end: 18px; }
+    .modal-avatar { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; font-family: var(--font-he); font-size: 14px; font-weight: 800; color: var(--bg); position: relative; }
+    .modal-avatar::after { content: ''; position: absolute; inset: 0; border-radius: 50%; box-shadow: inset 0 0 0 2px rgba(255,255,255,0.25); }
+    .modal-title { font-family: var(--font-he); font-size: 19px; font-weight: 700; line-height: 1.2; }
+    .modal-subtitle { font-size: 12px; color: var(--ink-soft); margin-block-start: 4px; }
+    .modal-row { display: flex; gap: 8px; align-items: center; margin-block-end: 10px; padding: 11px 14px; background: var(--paper-2); border-radius: 8px; font-size: 13px; color: var(--ink); }
+    .modal-row strong { color: var(--ink-mute); font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; min-width: 86px; }
+    .modal-close { background: var(--accent-cyan); color: var(--bg); border: none; padding: 11px 20px; font-family: var(--font-he); font-size: 13px; font-weight: 700; border-radius: 10px; cursor: pointer; width: 100%; margin-top: 10px; }
     .modal-close:hover { background: #22D3EE; }
+
+    /* Note about logos */
+    .logo-note {
+      background: rgba(103,232,249,0.06);
+      border: 1px solid rgba(103,232,249,0.2);
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-block-end: 12px;
+      font-size: 11.5px;
+      color: var(--ink-soft);
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .logo-note .icon {
+      color: var(--accent-cyan);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
   </style>
 </head>
 <body>
 
   <div class="page">
 
-    <!-- ====== HEADER ====== -->
+    <!-- HEADER -->
     <div class="header">
       <div class="brand">
         <div class="brand-logo">ZG</div>
         <div class="brand-text">
-          <span class="header-meta-label">ZST · GANTTS SYSTEM</span>
+          <span class="header-meta-label">ZST · GANTTS SYSTEM · v3</span>
           <h1>
             <span class="label">לוח שנה מאוחד</span>
             <span class="sep"></span>
-            <span>Master View</span>
+            <span>שם מלא + Today מורחב</span>
           </h1>
-          <div class="hint">לוח שנה אחד של כל המחלקה — כל יום מציג את כל המשימות של כל הלקוחות</div>
+          <div class="hint">לוח שנה אחד · קוביות יום שגדלות לפי כמות תוכן · שם לקוח מלא לא קיצור</div>
         </div>
       </div>
-
       <div class="header-right">
         <div class="month-picker">
           <span class="month-picker-label">חודש</span>
@@ -929,167 +442,107 @@
       </div>
     </div>
 
-    <!-- ====== CONTROLS ====== -->
+    <!-- LOGO NOTE -->
+    <div class="logo-note">
+      <span class="icon">💡</span>
+      <span><strong>לגבי לוגואים:</strong> טכנית קל מאוד (img 32px לכל לקוח, מ-R2). לוגיסטית — אצטרך לאסוף 19 לוגואים מתיקיות הלקוחות. ל-Phase 4 של המערכת זה יקרה. כאן במוקאפ — <strong>שם הלקוח המלא</strong> + עיגול בצבע הלקוח (כדי לזהות מהיר את הצבע).</span>
+    </div>
+
+    <!-- CONTROLS -->
     <div class="controls">
       <div class="view-switcher">
-        <button class="view-btn active" data-view="linear">
+        <button class="view-btn active" data-view="default">
           <span class="view-btn-letter">א</span>
-          <span>משימות ברצף</span>
-          <span class="view-btn-tag">דומה לסקיל</span>
+          <span>שורה אנכית · שם + משימה</span>
+          <span class="view-btn-tag">מומלץ</span>
         </button>
-        <button class="view-btn" data-view="grouped">
+        <button class="view-btn" data-view="avatar">
           <span class="view-btn-letter">ב</span>
-          <span>מקובץ לפי לקוח</span>
+          <span>עם עיגול צבעוני</span>
         </button>
-        <button class="view-btn" data-view="status">
+        <button class="view-btn" data-view="card">
           <span class="view-btn-letter">ג</span>
-          <span>מקובץ לפי סטטוס</span>
+          <span>כרטיס מורחב</span>
         </button>
       </div>
-
       <div class="legend">
         <span class="legend-label">סטטוס</span>
-        <span class="legend-chip"><span class="sw round" style="background:var(--status-work)"></span>בעבודה</span>
-        <span class="legend-chip"><span class="sw round" style="background:var(--status-design)"></span>בעיצוב</span>
-        <span class="legend-chip"><span class="sw round" style="background:var(--status-pending)"></span>לאישור</span>
-        <span class="legend-chip"><span class="sw round" style="background:var(--status-approved)"></span>אושר</span>
-        <span class="legend-chip"><span class="sw round" style="background:var(--status-archived)"></span>נגנז</span>
+        <span class="legend-chip"><span class="sw" style="background:var(--status-work)"></span>בעבודה</span>
+        <span class="legend-chip"><span class="sw" style="background:var(--status-design)"></span>בעיצוב</span>
+        <span class="legend-chip"><span class="sw" style="background:var(--status-pending)"></span>לאישור</span>
+        <span class="legend-chip"><span class="sw" style="background:var(--status-approved)"></span>אושר</span>
+        <span class="legend-chip"><span class="sw" style="background:var(--status-archived)"></span>נגנז</span>
       </div>
     </div>
 
-    <!-- ============================================== -->
-    <!-- OPTION A: LINEAR TASK CHIPS                    -->
-    <!-- ============================================== -->
-    <section class="view-section active" id="view-linear">
+    <!-- OPTION A: 2-row chip (client + task title) -->
+    <section class="view-section active" id="view-default">
       <div class="view-intro">
         <div class="view-intro-text">
-          <h2>אופציה א' — משימות ברצף <span class="badge">דומה לסקיל · דיפולט</span></h2>
-          <p>בדיוק כמו שבקשת: לוח שנה חודשי אחד (כמו בסקיל), ובכל יום רואים את כל המשימות של כל הלקוחות — מסודרות אנכית, צבע כל משימה לפי לקוח, monogram + כותרת + נקודת סטטוס. לחיצה על משימה פותחת את המודאל המלא.</p>
+          <h2>אופציה א' — שורה אנכית: שם לקוח + שם משימה <span class="badge">דיפולט</span></h2>
+          <p>כל משימה היא chip קטן ב-2 שורות: שם הלקוח המלא באפור קטן למעלה, שם המשימה בולט מתחת. צבע הלקוח כפס דק בצד. מקובץ לפי סטטוס. <strong>היום (24.5) מורחב ל-420px</strong>, ימים עמוסים (5+ משימות) מורחבים ל-320px. הכי קומפקטי וקריא.</p>
         </div>
         <div class="pros-cons">
-          <div class="pro">
-            <span class="label">✓ יתרון</span>
-            הכי קרוב לחוויה של הסקיל. מבט אחד על כל המחלקה בלי scroll. הצבעוניות עושה את ההפרדה.
-          </div>
-          <div class="con">
-            <span class="label">⚠ חיסרון</span>
-            בימים עמוסים (ראשון בבוקר) - הרשימה ארוכה, ייתכן +N more. צריך לחפש לקוח ספציפי בעיניים.
-          </div>
+          <div class="pro"><span class="label">✓ יתרון</span>קריאות מקסימלית · שם מלא בכל chip · workflow-driven (סטטוס first)</div>
+          <div class="con"><span class="label">⚠ חיסרון</span>צבע הלקוח קטן יחסית (פס בצד) · אם רוצים עין-לעין על לקוח ספציפי — אופציה ב' עדיפה</div>
         </div>
       </div>
-
-      <div class="toolbar">
-        <span class="toolbar-label">תצוגה</span>
-        <div class="density-btn-group">
-          <button class="density-btn" data-density="compact" data-target="linear">קומפקטי</button>
-          <button class="density-btn active" data-density="normal" data-target="linear">רגיל</button>
-          <button class="density-btn" data-density="spacious" data-target="linear">מרווח</button>
-        </div>
-        <div class="toolbar-right">
-          <button class="toolbar-action">⤓ ייצוא PDF</button>
-          <button class="toolbar-action">🔗 שתף לינק לחודש</button>
-        </div>
-      </div>
-
       <div class="view-frame">
-        <div class="weekdays" id="weekdays-linear"></div>
-        <div class="month-grid density-normal" id="grid-linear"></div>
+        <div class="weekdays" id="weekdays-default"></div>
+        <div class="month-grid" id="grid-default"></div>
       </div>
     </section>
 
-    <!-- ============================================== -->
-    <!-- OPTION B: GROUPED BY CLIENT                    -->
-    <!-- ============================================== -->
-    <section class="view-section" id="view-grouped">
+    <!-- OPTION B: Avatar circle + 2-line text -->
+    <section class="view-section" id="view-avatar">
       <div class="view-intro">
         <div class="view-intro-text">
-          <h2>אופציה ב' — מקובץ לפי לקוח (שיפור שלי)</h2>
-          <p>אותה רשת חודשית, אבל בתוך כל יום המשימות מקובצות לפי לקוח — כל לקוח מקבל "סטריפ" קטן עם monogram + chips קטנים של כל המשימות שלו ביום. רואים מיד "אדבות יש לו 3 פוסטים היום, חיים+ יש לו 1".</p>
+          <h2>אופציה ב' — עם עיגול צבעוני (במקום לוגו) <span class="badge alt">חלופי</span></h2>
+          <p>אותה תצוגה אבל כל משימה כוללת עיגול 28px בצבע הלקוח (placeholder ללוגו עתידי). העיגול עוזר לזיהוי ויזואלי מהיר של הלקוח לפני קריאת השם. שם לקוח קטן באפור, שם משימה בולט. סטטוס כנקודה בצד.</p>
         </div>
         <div class="pros-cons">
-          <div class="pro">
-            <span class="label">✓ יתרון</span>
-            סדר ויזואלי - יום עמוס נראה מסודר ולא בלגן. קל לסרוק לקוח ספציפי. הבחנה מהירה בין לקוחות.
-          </div>
-          <div class="con">
-            <span class="label">⚠ חיסרון</span>
-            כל cell צריך יותר גובה. יותר חלוקה ויזואלית - ייתכן שמרגיש "כבד" בהשוואה לאופציה א'.
-          </div>
+          <div class="pro"><span class="label">✓ יתרון</span>זיהוי לקוח בעין אחת לפי הצבע · קל לעבור לראוי-לוגו כשהלוגואים יעלו · יותר ויזואלי וגדול</div>
+          <div class="con"><span class="label">⚠ חיסרון</span>תופס יותר אופקית · פחות משימות נכנסות בcell · 19 צבעים שונים יכולים להיות הרבה</div>
         </div>
       </div>
-
-      <div class="toolbar">
-        <span class="toolbar-label">סינון לקוחות</span>
-        <span class="filter-chip active"><span class="filter-chip-mono" style="background:#67E8F9">כל</span>כל הלקוחות</span>
-        <span class="filter-chip"><span class="filter-chip-mono" style="background:#67E8F9">אד</span>אדוות</span>
-        <span class="filter-chip"><span class="filter-chip-mono" style="background:#5EEAD4">חב</span>חיים+</span>
-        <span class="filter-chip"><span class="filter-chip-mono" style="background:#FACC15">שה</span>שליחות</span>
-        <span class="filter-chip"><span class="filter-chip-mono" style="background:#FB923C">פת</span>פורום תקנה</span>
-        <span class="filter-chip"><span class="x">+15</span></span>
-        <div class="toolbar-right">
-          <button class="toolbar-action">🔗 שתף לינק לחודש</button>
-        </div>
-      </div>
-
       <div class="view-frame">
-        <div class="weekdays" id="weekdays-grouped"></div>
-        <div class="month-grid" id="grid-grouped"></div>
+        <div class="weekdays" id="weekdays-avatar"></div>
+        <div class="month-grid" id="grid-avatar"></div>
       </div>
     </section>
 
-    <!-- ============================================== -->
-    <!-- OPTION C: STATUS GROUPED                       -->
-    <!-- ============================================== -->
-    <section class="view-section" id="view-status">
+    <!-- OPTION C: Full card (client name BIG + title) -->
+    <section class="view-section" id="view-card">
       <div class="view-intro">
         <div class="view-intro-text">
-          <h2>אופציה ג' — מקובץ לפי סטטוס (שיפור שלי)</h2>
-          <p>אותה רשת חודשית, אבל בתוך כל יום המשימות מקובצות לפי סטטוס — בעבודה, לאישור, אושר. כל קבוצה עם header בצבע הסטטוס. צבע הלקוח נשאר כפס דק על המשימה. תפיסה מהירה של "מה הסטטוס היום" - איפה יש פערים, מה מחכה לאישורי.</p>
+          <h2>אופציה ג' — כרטיס מורחב <span class="badge alt">מקסימום מידע</span></h2>
+          <p>כל משימה היא כרטיס מלא: ריבוע צבע + שם לקוח בולט + סוג תוכן (פוסט/קרוסלה/ריל) + שם משימה + סטטוס מילולי. רקע ה-card בtint של צבע הלקוח. הכי הרבה מידע לעין — אבל פחות משימות נכנסות בcell.</p>
         </div>
         <div class="pros-cons">
-          <div class="pro">
-            <span class="label">✓ יתרון</span>
-            רואים מיד "3 משימות מחכות לאישורי היום" - workflow-driven. מתאים למנהל שבודק תקופתית סטטוס.
-          </div>
-          <div class="con">
-            <span class="label">⚠ חיסרון</span>
-            הצבע של הלקוח הופך משני (פס דק). יותר רעש ויזואלי בכל cell. שונה מהחוויה של הסקיל.
-          </div>
+          <div class="pro"><span class="label">✓ יתרון</span>מקסימום מידע לכל משימה בלי ללחוץ · רקע צבעוני עוזר להבחנה · כותרת מלאה</div>
+          <div class="con"><span class="label">⚠ חיסרון</span>~3 משימות נכנסות לcell של 200px · יום עמוס יציג +N עוד · יותר ויזואלי-עמוס</div>
         </div>
       </div>
-
-      <div class="toolbar">
-        <span class="toolbar-label">סנן סטטוסים</span>
-        <span class="filter-chip active">הכל</span>
-        <span class="filter-chip"><span class="sw round" style="width:8px;height:8px;background:var(--status-pending)"></span>לאישור (12)</span>
-        <span class="filter-chip"><span class="sw round" style="width:8px;height:8px;background:var(--status-work)"></span>בעבודה (28)</span>
-        <span class="filter-chip"><span class="sw round" style="width:8px;height:8px;background:var(--status-approved)"></span>אושרו (24)</span>
-        <div class="toolbar-right">
-          <button class="toolbar-action">🔗 שתף לינק לחודש</button>
-        </div>
-      </div>
-
       <div class="view-frame">
-        <div class="weekdays" id="weekdays-status"></div>
-        <div class="month-grid" id="grid-status"></div>
+        <div class="weekdays" id="weekdays-card"></div>
+        <div class="month-grid" id="grid-card"></div>
       </div>
     </section>
 
-    <!-- ====== DECISION BAR ====== -->
     <div class="decision-bar">
       <div class="decision-bar-text">
-        <h3>איזו אופציה הכי תואמת לדרך החשיבה שלכם?</h3>
-        <p>כל 3 האופציות שומרות על לוח שנה חודשי אחד (כמו בסקיל). ההבדל = איך מציגים את המשימות בתוך כל יום. אפשר גם לשלב: אופציה א' כברירת מחדל + toggle לאופציה ב' לימים עמוסים.</p>
+        <h3>איזה layout עובד הכי טוב לעין שלך?</h3>
+        <p>כל 3 משתפים: לוח שנה אחד · מקובץ לפי סטטוס · היום (24.5) מורחב · ימים עמוסים מורחבים · שם לקוח מלא. ההבדל = איך נראה כל chip בודד.</p>
       </div>
     </div>
 
   </div>
 
-  <!-- Modal (preview) -->
+  <!-- MODAL -->
   <div class="modal-backdrop" id="modal">
     <div class="modal">
       <div class="modal-head">
-        <div class="modal-mono" id="modal-mono">אד</div>
+        <div class="modal-avatar" id="modal-avatar">אד</div>
         <div>
           <div class="modal-title" id="modal-title">תקציב 2026</div>
           <div class="modal-subtitle" id="modal-subtitle">עמותת אדוות · 14.5.2026 · פוסט</div>
@@ -1099,31 +552,31 @@
       <div class="modal-row"><strong>קופי נלווה</strong>תקציב 2026 מאושר - חלוקת המשאבים לפי תוכניות העבודה...</div>
       <div class="modal-row"><strong>שקפים</strong>3 שקפים בקרוסלה · כל שקף עם קופי משלו</div>
       <div class="modal-row"><strong>מדיה</strong>3 תמונות הועלו (1.2 MB)</div>
-      <button class="modal-close" onclick="document.getElementById('modal').classList.remove('open')">סגור · במערכת האמיתית כאן יהיו עריכה + רטיב + שיתוף</button>
+      <button class="modal-close" onclick="document.getElementById('modal').classList.remove('open')">סגור · במערכת כאן יהיו עריכה + רטיב + שיתוף</button>
     </div>
   </div>
 
   <script>
     const CLIENTS = [
-      { slug: 'adavot', name: 'עמותת אדוות', mono: 'אד', color: '#67E8F9' },
-      { slug: 'haim-plus', name: 'חיים בפלוס', mono: 'חב', color: '#5EEAD4' },
-      { slug: 'shlichut', name: 'שליחות הוראה', mono: 'שה', color: '#FACC15' },
-      { slug: 'forum-takana', name: 'פורום תקנה', mono: 'פת', color: '#FB923C' },
-      { slug: 'merkaz-shazar', name: 'מרכז שזר', mono: 'מש', color: '#C4B5FD' },
-      { slug: 'meshek-ahia', name: 'משק אחיה', mono: 'מא', color: '#86EFAC' },
-      { slug: 'agada', name: 'אגדה', mono: 'אג', color: '#F0ABFC' },
-      { slug: 'emuna', name: 'תנועת אמונה', mono: 'אמ', color: '#FDA4AF' },
-      { slug: 'yba78', name: 'ישיבות בני עקיבא', mono: 'יב', color: '#FBBF24' },
-      { slug: 'liver', name: 'מושתלי כבד', mono: 'מכ', color: '#A78BFA' },
-      { slug: 'nevo', name: 'נבו תיירות', mono: 'נב', color: '#34D399' },
-      { slug: 'yba-merkaz', name: 'יבע מרכז', mono: 'יע', color: '#F472B6' },
-      { slug: 'nitzcha', name: 'ניצחה הרוח', mono: 'נר', color: '#60A5FA' },
-      { slug: 'merkaz-katif', name: 'מרכז קטיף', mono: 'מק', color: '#FCA5A5' },
-      { slug: 'charedim-tzava', name: 'חרדים לצבא', mono: 'חצ', color: '#A3E635' },
-      { slug: 'dugri', name: 'דוגרי · משרד החוץ', mono: 'דג', color: '#FDBA74' },
-      { slug: 'gush-katif', name: 'מורשת גוש קטיף', mono: 'גק', color: '#7DD3FC' },
-      { slug: 'farmina', name: 'פרמינה', mono: 'פר', color: '#FACC15' },
-      { slug: 'echad-bachodesh', name: 'אחד בחודש', mono: 'אב', color: '#67E8F9' },
+      { slug: 'adavot', name: 'עמותת אדוות', short: 'אד', color: '#67E8F9' },
+      { slug: 'haim-plus', name: 'חיים בפלוס', short: 'חב', color: '#5EEAD4' },
+      { slug: 'shlichut', name: 'שליחות הוראה', short: 'שה', color: '#FACC15' },
+      { slug: 'forum-takana', name: 'פורום תקנה', short: 'פת', color: '#FB923C' },
+      { slug: 'merkaz-shazar', name: 'מרכז שזר', short: 'מש', color: '#C4B5FD' },
+      { slug: 'meshek-ahia', name: 'משק אחיה', short: 'מא', color: '#86EFAC' },
+      { slug: 'agada', name: 'אגדה', short: 'אג', color: '#F0ABFC' },
+      { slug: 'emuna', name: 'תנועת אמונה', short: 'אמ', color: '#FDA4AF' },
+      { slug: 'yba78', name: 'ישיבות בני עקיבא', short: 'יב', color: '#FBBF24' },
+      { slug: 'liver', name: 'מושתלי כבד', short: 'מכ', color: '#A78BFA' },
+      { slug: 'nevo', name: 'נבו תיירות', short: 'נב', color: '#34D399' },
+      { slug: 'yba-merkaz', name: 'יבע מרכז', short: 'יע', color: '#F472B6' },
+      { slug: 'nitzcha', name: 'ניצחה הרוח', short: 'נר', color: '#60A5FA' },
+      { slug: 'merkaz-katif', name: 'מרכז קטיף', short: 'מק', color: '#FCA5A5' },
+      { slug: 'charedim-tzava', name: 'חרדים לצבא', short: 'חצ', color: '#A3E635' },
+      { slug: 'dugri', name: 'דוגרי משרד החוץ', short: 'דג', color: '#FDBA74' },
+      { slug: 'gush-katif', name: 'מורשת גוש קטיף', short: 'גק', color: '#7DD3FC' },
+      { slug: 'farmina', name: 'פרמינה', short: 'פר', color: '#FACC15' },
+      { slug: 'echad-bachodesh', name: 'אחד בחודש', short: 'אב', color: '#67E8F9' },
     ];
 
     function tint(hex, alpha) {
@@ -1135,14 +588,20 @@
 
     const STATUSES = ['work', 'design', 'pending', 'approved', 'archived'];
     const STATUS_LABELS = { work: 'בעבודה', design: 'בעיצוב', pending: 'ממתין לאישור', approved: 'אושר', archived: 'נגנז' };
+    const STATUS_LABELS_SHORT = { work: 'בעבודה', design: 'בעיצוב', pending: 'לאישור', approved: 'אושר', archived: 'נגנז' };
     const STATUS_COLORS = { work: '#3B82F6', design: '#F97316', pending: '#EAB308', approved: '#22C55E', archived: '#6B7280' };
+    const STATUS_ORDER = ['pending', 'work', 'design', 'approved', 'archived'];
     const STATUS_WEIGHTS = [0.30, 0.25, 0.20, 0.20, 0.05];
+
+    const TYPES = ['post', 'carousel', 'story', 'reel'];
+    const TYPE_LABELS = { post: 'פוסט', carousel: 'קרוסלה', story: 'סטורי', reel: 'ריל' };
 
     const SAMPLE_TITLES = [
       'תקציב 2026', 'חג השבועות', 'סיכום שבועי', 'מבצע קיץ', 'הכרזה רשמית',
       'ראיון מיוחד', 'תוכן לקהל', 'הזמנה לאירוע', 'תודה לתורמים', 'מאחורי הקלעים',
       '5 טיפים', 'מה חדש?', 'גלריית תמונות', 'סדנת קיץ', 'מסר חשוב',
-      'עדות אישית', 'הקדמה לפרק', 'שאלה לקהל', 'משחק וזכייה', 'יום ירושלים'
+      'עדות אישית', 'הקדמה לפרק', 'שאלה לקהל', 'משחק וזכייה', 'יום ירושלים',
+      'פרשת השבוע', 'דבר ראש המרכז', 'הזמנה לכנס', 'ברכת חודש',
     ];
 
     function weightedRandom(items, weights) {
@@ -1156,22 +615,10 @@
     }
 
     const HEBREW_DAYS = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
-    const HEBREW_DAYS_SHORT = ['א\'', 'ב\'', 'ג\'', 'ד\'', 'ה\'', 'ו\'', 'שבת'];
-    const HEBREW_DATES = {
-      // May 2026 ≈ Iyar–Sivan 5786 (approximate, for demo)
-    };
-    function hebrewDate(day) {
-      // approximate Hebrew calendar for May 2026 (Iyar starts ~April, Sivan ~May 17)
-      const iyarStart = 14; // Iyar 14 = May 1
-      const sivanStart = 17; // May 17 = Sivan 1
-      if (day < sivanStart) {
-        const heb = day + iyarStart - 1;
-        return `${gematria(heb)} אייר`;
-      } else {
-        const heb = day - sivanStart + 1;
-        return `${gematria(heb)} סיון`;
-      }
-    }
+    const TODAY = 24;
+    function dayOfWeek(day) { return (5 + (day - 1)) % 7; }
+    function isSaturday(day) { return dayOfWeek(day) === 6; }
+
     function gematria(n) {
       const ones = ['', 'א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ז', 'ח', 'ט'];
       const tens = ['', 'י', 'כ', 'ל', 'מ', 'נ', 'ס', 'ע', 'פ', 'צ'];
@@ -1182,16 +629,20 @@
       const o = n % 10;
       return o === 0 ? `${tens[t]}'` : `${tens[t]}"${ones[o]}`;
     }
+    function hebrewDate(day) {
+      const iyarStart = 14;
+      const sivanStart = 17;
+      if (day < sivanStart) {
+        return `${gematria(day + iyarStart - 1)} אייר`;
+      } else {
+        return `${gematria(day - sivanStart + 1)} סיון`;
+      }
+    }
 
-    const TODAY = 24;
-    function dayOfWeek(day) { return (5 + (day - 1)) % 7; } // May 1, 2026 = Friday
-    function isSaturday(day) { return dayOfWeek(day) === 6; }
-
-    // Generate all tasks for the month
     function generateMonthTasks() {
-      const tasks = []; // flat list
+      const tasks = [];
       CLIENTS.forEach(client => {
-        const itemCount = 3 + Math.floor(Math.random() * 4); // 3-6 per client
+        const itemCount = 3 + Math.floor(Math.random() * 4);
         const days = new Set();
         let attempts = 0;
         while (days.size < itemCount && attempts < 50) {
@@ -1201,44 +652,46 @@
         }
         days.forEach(day => {
           tasks.push({
-            day,
-            client,
+            day, client,
             title: SAMPLE_TITLES[Math.floor(Math.random() * SAMPLE_TITLES.length)],
+            type: TYPES[Math.floor(Math.random() * TYPES.length)],
             status: weightedRandom(STATUSES, STATUS_WEIGHTS),
           });
         });
       });
-      // Add some extra concentration on day 24 (today) and 25 (busy Sunday)
-      [24, 25, 26].forEach(d => {
-        for (let i = 0; i < 2; i++) {
-          const c = CLIENTS[Math.floor(Math.random() * CLIENTS.length)];
-          tasks.push({
-            day: d,
-            client: c,
-            title: SAMPLE_TITLES[Math.floor(Math.random() * SAMPLE_TITLES.length)],
-            status: weightedRandom(STATUSES, STATUS_WEIGHTS),
-          });
-        }
+      // Today (24) — many tasks (showcase expanded)
+      const todayClients = [0, 2, 4, 6, 8, 10, 12, 14, 16];
+      todayClients.forEach(idx => {
+        tasks.push({
+          day: 24, client: CLIENTS[idx],
+          title: SAMPLE_TITLES[Math.floor(Math.random() * SAMPLE_TITLES.length)],
+          type: TYPES[Math.floor(Math.random() * TYPES.length)],
+          status: weightedRandom(STATUSES, STATUS_WEIGHTS),
+        });
+      });
+      // 25 = busy Sunday
+      [1, 3, 5, 7, 9].forEach(idx => {
+        tasks.push({
+          day: 25, client: CLIENTS[idx],
+          title: SAMPLE_TITLES[Math.floor(Math.random() * SAMPLE_TITLES.length)],
+          type: TYPES[Math.floor(Math.random() * TYPES.length)],
+          status: weightedRandom(STATUSES, STATUS_WEIGHTS),
+        });
       });
       return tasks;
     }
 
     const TASKS = generateMonthTasks();
+    function tasksForDay(day) { return TASKS.filter(t => t.day === day); }
 
-    function tasksForDay(day) {
-      return TASKS.filter(t => t.day === day);
-    }
-
-    // ====== RENDER WEEKDAYS ======
     function renderWeekdays(containerId) {
-      const html = HEBREW_DAYS.map((d, i) => `<div class="wd ${i >= 5 ? 'weekend' : ''}">${d}</div>`).join('');
-      document.getElementById(containerId).innerHTML = html;
+      document.getElementById(containerId).innerHTML =
+        HEBREW_DAYS.map((d, i) => `<div class="wd ${i >= 5 ? 'weekend' : ''}">${d}</div>`).join('');
     }
 
-    // ====== RENDER GRID (shared structure) ======
-    function renderGrid(containerId, cellRenderer) {
+    function renderGrid(containerId, taskRenderer) {
       const container = document.getElementById(containerId);
-      const firstDow = 5; // May 1 = Friday
+      const firstDow = 5;
       const daysInMonth = 31;
       const totalCells = Math.ceil((firstDow + daysInMonth) / 7) * 7;
       const weeksCount = totalCells / 7;
@@ -1250,15 +703,17 @@
           const cellIdx = w * 7 + d;
           const dayNum = cellIdx - firstDow + 1;
           const inMonth = dayNum >= 1 && dayNum <= daysInMonth;
-          const dow = d;
           const classes = ['cell'];
           if (!inMonth) classes.push('outside');
           if (inMonth) {
-            if (dow === 5) classes.push('friday');
-            if (dow === 6) classes.push('saturday');
+            if (d === 5) classes.push('friday');
+            if (d === 6) classes.push('saturday');
             if (dayNum === TODAY) classes.push('is-today');
+            const dayTasks = tasksForDay(dayNum);
+            if (dayNum !== TODAY && dayTasks.length >= 5) classes.push('busy');
           }
-          html += `<div class="${classes.join(' ')}">`;
+          const dataAttr = inMonth && dayNum === TODAY ? `data-date="${dayNum}.5"` : '';
+          html += `<div class="${classes.join(' ')}" ${dataAttr}>`;
           if (inMonth) {
             const dayTasks = tasksForDay(dayNum);
             html += `<div class="cell-head">
@@ -1266,7 +721,7 @@
               ${dayTasks.length > 0 ? `<span class="cell-count">${dayTasks.length}</span>` : ''}
               <span class="cell-heb">${hebrewDate(dayNum)}</span>
             </div>`;
-            html += `<div class="cell-body">${cellRenderer(dayTasks, dayNum)}</div>`;
+            html += `<div class="cell-body">${taskRenderer(dayTasks, dayNum)}</div>`;
           } else {
             const displayNum = dayNum < 1 ? (30 + dayNum) : (dayNum - daysInMonth);
             html += `<div class="cell-head"><span class="cell-num">${displayNum}</span></div>`;
@@ -1278,66 +733,7 @@
       container.innerHTML = html;
     }
 
-    // ====== OPTION A: LINEAR ======
-    function renderLinear(tasks, dayNum) {
-      const MAX_VISIBLE = 5;
-      const visible = tasks.slice(0, MAX_VISIBLE);
-      const overflow = tasks.length - MAX_VISIBLE;
-      let html = visible.map(t => {
-        const color = t.client.color;
-        return `<div class="task-chip"
-          style="--client-color:${color};--client-tint:${tint(color,0.18)};--client-tint-soft:${tint(color,0.05)};border-inline-start-color:${color}"
-          onclick="openModal('${t.client.mono}','${t.title}','${t.client.name}',${dayNum},'${t.status}')">
-          <span class="task-chip-row">
-            <span class="task-mono" style="background:${color}">${t.client.mono}</span>
-            <span class="task-title">${t.title}</span>
-            <span class="task-status" style="background:${STATUS_COLORS[t.status]}"></span>
-          </span>
-          <span class="task-meta">${t.client.name} · ${STATUS_LABELS[t.status]}</span>
-        </div>`;
-      }).join('');
-      if (overflow > 0) {
-        html += `<div class="task-more">+${overflow} עוד</div>`;
-      }
-      return html;
-    }
-
-    // ====== OPTION B: GROUPED BY CLIENT ======
-    function renderGrouped(tasks, dayNum) {
-      // Group tasks by client
-      const grouped = {};
-      tasks.forEach(t => {
-        if (!grouped[t.client.slug]) grouped[t.client.slug] = { client: t.client, items: [] };
-        grouped[t.client.slug].items.push(t);
-      });
-      const groups = Object.values(grouped);
-      const MAX_GROUPS = 4;
-      const visible = groups.slice(0, MAX_GROUPS);
-      const overflow = groups.length - MAX_GROUPS;
-
-      let html = visible.map(g => {
-        const color = g.client.color;
-        return `<div class="client-group" style="--client-color:${color}" onclick="openModal('${g.client.mono}','${g.items[0].title}','${g.client.name}',${dayNum},'${g.items[0].status}')">
-          <div class="client-group-head">
-            <span class="client-group-mono" style="background:${color}">${g.client.mono}</span>
-          </div>
-          <div class="client-group-items">
-            ${g.items.map(t => `<span class="group-task">
-              <span class="group-task-title">${t.title}</span>
-              <span class="group-task-status" style="background:${STATUS_COLORS[t.status]}"></span>
-            </span>`).join('')}
-          </div>
-        </div>`;
-      }).join('');
-      if (overflow > 0) {
-        html += `<div class="task-more">+${overflow} לקוחות נוספים</div>`;
-      }
-      return html;
-    }
-
-    // ====== OPTION C: STATUS GROUPED ======
-    function renderStatus(tasks, dayNum) {
-      const STATUS_ORDER = ['pending', 'work', 'design', 'approved', 'archived'];
+    function renderStatusGroups(tasks, dayNum, chipRenderer, maxPerGroup) {
       const grouped = {};
       STATUS_ORDER.forEach(s => grouped[s] = []);
       tasks.forEach(t => grouped[t.status].push(t));
@@ -1347,31 +743,72 @@
         const items = grouped[status];
         if (items.length === 0) return;
         const color = STATUS_COLORS[status];
+        const visible = items.slice(0, maxPerGroup);
+        const overflow = items.length - maxPerGroup;
         html += `<div class="status-group">
           <div class="status-group-head" style="--status-color:${color}">
             <span class="dot"></span>
-            ${STATUS_LABELS[status]} · ${items.length}
+            ${STATUS_LABELS_SHORT[status]} · ${items.length}
           </div>
           <div class="status-group-items">
-            ${items.slice(0, 4).map(t => `<span class="status-task" style="--client-color:${t.client.color}"
-              onclick="openModal('${t.client.mono}','${t.title}','${t.client.name}',${dayNum},'${t.status}')">
-              <span class="status-task-mono" style="background:${t.client.color}">${t.client.mono}</span>
-              <span class="status-task-title">${t.title}</span>
-            </span>`).join('')}
-            ${items.length > 4 ? `<span class="status-task" style="background:transparent;border:none;color:var(--ink-mute)">+${items.length - 4}</span>` : ''}
+            ${visible.map(t => chipRenderer(t, dayNum)).join('')}
+            ${overflow > 0 ? `<div class="task-more">+${overflow} עוד</div>` : ''}
           </div>
         </div>`;
       });
       return html;
     }
 
-    // ====== INIT ======
-    ['linear', 'grouped', 'status'].forEach(v => renderWeekdays(`weekdays-${v}`));
-    renderGrid('grid-linear', renderLinear);
-    renderGrid('grid-grouped', renderGrouped);
-    renderGrid('grid-status', renderStatus);
+    // OPTION A: 2-row chip (default)
+    function chipDefault(t, dayNum) {
+      return `<div class="task-chip" style="--client-color:${t.client.color}"
+        onclick="openModal('${t.client.short}','${t.title}','${t.client.name}','${t.client.color}',${dayNum},'${t.status}','${t.type}')">
+        <div class="task-chip-row1">
+          <span class="task-client">${t.client.name}</span>
+          <span class="task-status" style="background:${STATUS_COLORS[t.status]}"></span>
+        </div>
+        <div class="task-title">${t.title}</div>
+      </div>`;
+    }
 
-    // ====== VIEW SWITCHER ======
+    // OPTION B: avatar chip
+    function chipAvatar(t, dayNum) {
+      return `<div class="task-chip-avatar"
+        onclick="openModal('${t.client.short}','${t.title}','${t.client.name}','${t.client.color}',${dayNum},'${t.status}','${t.type}')">
+        <div class="task-avatar" style="--client-color:${t.client.color};background:${t.client.color}">${t.client.short}</div>
+        <div class="task-text">
+          <div class="task-text-client">${t.client.name}</div>
+          <div class="task-text-title">${t.title}</div>
+        </div>
+        <span class="task-status-large" style="background:${STATUS_COLORS[t.status]}"></span>
+      </div>`;
+    }
+
+    // OPTION C: full card
+    function chipCard(t, dayNum) {
+      return `<div class="task-card" style="--client-color:${t.client.color};--client-tint:${tint(t.client.color, 0.10)};--client-tint-strong:${tint(t.client.color, 0.18)}"
+        onclick="openModal('${t.client.short}','${t.title}','${t.client.name}','${t.client.color}',${dayNum},'${t.status}','${t.type}')">
+        <div class="task-card-head">
+          <div class="task-card-client">
+            <span class="task-card-dot"></span>
+            <span class="task-card-client-name">${t.client.name}</span>
+          </div>
+          <span class="task-card-type">${TYPE_LABELS[t.type]}</span>
+        </div>
+        <div class="task-card-title">${t.title}</div>
+        <div class="task-card-footer">
+          <span class="task-card-status-dot" style="background:${STATUS_COLORS[t.status]}"></span>
+          <span class="task-card-status-text">${STATUS_LABELS_SHORT[t.status]}</span>
+        </div>
+      </div>`;
+    }
+
+    // INIT
+    ['default', 'avatar', 'card'].forEach(v => renderWeekdays(`weekdays-${v}`));
+    renderGrid('grid-default', (tasks, dayNum) => renderStatusGroups(tasks, dayNum, chipDefault, 6));
+    renderGrid('grid-avatar', (tasks, dayNum) => renderStatusGroups(tasks, dayNum, chipAvatar, 5));
+    renderGrid('grid-card', (tasks, dayNum) => renderStatusGroups(tasks, dayNum, chipCard, 4));
+
     document.querySelectorAll('.view-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
@@ -1382,27 +819,12 @@
       });
     });
 
-    // ====== DENSITY (Option A only) ======
-    document.querySelectorAll('.density-btn[data-target="linear"]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.density-btn[data-target="linear"]').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const density = btn.dataset.density;
-        const grid = document.getElementById('grid-linear');
-        grid.classList.remove('density-compact', 'density-normal', 'density-spacious');
-        grid.classList.add(`density-${density}`);
-      });
-    });
-
-    // ====== MODAL ======
-    window.openModal = function(mono, title, clientName, day, status) {
-      const modal = document.getElementById('modal');
-      const client = CLIENTS.find(c => c.mono === mono);
-      document.getElementById('modal-mono').textContent = mono;
-      document.getElementById('modal-mono').style.background = client ? client.color : '#67E8F9';
+    window.openModal = function(short, title, clientName, clientColor, day, status, type) {
+      document.getElementById('modal-avatar').textContent = short;
+      document.getElementById('modal-avatar').style.background = clientColor;
       document.getElementById('modal-title').textContent = title;
-      document.getElementById('modal-subtitle').textContent = `${clientName} · ${day}.5.2026 · ${STATUS_LABELS[status]}`;
-      modal.classList.add('open');
+      document.getElementById('modal-subtitle').textContent = `${clientName} · ${day}.5.2026 · ${TYPE_LABELS[type]}`;
+      document.getElementById('modal').classList.add('open');
     };
     document.getElementById('modal').addEventListener('click', (e) => {
       if (e.target.id === 'modal') document.getElementById('modal').classList.remove('open');
