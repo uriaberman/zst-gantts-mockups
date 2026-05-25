@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZST Gantts System | Master + Per-Client View</title>
+  <title>ZST Gantts System | v7 — Smart Upload + Full Modal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -25,8 +25,8 @@
     body { font-family: var(--font); direction: rtl; background: var(--bg); color: var(--ink); font-size: 14px; line-height: 1.55; min-height: 100vh; -webkit-font-smoothing: antialiased; }
     .page { max-width: 1680px; margin: 0 auto; padding: 24px 28px 48px; }
 
-    /* HEADER - NO ANIMATIONS */
-    .header { position: relative; display: flex; align-items: center; justify-content: space-between; padding: 22px 30px; gap: 24px; background: var(--paper); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow-md); margin-bottom: 18px; overflow: hidden; flex-wrap: wrap; }
+    /* HEADER */
+    .header { position: relative; display: flex; align-items: center; justify-content: space-between; padding: 22px 30px; gap: 24px; background: var(--paper); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow-md); margin-bottom: 18px; overflow: visible; flex-wrap: wrap; }
     .header::before { content: ''; position: absolute; inset-inline-start: 0; inset-block-start: 0; inset-block-end: 0; width: 3px; background: var(--accent-cyan); }
     .brand { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
     .brand-logo { width: 46px; height: 46px; background: var(--accent-cyan); border-radius: 11px; display: grid; place-items: center; color: var(--bg); font-weight: 800; font-size: 1.05rem; }
@@ -36,111 +36,54 @@
     .brand-text .header-meta-label { font-family: var(--font-en); font-size: 10px; font-weight: 500; letter-spacing: 0.32em; text-transform: uppercase; color: var(--accent-cyan); margin-block-end: 4px; display: block; }
     .brand-text .hint { font-size: 11px; color: var(--ink-mute); margin-block-start: 4px; }
 
-    /* CLIENT DROPDOWN (new!) */
-    .client-selector {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-    }
-    .client-selector-trigger {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--paper-2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 10px 16px;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      min-width: 240px;
-      font-family: var(--font-he);
-    }
-    .client-selector-trigger:hover {
-      border-color: var(--accent-cyan);
-      background: var(--paper-4);
-    }
-    .client-selector-trigger.open {
-      border-color: var(--accent-cyan);
-      box-shadow: 0 0 0 2px rgba(103,232,249,0.2);
-    }
-    .client-selector-label {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--ink-mute);
-    }
-    .client-selector-current {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex: 1;
-    }
-    .client-selector-dot {
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      background: var(--accent-cyan);
-    }
-    .client-selector-name {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--ink);
-    }
-    .client-selector-arrow {
-      color: var(--accent-cyan);
-      transition: transform 0.2s ease;
-    }
-    .client-selector-trigger.open .client-selector-arrow {
-      transform: rotate(180deg);
-    }
-    .client-selector-menu {
-      position: absolute;
-      inset-block-start: calc(100% + 6px);
-      inset-inline-start: 0;
-      min-width: 280px;
-      max-height: 420px;
-      overflow-y: auto;
-      background: var(--paper);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      box-shadow: var(--shadow-lg);
-      padding: 5px;
-      z-index: 50;
-      display: none;
-    }
+    /* CLIENT DROPDOWN */
+    .client-selector { position: relative; display: inline-flex; align-items: center; }
+    .client-selector-trigger { display: inline-flex; align-items: center; gap: 10px; background: var(--paper-2); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; cursor: pointer; transition: all 0.15s ease; min-width: 240px; font-family: var(--font-he); }
+    .client-selector-trigger:hover { border-color: var(--accent-cyan); background: var(--paper-4); }
+    .client-selector-trigger.open { border-color: var(--accent-cyan); }
+    .client-selector-label { font-size: 10px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-mute); }
+    .client-selector-current { display: flex; align-items: center; gap: 8px; flex: 1; }
+    .client-selector-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent-cyan); }
+    .client-selector-name { font-size: 14px; font-weight: 700; color: var(--ink); }
+    .client-selector-arrow { color: var(--accent-cyan); transition: transform 0.2s ease; }
+    .client-selector-trigger.open .client-selector-arrow { transform: rotate(180deg); }
+    .client-selector-menu { position: absolute; inset-block-start: calc(100% + 6px); inset-inline-start: 0; min-width: 280px; max-height: 420px; overflow-y: auto; background: var(--paper); border: 1px solid var(--border); border-radius: 10px; box-shadow: var(--shadow-lg); padding: 5px; z-index: 50; display: none; }
     .client-selector-menu.open { display: block; }
-    .client-selector-option {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 9px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background 0.12s ease;
-      font-size: 13px;
-      color: var(--ink);
-      font-family: var(--font-he);
-    }
+    .client-selector-option { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 6px; cursor: pointer; transition: background 0.12s ease; font-size: 13px; color: var(--ink); font-family: var(--font-he); }
     .client-selector-option:hover { background: var(--paper-3); }
     .client-selector-option.active { background: rgba(103,232,249,0.1); color: var(--accent-cyan); font-weight: 600; }
-    .client-selector-option-dot {
-      width: 12px; height: 12px;
-      border-radius: 50%;
-      flex-shrink: 0;
+    .client-selector-option-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+    .client-selector-option-count { margin-inline-start: auto; font-family: var(--font-en); font-size: 11px; color: var(--ink-mute); background: rgba(148,163,184,0.08); padding: 1px 7px; border-radius: 999px; }
+    .client-selector-divider { height: 1px; background: var(--border); margin: 4px 6px; }
+
+    /* SMART UPLOAD BUTTON (new!) */
+    .smart-upload-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      background: linear-gradient(135deg, var(--gold) 0%, #F59E0B 100%);
+      color: var(--bg);
+      border: none;
+      padding: 11px 20px;
+      font-family: var(--font-he);
+      font-size: 14px;
+      font-weight: 800;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      box-shadow: 0 4px 14px rgba(250,204,21,0.3);
+      letter-spacing: 0.02em;
     }
-    .client-selector-option-count {
-      margin-inline-start: auto;
-      font-family: var(--font-en);
-      font-size: 11px;
-      color: var(--ink-mute);
-      background: rgba(148,163,184,0.08);
-      padding: 1px 7px;
-      border-radius: 999px;
-    }
-    .client-selector-divider {
-      height: 1px;
-      background: var(--border);
-      margin: 4px 6px;
+    .smart-upload-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(250,204,21,0.4); }
+    .smart-upload-btn .icon { font-size: 18px; }
+    .smart-upload-btn .badge-ai {
+      background: var(--bg);
+      color: var(--gold);
+      font-size: 9px;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 4px;
+      letter-spacing: 0.08em;
     }
 
     .header-right { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
@@ -151,76 +94,15 @@
     .stats-chip strong { color: var(--ink); font-weight: 700; }
 
     /* PRO RECOMMENDATION */
-    .pro-recommendation {
-      background: var(--paper);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 22px 26px;
-      margin-block-end: 18px;
-      position: relative;
-      overflow: hidden;
-    }
-    .pro-recommendation::before {
-      content: '';
-      position: absolute;
-      inset-block-start: 0; inset-inline-start: 0; inset-block-end: 0;
-      width: 4px;
-      background: var(--accent-cyan);
-    }
-    .pro-recommendation-title {
-      font-family: var(--font-he);
-      font-size: 16px;
-      font-weight: 800;
-      color: var(--accent-cyan);
-      margin-block-end: 8px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .pro-recommendation-title .badge {
-      background: var(--accent-cyan);
-      color: var(--bg);
-      font-size: 10px;
-      font-weight: 800;
-      padding: 3px 9px;
-      border-radius: 6px;
-      letter-spacing: 0.06em;
-    }
-    .pro-recommendation-lead {
-      font-size: 13px;
-      color: var(--ink);
-      line-height: 1.6;
-      margin-block-end: 16px;
-      max-width: 1080px;
-    }
+    .pro-recommendation { background: var(--paper); border: 1px solid var(--border); border-radius: 14px; padding: 22px 26px; margin-block-end: 18px; position: relative; overflow: hidden; }
+    .pro-recommendation::before { content: ''; position: absolute; inset-block-start: 0; inset-inline-start: 0; inset-block-end: 0; width: 4px; background: var(--accent-cyan); }
+    .pro-recommendation-title { font-family: var(--font-he); font-size: 16px; font-weight: 800; color: var(--accent-cyan); margin-block-end: 8px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .pro-recommendation-title .badge { background: var(--accent-cyan); color: var(--bg); font-size: 10px; font-weight: 800; padding: 3px 9px; border-radius: 6px; letter-spacing: 0.06em; }
+    .pro-recommendation-lead { font-size: 13px; color: var(--ink); line-height: 1.6; margin-block-end: 16px; max-width: 1080px; }
     .pro-recommendation-lead strong { color: var(--accent-cyan); }
-    .explanation-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 12px;
-    }
-    .explain-card {
-      background: var(--paper-3);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 14px 16px;
-      position: relative;
-    }
-    .explain-card-num {
-      position: absolute;
-      inset-block-start: -8px;
-      inset-inline-end: 12px;
-      width: 24px; height: 24px;
-      border-radius: 50%;
-      background: var(--accent-cyan);
-      color: var(--bg);
-      display: grid;
-      place-items: center;
-      font-family: var(--font-en);
-      font-size: 12px;
-      font-weight: 800;
-    }
+    .explanation-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+    .explain-card { background: var(--paper-3); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; position: relative; }
+    .explain-card-num { position: absolute; inset-block-start: -8px; inset-inline-end: 12px; width: 24px; height: 24px; border-radius: 50%; background: var(--accent-cyan); color: var(--bg); display: grid; place-items: center; font-family: var(--font-en); font-size: 12px; font-weight: 800; }
     .explain-card-title { font-family: var(--font-he); font-size: 13px; font-weight: 700; color: var(--ink); margin-block-end: 8px; display: flex; align-items: center; gap: 6px; }
     .explain-card-title .emoji { font-size: 16px; }
     .explain-card ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 5px; }
@@ -248,26 +130,9 @@
     .legend-chip .type-letter { width: 18px; height: 18px; display: grid; place-items: center; border-radius: 4px; font-family: var(--font-he); font-size: 10px; font-weight: 800; background: rgba(103,232,249,0.15); color: var(--accent-cyan); border: 1px solid rgba(103,232,249,0.3); }
     .legend-divider { width: 1px; height: 18px; background: var(--border); }
 
-    /* SYNC BANNER (shown briefly after edits) */
-    .sync-banner {
-      position: fixed;
-      inset-block-start: 20px;
-      inset-inline-start: 20px;
-      background: var(--status-approved);
-      color: var(--bg);
-      padding: 10px 18px;
-      border-radius: 10px;
-      font-family: var(--font-he);
-      font-size: 13px;
-      font-weight: 700;
-      box-shadow: 0 8px 24px rgba(34,197,94,0.4);
-      z-index: 2000;
-      opacity: 0;
-      transform: translateX(-30px);
-      transition: all 0.3s ease;
-      pointer-events: none;
-    }
-    .sync-banner.show { opacity: 1; transform: translateX(0); pointer-events: auto; }
+    /* SYNC BANNER */
+    .sync-banner { position: fixed; inset-block-start: 20px; inset-inline-start: 20px; background: var(--status-approved); color: var(--bg); padding: 10px 18px; border-radius: 10px; font-family: var(--font-he); font-size: 13px; font-weight: 700; box-shadow: 0 8px 24px rgba(34,197,94,0.4); z-index: 2000; opacity: 0; transform: translateX(-30px); transition: all 0.3s ease; pointer-events: none; }
+    .sync-banner.show { opacity: 1; transform: translateX(0); }
 
     /* GRID */
     .view-frame { background: var(--paper); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow-md); padding: 16px; }
@@ -277,19 +142,7 @@
     .month-grid { display: flex; flex-direction: column; gap: 6px; }
     .week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; align-items: stretch; }
 
-    .cell {
-      position: relative;
-      background: var(--paper-2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      min-height: 200px;
-      padding: 10px 9px 9px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      overflow: hidden;
-      transition: min-height 0.2s ease;
-    }
+    .cell { position: relative; background: var(--paper-2); border: 1px solid var(--border); border-radius: 10px; min-height: 200px; padding: 10px 9px 9px; display: flex; flex-direction: column; gap: 6px; overflow: hidden; transition: min-height 0.2s ease; }
     .cell.outside { background: transparent; border-color: var(--border-soft); min-height: 80px; }
     .cell.outside .cell-head { opacity: 0.35; }
     .cell.outside .cell-body { display: none; }
@@ -297,37 +150,14 @@
     .cell.saturday { background: rgba(250,204,21,0.04); border-color: rgba(251,191,36,0.18); }
     .cell.busy { min-height: 320px; }
     .cell.very-busy { min-height: 380px; }
-    .cell.is-today {
-      border-color: var(--gold);
-      box-shadow: 0 0 0 2px var(--gold);
-      overflow: visible;
-      min-height: 440px;
-      background: var(--paper-2);
-    }
-    .cell.is-today::after {
-      content: 'היום · ' attr(data-date);
-      position: absolute;
-      top: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--gold);
-      color: var(--bg);
-      font-family: var(--font-he);
-      font-size: 10.5px;
-      font-weight: 800;
-      padding: 3px 14px;
-      border-radius: 999px;
-      letter-spacing: 0.05em;
-      z-index: 3;
-      white-space: nowrap;
-    }
+    .cell.is-today { border-color: var(--gold); box-shadow: 0 0 0 2px var(--gold); overflow: visible; min-height: 440px; background: var(--paper-2); }
+    .cell.is-today::after { content: 'היום · ' attr(data-date); position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: var(--gold); color: var(--bg); font-family: var(--font-he); font-size: 10.5px; font-weight: 800; padding: 3px 14px; border-radius: 999px; letter-spacing: 0.05em; z-index: 3; white-space: nowrap; }
     .cell-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 6px; padding-bottom: 7px; border-bottom: 1px solid rgba(148,163,184,0.1); min-height: 28px; }
     .cell-num { font-family: var(--font-en); font-size: 17px; font-weight: 600; color: var(--ink); line-height: 1; }
     .cell.is-today .cell-num { color: var(--gold); font-weight: 800; font-size: 19px; }
     .cell-heb { font-family: var(--font-he); font-size: 10.5px; color: var(--ink-soft); font-weight: 500; text-align: end; line-height: 1.3; }
     .cell-body { display: flex; flex-direction: column; gap: 4px; flex: 1; padding-top: 2px; overflow: hidden; }
 
-    /* + button on hover */
     .cell-add-btn { position: absolute; inset-block-end: 6px; inset-inline-start: 6px; width: 26px; height: 26px; border-radius: 50%; background: var(--accent-cyan); color: var(--bg); border: none; cursor: pointer; font-size: 16px; font-weight: 700; display: none; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(103,232,249,0.4); transition: transform 0.15s ease; z-index: 5; }
     .cell:hover .cell-add-btn { display: flex; }
     .cell-add-btn:hover { transform: scale(1.15); }
@@ -373,286 +203,333 @@
     .tooltip-row strong { color: var(--ink-mute); font-weight: 700; font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em; min-width: 50px; }
     .tooltip-hint { margin-block-start: 8px; padding-block-start: 8px; border-block-start: 1px solid var(--border); font-size: 10.5px; color: var(--ink-mute); text-align: center; }
 
-    /* ====================================================== */
-    /* WIDE MODAL — like the skill (2 columns: copy + media)  */
-    /* ====================================================== */
+    /* WIDE MODAL */
     .modal-backdrop { position: fixed; inset: 0; background: rgba(7,16,31,0.88); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 24px; }
     .modal-backdrop.open { display: flex; }
-    .modal-wide {
-      background: var(--paper);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      max-width: 1100px;
-      width: 100%;
-      max-height: 90vh;
-      overflow-y: auto;
-      box-shadow: var(--shadow-lg);
-    }
-    .modal-wide-header {
-      display: flex;
-      align-items: stretch;
-      gap: 16px;
-      padding: 22px 26px 18px;
-      border-block-end: 1px solid var(--border);
-      position: relative;
-    }
+    .modal-wide { background: var(--paper); border: 1px solid var(--border); border-radius: 16px; max-width: 1200px; width: 100%; max-height: 92vh; overflow-y: auto; box-shadow: var(--shadow-lg); }
+    .modal-wide-header { display: flex; align-items: stretch; gap: 16px; padding: 22px 26px 18px; border-block-end: 1px solid var(--border); position: relative; }
     .modal-color-bar { width: 5px; border-radius: 3px; flex-shrink: 0; }
     .modal-titles { flex: 1; }
-    .modal-eyebrow {
-      font-family: var(--font-en);
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--ink-mute);
-      margin-block-end: 6px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .modal-eyebrow-chip {
-      background: rgba(103,232,249,0.12);
-      color: var(--accent-cyan);
-      padding: 2px 7px;
-      border-radius: 4px;
-      letter-spacing: 0.05em;
-      font-size: 9px;
-    }
-    .modal-title-big {
-      font-family: var(--font-he);
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--ink);
-      line-height: 1.2;
-      margin-block-end: 6px;
-    }
-    .modal-subtitle-row {
-      font-family: var(--font-he);
-      font-size: 13px;
-      color: var(--ink-soft);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
+    .modal-eyebrow { font-family: var(--font-en); font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-mute); margin-block-end: 6px; display: flex; align-items: center; gap: 8px; }
+    .modal-eyebrow-chip { background: rgba(103,232,249,0.12); color: var(--accent-cyan); padding: 2px 7px; border-radius: 4px; letter-spacing: 0.05em; font-size: 9px; }
+    .modal-title-big { font-family: var(--font-he); font-size: 22px; font-weight: 700; color: var(--ink); line-height: 1.2; margin-block-end: 6px; }
+    .modal-subtitle-row { font-family: var(--font-he); font-size: 13px; color: var(--ink-soft); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     .modal-subtitle-row .dot-sep { color: var(--ink-faint); }
-    .modal-close-x {
-      width: 36px; height: 36px;
-      border-radius: 10px;
-      background: var(--paper-2);
-      border: 1px solid var(--border);
-      color: var(--ink-soft);
-      cursor: pointer;
-      font-size: 20px;
-      display: grid;
-      place-items: center;
-      flex-shrink: 0;
-      transition: all 0.15s ease;
-    }
+    .modal-close-x { width: 36px; height: 36px; border-radius: 10px; background: var(--paper-2); border: 1px solid var(--border); color: var(--ink-soft); cursor: pointer; font-size: 20px; display: grid; place-items: center; flex-shrink: 0; transition: all 0.15s ease; }
     .modal-close-x:hover { background: var(--paper-3); color: var(--ink); border-color: var(--accent-cyan); }
 
-    .modal-body {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0;
-    }
-    .modal-col {
-      padding: 22px 26px;
-    }
+    .modal-body { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+    .modal-col { padding: 22px 26px; }
     .modal-col-right { border-inline-start: 1px solid var(--border); }
-    @media (max-width: 760px) {
-      .modal-body { grid-template-columns: 1fr; }
-      .modal-col-right { border-inline-start: none; border-block-start: 1px solid var(--border); }
-    }
+    @media (max-width: 760px) { .modal-body { grid-template-columns: 1fr; } .modal-col-right { border-inline-start: none; border-block-start: 1px solid var(--border); } }
 
     .modal-section { margin-block-end: 18px; }
     .modal-section:last-child { margin-block-end: 0; }
-    .modal-section-label {
-      font-family: var(--font-he);
-      font-size: 11px;
-      font-weight: 800;
-      color: var(--ink-mute);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-block-end: 8px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
+    .modal-section-label { font-family: var(--font-he); font-size: 11px; font-weight: 800; color: var(--ink-mute); letter-spacing: 0.1em; text-transform: uppercase; margin-block-end: 8px; display: flex; align-items: center; gap: 6px; }
 
-    .status-dropdown {
-      width: 100%;
-      background: var(--paper-2);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 10px 14px;
-      color: var(--ink);
-      font-family: var(--font-he);
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      appearance: none;
-      background-image: linear-gradient(45deg, transparent 50%, var(--accent-cyan) 50%), linear-gradient(135deg, var(--accent-cyan) 50%, transparent 50%);
-      background-position: calc(2% + 0px) 50%, calc(2% + 6px) 50%;
-      background-size: 6px 6px;
-      background-repeat: no-repeat;
-    }
+    .status-dropdown { width: 100%; background: var(--paper-2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; color: var(--ink); font-family: var(--font-he); font-size: 13px; font-weight: 600; cursor: pointer; }
     .status-dropdown:focus { outline: none; border-color: var(--accent-cyan); }
-
-    .copy-textarea {
-      width: 100%;
-      min-height: 160px;
-      background: var(--paper-2);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 12px 14px;
-      color: var(--ink);
-      font-family: var(--font-he);
-      font-size: 13px;
-      line-height: 1.6;
-      resize: vertical;
-      transition: border 0.15s ease;
-    }
+    .copy-textarea { width: 100%; min-height: 100px; background: var(--paper-2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; color: var(--ink); font-family: var(--font-he); font-size: 13px; line-height: 1.6; resize: vertical; transition: border 0.15s ease; }
     .copy-textarea:focus { outline: none; border-color: var(--accent-cyan); }
+    .copy-textarea.small { min-height: 50px; font-size: 12px; padding: 8px 10px; }
 
-    .modal-actions {
-      display: flex;
-      gap: 8px;
-      margin-block-start: 16px;
-    }
+    .modal-actions { display: flex; gap: 8px; margin-block-start: 16px; }
     .btn { font-family: var(--font-he); font-size: 13px; font-weight: 700; padding: 10px 18px; border-radius: 8px; cursor: pointer; border: 1px solid transparent; transition: all 0.15s ease; }
     .btn-primary { background: var(--accent-cyan); color: var(--bg); flex: 1; }
     .btn-primary:hover { background: #22D3EE; }
     .btn-secondary { background: var(--paper-2); color: var(--ink); border-color: var(--border); }
     .btn-secondary:hover { background: var(--paper-3); border-color: var(--accent-cyan); }
+    .btn-gold { background: var(--gold); color: var(--bg); flex: 1; }
+    .btn-gold:hover { background: #F59E0B; }
 
     /* MEDIA section */
-    .media-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-    }
-    .media-slot {
-      background: var(--paper-2);
-      border: 1.5px dashed var(--border);
-      border-radius: 10px;
-      padding: 14px;
-      transition: all 0.15s ease;
-      cursor: pointer;
-    }
+    .media-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    .media-slot { background: var(--paper-2); border: 1.5px dashed var(--border); border-radius: 10px; padding: 14px; transition: all 0.15s ease; cursor: pointer; }
     .media-slot:hover { border-color: var(--accent-cyan); background: var(--paper-3); }
     .media-slot.has-image { border-style: solid; border-color: var(--border); padding: 0; overflow: hidden; }
+    .media-slot-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-block-end: 8px; }
+    .media-slot-label { font-family: var(--font-he); font-size: 12px; font-weight: 700; color: var(--ink); display: flex; align-items: center; gap: 6px; }
+    .media-slot-label-num { width: 18px; height: 18px; border-radius: 4px; background: var(--accent-cyan); color: var(--bg); display: grid; place-items: center; font-family: var(--font-en); font-size: 10px; font-weight: 800; }
+    .media-slot-size { font-family: var(--font-en); font-size: 10.5px; font-weight: 700; color: var(--ink-mute); background: rgba(148,163,184,0.08); padding: 2px 7px; border-radius: 4px; letter-spacing: 0.02em; }
+    .media-slot-placeholder { aspect-ratio: var(--aspect, 1 / 1); display: grid; place-items: center; color: var(--ink-mute); font-family: var(--font-he); font-size: 13px; gap: 6px; max-block-size: 220px; margin: 0 auto; width: 100%; max-inline-size: 280px; }
+    .media-slot-placeholder-icon { font-size: 28px; color: var(--accent-cyan); }
+    .media-slot-placeholder-text { font-weight: 600; }
+    .media-slot-placeholder-hint { font-size: 11px; color: var(--ink-faint); }
+    .media-slot-image { width: 100%; aspect-ratio: var(--aspect, 1 / 1); max-block-size: 220px; background: linear-gradient(135deg, var(--client-color) 0%, rgba(20,34,58,0.8) 100%); display: grid; place-items: center; color: var(--bg); font-family: var(--font-he); font-weight: 800; font-size: 24px; position: relative; cursor: pointer; }
+    .media-slot-image::after { content: 'תמונה לדוגמה'; position: absolute; inset-block-end: 12px; inset-inline-start: 50%; transform: translateX(-50%); background: rgba(7,16,31,0.7); color: var(--ink); font-size: 10px; font-weight: 600; padding: 3px 10px; border-radius: 999px; }
+    .media-slot-actions { display: flex; gap: 6px; padding: 10px 14px; border-block-start: 1px solid var(--border); background: var(--paper-2); }
+    .media-slot-action { flex: 1; background: transparent; border: 1px solid var(--border); color: var(--ink-soft); font-family: var(--font-he); font-size: 11px; font-weight: 600; padding: 6px 10px; border-radius: 6px; cursor: pointer; }
+    .media-slot-action:hover { background: var(--paper-3); color: var(--ink); border-color: var(--accent-cyan); }
+    .media-slot-action.danger:hover { border-color: #EF4444; color: #EF4444; }
 
-    .media-slot-head {
+    /* SLIDES SECTION (new! 3 copy types like skill) */
+    .slides-section {
+      grid-column: 1 / -1;
+      border-block-start: 1px solid var(--border);
+      padding: 22px 26px 26px;
+      background: var(--paper-3);
+    }
+    .slides-section-head {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      margin-block-end: 8px;
+      margin-block-end: 14px;
     }
-    .media-slot-label {
+    .slides-section-title {
       font-family: var(--font-he);
-      font-size: 12px;
-      font-weight: 700;
+      font-size: 14px;
+      font-weight: 800;
       color: var(--ink);
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
     }
-    .media-slot-label-num {
-      width: 18px; height: 18px;
-      border-radius: 4px;
+    .slides-section-title-num {
       background: var(--accent-cyan);
       color: var(--bg);
-      display: grid;
-      place-items: center;
-      font-family: var(--font-en);
-      font-size: 10px;
-      font-weight: 800;
+      padding: 2px 9px;
+      border-radius: 999px;
+      font-size: 11px;
     }
-    .media-slot-size {
-      font-family: var(--font-en);
-      font-size: 10.5px;
-      font-weight: 700;
-      color: var(--ink-mute);
-      background: rgba(148,163,184,0.08);
-      padding: 2px 7px;
-      border-radius: 4px;
-      letter-spacing: 0.02em;
-    }
-    .media-slot-placeholder {
-      aspect-ratio: var(--aspect, 1 / 1);
-      display: grid;
-      place-items: center;
-      color: var(--ink-mute);
+    .slides-section-hint {
       font-family: var(--font-he);
-      font-size: 13px;
-      gap: 6px;
-      max-block-size: 280px;
-      margin: 0 auto;
-      width: 100%;
-      max-inline-size: 320px;
+      font-size: 11px;
+      color: var(--ink-mute);
     }
-    .media-slot-placeholder-icon { font-size: 32px; color: var(--accent-cyan); }
-    .media-slot-placeholder-text { font-weight: 600; }
-    .media-slot-placeholder-hint { font-size: 11px; color: var(--ink-faint); }
+    .slides-list {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    .slide-card {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 16px;
+      transition: border 0.15s ease;
+    }
+    .slide-card:hover { border-color: var(--accent-cyan); }
+    @media (max-width: 760px) { .slide-card { grid-template-columns: 1fr; } }
 
-    /* Mock image */
-    .media-slot-image {
-      width: 100%;
-      aspect-ratio: var(--aspect, 1 / 1);
-      max-block-size: 280px;
+    .slide-card-preview {
       background: linear-gradient(135deg, var(--client-color) 0%, rgba(20,34,58,0.8) 100%);
+      aspect-ratio: var(--aspect, 1 / 1);
+      max-width: 140px;
+      border-radius: 8px;
       display: grid;
       place-items: center;
       color: var(--bg);
       font-family: var(--font-he);
       font-weight: 800;
-      font-size: 24px;
+      font-size: 22px;
       position: relative;
       cursor: pointer;
     }
-    .media-slot-image::after {
-      content: 'תמונה לדוגמה';
+    .slide-card-preview-num {
       position: absolute;
-      inset-block-end: 12px;
-      inset-inline-start: 50%;
-      transform: translateX(-50%);
+      inset-block-start: 6px;
+      inset-inline-start: 6px;
       background: rgba(7,16,31,0.7);
       color: var(--ink);
       font-size: 10px;
-      font-weight: 600;
-      padding: 3px 10px;
-      border-radius: 999px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+    .slide-card-fields {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .slide-field-label {
+      font-family: var(--font-he);
+      font-size: 9.5px;
+      font-weight: 800;
+      color: var(--ink-mute);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-block-end: 3px;
+    }
+    .slide-field-label .badge-type {
+      display: inline-block;
+      background: rgba(103,232,249,0.1);
+      color: var(--accent-cyan);
+      font-size: 9px;
+      padding: 1px 6px;
+      border-radius: 3px;
+      margin-inline-start: 6px;
       letter-spacing: 0.04em;
     }
-    .media-slot-actions {
+    .slide-field-label .badge-type.visual { background: rgba(94,234,212,0.1); color: #5EEAD4; }
+    .slide-field-label .badge-type.caption { background: rgba(250,204,21,0.1); color: var(--gold); }
+
+    /* SMART UPLOAD MODAL */
+    .upload-modal { background: var(--paper); border: 1px solid var(--border); border-radius: 16px; max-width: 760px; width: 100%; padding: 0; box-shadow: var(--shadow-lg); }
+    .upload-modal-header {
+      padding: 22px 26px 18px;
+      border-block-end: 1px solid var(--border);
+      background: linear-gradient(135deg, rgba(250,204,21,0.08) 0%, transparent 100%);
       display: flex;
-      gap: 6px;
-      padding: 10px 14px;
-      border-block-start: 1px solid var(--border);
-      background: var(--paper-2);
+      align-items: center;
+      justify-content: space-between;
     }
-    .media-slot-action {
-      flex: 1;
-      background: transparent;
+    .upload-modal-title {
+      font-family: var(--font-he);
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .upload-modal-title .icon { font-size: 24px; color: var(--gold); }
+    .upload-modal-title .ai-tag { background: var(--gold); color: var(--bg); font-size: 10px; padding: 3px 8px; border-radius: 5px; font-weight: 800; letter-spacing: 0.06em; }
+    .upload-modal-subtitle { font-family: var(--font-he); font-size: 12px; color: var(--ink-soft); margin-block-start: 4px; line-height: 1.5; max-width: 540px; }
+    .upload-modal-body { padding: 22px 26px 26px; }
+
+    /* Drop area */
+    .drop-area {
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      padding: 36px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: var(--paper-2);
+      margin-block-end: 16px;
+    }
+    .drop-area:hover, .drop-area.dragover {
+      border-color: var(--gold);
+      background: var(--paper-3);
+    }
+    .drop-area-icon { font-size: 44px; color: var(--gold); margin-block-end: 10px; }
+    .drop-area-title { font-family: var(--font-he); font-size: 16px; font-weight: 700; color: var(--ink); margin-block-end: 4px; }
+    .drop-area-hint { font-family: var(--font-he); font-size: 12px; color: var(--ink-soft); }
+
+    /* File types support */
+    .file-types-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 8px;
+      margin-block-end: 18px;
+    }
+    .file-type {
+      background: var(--paper-2);
       border: 1px solid var(--border);
-      color: var(--ink-soft);
+      border-radius: 8px;
+      padding: 10px 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .file-type:hover {
+      border-color: var(--gold);
+      background: var(--paper-3);
+      transform: translateY(-1px);
+    }
+    .file-type-icon { font-size: 22px; margin-block-end: 4px; }
+    .file-type-name {
       font-family: var(--font-he);
       font-size: 11px;
-      font-weight: 600;
-      padding: 6px 10px;
-      border-radius: 6px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .file-type-hint {
+      font-family: var(--font-en);
+      font-size: 9.5px;
+      color: var(--ink-mute);
+      margin-block-start: 2px;
+      letter-spacing: 0.02em;
+    }
+
+    /* URL input section */
+    .url-input-section { margin-block-end: 18px; }
+    .url-input-row {
+      display: flex;
+      gap: 8px;
+    }
+    .url-input {
+      flex: 1;
+      background: var(--paper-2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: var(--ink);
+      font-family: var(--font-en);
+      font-size: 12.5px;
+      direction: ltr;
+      text-align: start;
+    }
+    .url-input:focus { outline: none; border-color: var(--gold); }
+    .url-input::placeholder { color: var(--ink-faint); }
+    .url-input-btn {
+      background: var(--gold);
+      color: var(--bg);
+      border: none;
+      padding: 0 18px;
+      border-radius: 8px;
+      font-family: var(--font-he);
+      font-size: 13px;
+      font-weight: 700;
       cursor: pointer;
     }
-    .media-slot-action:hover { background: var(--paper-3); color: var(--ink); border-color: var(--accent-cyan); }
-    .media-slot-action.danger:hover { border-color: #EF4444; color: #EF4444; }
+    .url-input-btn:hover { background: #F59E0B; }
 
-    /* SCROLL FOR MEDIA */
-    .media-grid-scroll { max-block-size: 60vh; overflow-y: auto; padding-inline-end: 4px; }
-    .media-grid-scroll::-webkit-scrollbar { width: 6px; }
-    .media-grid-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-    .media-grid-scroll::-webkit-scrollbar-thumb:hover { background: var(--accent-cyan); }
+    /* Upload AI explanation */
+    .ai-explanation {
+      background: rgba(250,204,21,0.06);
+      border: 1px solid rgba(250,204,21,0.25);
+      border-inline-start: 3px solid var(--gold);
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-block-end: 16px;
+      font-family: var(--font-he);
+      font-size: 12px;
+      color: var(--ink-soft);
+      line-height: 1.55;
+    }
+    .ai-explanation strong { color: var(--gold); }
+    .ai-explanation-list {
+      margin-block-start: 6px;
+      padding-inline-start: 16px;
+      list-style: disc;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .ai-explanation-list li { font-size: 11.5px; }
+
+    .upload-target {
+      background: var(--paper-2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-block-end: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .upload-target-label {
+      font-family: var(--font-he);
+      font-size: 12px;
+      color: var(--ink-soft);
+    }
+    .upload-target-select {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 12px;
+      color: var(--ink);
+      font-family: var(--font-he);
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -664,16 +541,15 @@
       <div class="brand">
         <div class="brand-logo">ZG</div>
         <div class="brand-text">
-          <span class="header-meta-label">ZST · GANTTS SYSTEM · v6</span>
+          <span class="header-meta-label">ZST · GANTTS SYSTEM · v7</span>
           <h1>
             <span class="label" id="page-title-label">Master View</span>
             <span class="sep"></span>
             <span id="page-title-context">כל הלקוחות</span>
           </h1>
-          <div class="hint">לוח שנה אחד · Tile/List · מודאל מלא · מעבר מהיר בין לקוחות</div>
+          <div class="hint">לוח שנה אחד · מודאל מלא · Smart Upload · סנכרון אחיד</div>
         </div>
 
-        <!-- CLIENT DROPDOWN (new!) -->
         <div class="client-selector" id="client-selector">
           <div class="client-selector-trigger" id="client-trigger">
             <span class="client-selector-label">תצוגה</span>
@@ -685,6 +561,13 @@
           </div>
           <div class="client-selector-menu" id="client-menu"></div>
         </div>
+
+        <!-- SMART UPLOAD BUTTON -->
+        <button class="smart-upload-btn" onclick="openUploadModal()">
+          <span class="icon">📤</span>
+          <span>העלאת תוכן</span>
+          <span class="badge-ai">AI</span>
+        </button>
       </div>
 
       <div class="header-right">
@@ -700,58 +583,58 @@
     <div class="pro-recommendation">
       <div class="pro-recommendation-title">
         <span>🎯</span>
-        <span>הפתרון המקצועי המוצע</span>
-        <span class="badge">RECOMMENDED</span>
+        <span>הפתרון הסופי - v7</span>
+        <span class="badge">DESIGN LOCK</span>
       </div>
       <div class="pro-recommendation-lead">
-        לוח שנה חודשי אחד · <strong>2 מצבי תצוגה</strong> (Tile / List) · <strong>Dropdown לקוח</strong> בראש שמאפשר מעבר בין Master View לגאנט של כל לקוח · <strong>מודאל מלא</strong> כשלוחצים על משימה (קופי + מדיה עם הנחיות מידה) · <strong>סנכרון נתונים אחיד</strong> - שינוי בכל מקום משתקף בכל מקום.
+        כל הפיצ'רים מוטמעים. <strong>Tile/List + Hover Tooltip בשניהם</strong> · <strong>Client Dropdown</strong> למעבר בין Master ולקוח · <strong>מודאל מלא כמו בסקיל</strong> (3 סוגי קופי לכל שקף: ראשי/משני/קטן + קופי שקף) · <strong>Smart Upload AI</strong> (PDF/PPTX/DOCX/Google Slides/Google Docs/תמונות/קישורים) · <strong>סנכרון אחיד</strong> בכל התצוגות.
       </div>
 
       <div class="explanation-grid">
         <div class="explain-card">
           <span class="explain-card-num">1</span>
-          <div class="explain-card-title"><span class="emoji">📋</span> Client Dropdown</div>
+          <div class="explain-card-title"><span class="emoji">📤</span> Smart Upload (AI)</div>
           <ul>
-            <li><strong>בראש משמאל</strong> - תפריט בחירה</li>
-            <li><strong>דיפולט: Master View</strong> - כל 19 הלקוחות</li>
-            <li>לחיצה על לקוח → רק הגאנט שלו</li>
-            <li>מעבר מהיר בין לקוחות בלי לעזוב את הדף</li>
-            <li>הכותרת והסטטיסטיקה מתעדכנות אוטומטית</li>
+            <li><strong>כפתור צהוב</strong> בראש - "העלאת תוכן"</li>
+            <li>תומך: <strong>PDF · PPTX · DOCX</strong></li>
+            <li>תומך: <strong>Google Slides + Google Docs</strong> (URL)</li>
+            <li>תומך: <strong>תמונות + תיקיות Dropbox/Drive</strong></li>
+            <li>AI קורא תאריכים, כותרות, קופי + תמונות</li>
+            <li>מציג טבלת הצעה לאישור לפני יצירת הגאנט</li>
           </ul>
         </div>
 
         <div class="explain-card">
           <span class="explain-card-num">2</span>
-          <div class="explain-card-title"><span class="emoji">▣</span> Tile / List</div>
+          <div class="explain-card-title"><span class="emoji">🖱</span> Hover Tooltip בכל מקום</div>
           <ul>
-            <li><strong>Tile</strong> - קוביות קומפקטיות (דיפולט)</li>
-            <li><strong>List</strong> - chips אופקיים עם כותרת גלויה</li>
-            <li>Hover על tile → tooltip מלא</li>
-            <li>אותו toggle עובד גם ב-Master וגם בלקוח</li>
+            <li>Hover על <strong>tile</strong> → tooltip מפורט</li>
+            <li>Hover על <strong>chip ב-List View</strong> → tooltip מפורט</li>
+            <li>מציג: לקוח · משימה · סוג · סטטוס · תאריך</li>
+            <li>Click → פותח מודאל מלא</li>
           </ul>
         </div>
 
         <div class="explain-card">
           <span class="explain-card-num">3</span>
-          <div class="explain-card-title"><span class="emoji">🔲</span> מודאל מלא</div>
+          <div class="explain-card-title"><span class="emoji">🔲</span> מודאל מלא כמו בסקיל</div>
           <ul>
-            <li>לחיצה על משימה → <strong>מודאל גדול 2 צדדים</strong></li>
-            <li><strong>צד ימין</strong>: סטטוס + קופי נלווה + שמירה</li>
-            <li><strong>צד שמאל</strong>: מדיה עם הנחיות מידה</li>
-            <li>פוסט=1080×1080 / סטורי+ריל=9:16 / קרוסלה=עד 10</li>
-            <li>אותו מודאל ב-Master וב-Client view</li>
+            <li><strong>צד ימין</strong>: סטטוס · קופי נלווה · הסבר</li>
+            <li><strong>צד שמאל</strong>: מדיה ראשית עם הנחיית מידה</li>
+            <li><strong>מתחת</strong>: שקפים (לקרוסלה)</li>
+            <li>כל שקף: 3 סוגי קופי (ראשי / משני / קטן) + קופי שקף</li>
+            <li>תמונה לכל שקף עם הנחיית מידה</li>
           </ul>
         </div>
 
         <div class="explain-card">
           <span class="explain-card-num">4</span>
-          <div class="explain-card-title"><span class="emoji">🔄</span> Sync אחיד</div>
+          <div class="explain-card-title"><span class="emoji">🔄</span> Sync אחיד (Realtime)</div>
           <ul>
             <li>שינוי בלקוח → משתקף ב-Master מיד</li>
             <li>שינוי ב-Master → משתקף בלקוח מיד</li>
             <li><strong>Source of truth יחיד</strong> (Supabase DB)</li>
             <li>במערכת האמיתית: Realtime sync תוך 2 שניות</li>
-            <li>במוקאפ הזה: רענון העמוד מציג את העדכון</li>
           </ul>
         </div>
       </div>
@@ -762,7 +645,7 @@
       <div class="mode-switcher-info">
         <div class="mode-switcher-info-title">בחר מצב תצוגה</div>
         <div class="mode-switcher-info-desc" id="mode-desc">
-          <strong>Tile View</strong> — קוביות קומפקטיות. Hover על קוביה מציג tooltip עם פרטים, Click נכנס למשימה. דחיסות מקסימלית.
+          <strong>Tile View</strong> — קוביות קומפקטיות. Hover מציג tooltip מפורט, Click נכנס למשימה. דחיסות מקסימלית.
         </div>
       </div>
       <div class="mode-switcher">
@@ -795,7 +678,6 @@
       </div>
     </div>
 
-    <!-- GRID -->
     <div class="view-frame">
       <div class="weekdays" id="weekdays"></div>
       <div class="month-grid" id="grid"></div>
@@ -803,17 +685,17 @@
 
   </div>
 
-  <!-- TOOLTIP -->
+  <!-- TOOLTIP (shared between tile + list) -->
   <div class="tile-tooltip" id="tooltip">
     <div class="tooltip-client" id="tooltip-client"></div>
     <div class="tooltip-title" id="tooltip-title"></div>
     <div class="tooltip-row"><strong>סוג</strong><span id="tooltip-type"></span></div>
     <div class="tooltip-row"><strong>סטטוס</strong><span id="tooltip-status"></span></div>
     <div class="tooltip-row"><strong>תאריך</strong><span id="tooltip-date"></span></div>
-    <div class="tooltip-hint">לחץ לפתיחת המשימה</div>
+    <div class="tooltip-hint">לחץ לפתיחת המשימה המלאה</div>
   </div>
 
-  <!-- WIDE MODAL — like the skill -->
+  <!-- WIDE MODAL - like the skill -->
   <div class="modal-backdrop" id="modal">
     <div class="modal-wide">
 
@@ -837,8 +719,6 @@
       </div>
 
       <div class="modal-body">
-
-        <!-- RIGHT (in RTL) = copy + status + actions -->
         <div class="modal-col modal-col-right">
           <div class="modal-section">
             <div class="modal-section-label">📊 סטטוס</div>
@@ -850,33 +730,121 @@
               <option value="archived">נגנז</option>
             </select>
           </div>
-
           <div class="modal-section">
             <div class="modal-section-label">✏️ קופי נלווה (Caption)</div>
-            <textarea class="copy-textarea" id="modal-copy" placeholder="הקלד כאן את הקופי הנלווה לפוסט..."></textarea>
+            <textarea class="copy-textarea" id="modal-copy" placeholder="הקלד את הקופי הנלווה לפוסט..."></textarea>
           </div>
-
           <div class="modal-section">
             <div class="modal-section-label">💡 הסבר קצר (פנימי)</div>
-            <textarea class="copy-textarea" id="modal-explanation" style="min-height: 80px;" placeholder="הסבר הרעיון בקצרה - לעבודה פנימית של הצוות..."></textarea>
-          </div>
-
-          <div class="modal-actions">
-            <button class="btn btn-primary" onclick="saveAndClose()">💾 שמור שינויים</button>
-            <button class="btn btn-secondary" onclick="closeModal()">ביטול</button>
+            <textarea class="copy-textarea" id="modal-explanation" style="min-height: 70px;" placeholder="הסבר הרעיון בקצרה..."></textarea>
           </div>
         </div>
 
-        <!-- LEFT (in RTL) = media -->
         <div class="modal-col">
-          <div class="modal-section-label" id="modal-media-label">🖼 מדיה</div>
-          <div class="media-grid-scroll">
-            <div class="media-grid" id="modal-media-grid"></div>
+          <div class="modal-section-label" id="modal-media-label">🖼 מדיה ראשית</div>
+          <div class="media-grid" id="modal-media-grid"></div>
+        </div>
+
+        <!-- SLIDES SECTION - shown only for carousel -->
+        <div class="slides-section" id="slides-section" style="display:none;">
+          <div class="slides-section-head">
+            <div class="slides-section-title">
+              <span>📑 שקפי קרוסלה</span>
+              <span class="slides-section-title-num" id="slides-count">3</span>
+            </div>
+            <div class="slides-section-hint">לכל שקף: 3 סוגי טקסט על הויזואל + קופי לתיאור השקף</div>
           </div>
+          <div class="slides-list" id="slides-list"></div>
+        </div>
+      </div>
+
+      <div style="padding: 18px 26px 22px; border-top: 1px solid var(--border); background: var(--paper-3);">
+        <div class="modal-actions" style="margin: 0;">
+          <button class="btn btn-primary" onclick="saveAndClose()">💾 שמור שינויים</button>
+          <button class="btn btn-secondary" onclick="closeModal()">ביטול</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SMART UPLOAD MODAL -->
+  <div class="modal-backdrop" id="upload-modal">
+    <div class="upload-modal">
+      <div class="upload-modal-header">
+        <div>
+          <div class="upload-modal-title">
+            <span class="icon">📤</span>
+            <span>העלאת תוכן</span>
+            <span class="ai-tag">AI</span>
+          </div>
+          <div class="upload-modal-subtitle">המערכת תקרא את הקובץ אוטומטית - תזהה תאריכים, כותרות, קופי, ותמונות. אחרי הניתוח תקבל הצעה לאישור.</div>
+        </div>
+        <button class="modal-close-x" onclick="closeUploadModal()">×</button>
+      </div>
+
+      <div class="upload-modal-body">
+
+        <!-- Target client -->
+        <div class="upload-target">
+          <span class="upload-target-label">📋 העלה גאנט עבור:</span>
+          <select class="upload-target-select" id="upload-target-select">
+            <option value="">בחר לקוח...</option>
+          </select>
+        </div>
+
+        <!-- Drop area -->
+        <div class="drop-area" onclick="alert('פתיחת file picker')">
+          <div class="drop-area-icon">📁</div>
+          <div class="drop-area-title">גרור קבצים לכאן</div>
+          <div class="drop-area-hint">או לחץ לבחירה</div>
+        </div>
+
+        <!-- File types supported -->
+        <div class="modal-section-label" style="margin-block-end:10px">סוגי קבצים נתמכים</div>
+        <div class="file-types-grid">
+          <div class="file-type"><div class="file-type-icon">📄</div><div class="file-type-name">PDF</div><div class="file-type-hint">.pdf</div></div>
+          <div class="file-type"><div class="file-type-icon">📊</div><div class="file-type-name">PowerPoint</div><div class="file-type-hint">.pptx</div></div>
+          <div class="file-type"><div class="file-type-icon">📝</div><div class="file-type-name">Word</div><div class="file-type-hint">.docx</div></div>
+          <div class="file-type"><div class="file-type-icon">🖼</div><div class="file-type-name">תמונות</div><div class="file-type-hint">.jpg .png</div></div>
+          <div class="file-type"><div class="file-type-icon">📋</div><div class="file-type-name">ZIP</div><div class="file-type-hint">.zip</div></div>
+        </div>
+
+        <!-- URL inputs -->
+        <div class="modal-section-label" style="margin-block-end:10px">או הדבק קישור</div>
+        <div class="url-input-section">
+          <div class="url-input-row" style="margin-block-end:8px">
+            <input type="text" class="url-input" placeholder="🌐 Google Slides URL (https://docs.google.com/presentation/...)">
+            <button class="url-input-btn">טען</button>
+          </div>
+          <div class="url-input-row" style="margin-block-end:8px">
+            <input type="text" class="url-input" placeholder="📝 Google Docs URL (https://docs.google.com/document/...)">
+            <button class="url-input-btn">טען</button>
+          </div>
+          <div class="url-input-row">
+            <input type="text" class="url-input" placeholder="📂 Dropbox / Google Drive Folder URL">
+            <button class="url-input-btn">טען</button>
+          </div>
+        </div>
+
+        <!-- AI explanation -->
+        <div class="ai-explanation">
+          <strong>✨ מה ה-AI יעשה אחרי שאעלה?</strong>
+          <ul class="ai-explanation-list">
+            <li>יזהה תאריכים (גם בעברית: "ה-12 לחודש", "ראש חודש")</li>
+            <li>ישלוף כותרות פוסטים והסברים</li>
+            <li>יזהה סוג תוכן (פוסט/קרוסלה/סטורי/ריל) לפי הקשר</li>
+            <li>יחלץ קופי נלווה ויפריד ל-3 הסוגים (ראשי/משני/קטן)</li>
+            <li>יחלץ תמונות וישייך לכל פריט</li>
+            <li>יציג טבלת הצעה לאישור לפני יצירת הגאנט</li>
+          </ul>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn btn-gold" onclick="alert('במערכת האמיתית - מתחיל ניתוח Claude API')">🚀 התחל ניתוח AI</button>
+          <button class="btn btn-secondary" onclick="closeUploadModal()">ביטול</button>
         </div>
 
       </div>
-
     </div>
   </div>
 
@@ -884,7 +852,6 @@
   <div class="sync-banner" id="sync-banner">✓ נשמר וסונכרן בכל התצוגות</div>
 
   <script>
-    // SHORTENED CLIENT NAMES (max 2 words / 1 word)
     const CLIENTS = [
       { slug: 'adavot', name: 'אדוות', color: '#67E8F9' },
       { slug: 'haim-plus', name: 'חיים בפלוס', color: '#5EEAD4' },
@@ -936,8 +903,13 @@
       'ראיון מיוחד', 'תוכן לקהל', 'הזמנה לאירוע', 'תודה לתורמים', 'מאחורי הקלעים',
       '5 טיפים', 'מה חדש?', 'גלריית תמונות', 'סדנת קיץ', 'מסר חשוב',
       'עדות אישית', 'הקדמה לפרק', 'שאלה לקהל', 'משחק וזכייה', 'יום ירושלים',
-      'פרשת השבוע', 'דבר ראש המרכז', 'הזמנה לכנס', 'ברכת חודש',
     ];
+    const SAMPLE_SLIDE_TEXTS = {
+      primary: ['ראשי בולט', 'כותרת ראשית', '5 דברים שכדאי לדעת', 'הסיפור המלא'],
+      secondary: ['תת-כותרת תומכת', 'שורת הסבר', 'מה שחשוב לזכור'],
+      small: ['פרט קטן', 'הערה תחתונה', 'מקור: אתר זליגר'],
+      copy: ['קופי לתיאור השקף - מה הוא מציג, מה ההוק.', 'הסבר על תוכן הויזואל.'],
+    };
 
     function weightedRandom(items, weights) {
       const total = weights.reduce((a, b) => a + b, 0);
@@ -948,6 +920,7 @@
       }
       return items[items.length - 1];
     }
+    function randomFrom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
     const HEBREW_DAYS = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
     const TODAY = 24;
@@ -970,6 +943,20 @@
       return `${gematria(day - sivanStart + 1)} סיון`;
     }
 
+    function makeSlides(type) {
+      const count = type === 'carousel' ? 3 : 1;
+      const slides = [];
+      for (let i = 0; i < count; i++) {
+        slides.push({
+          primary: randomFrom(SAMPLE_SLIDE_TEXTS.primary),
+          secondary: randomFrom(SAMPLE_SLIDE_TEXTS.secondary),
+          small: randomFrom(SAMPLE_SLIDE_TEXTS.small),
+          copy: randomFrom(SAMPLE_SLIDE_TEXTS.copy),
+        });
+      }
+      return slides;
+    }
+
     function generateMonthTasks() {
       const tasks = [];
       let taskId = 0;
@@ -983,26 +970,30 @@
           attempts++;
         }
         days.forEach(day => {
+          const type = TYPES[Math.floor(Math.random() * TYPES.length)];
           tasks.push({
             id: ++taskId, day, client,
             title: SAMPLE_TITLES[Math.floor(Math.random() * SAMPLE_TITLES.length)],
-            type: TYPES[Math.floor(Math.random() * TYPES.length)],
+            type,
             status: weightedRandom(STATUSES, STATUS_WEIGHTS),
-            copy: 'דוגמת קופי נלווה לפוסט. כאן יהיה הטקסט המלא שעולה לסושיאל. הקפטיון יכלול גם אימוג\'ים והאשטגים.\n\n#זליגרשומרון #תוכן',
+            copy: 'דוגמת קופי נלווה לפוסט. הקפטיון המלא שעולה לסושיאל יכלול אימוג\'ים והאשטגים.\n\n#זליגרשומרון',
             explanation: 'הסבר פנימי על הרעיון - מה הזווית, מה ההוק, מי קהל היעד.',
+            slides: makeSlides(type),
           });
         });
       });
       const todayClients = [0, 2, 4, 6, 8, 10, 12, 14, 16];
       todayClients.forEach(idx => {
-        tasks.push({ id: ++taskId, day: 24, client: CLIENTS[idx], title: SAMPLE_TITLES[Math.floor(Math.random() * SAMPLE_TITLES.length)], type: TYPES[Math.floor(Math.random() * TYPES.length)], status: weightedRandom(STATUSES, STATUS_WEIGHTS), copy: 'דוגמת קופי.', explanation: 'הסבר.' });
+        const type = TYPES[Math.floor(Math.random() * TYPES.length)];
+        tasks.push({ id: ++taskId, day: 24, client: CLIENTS[idx], title: SAMPLE_TITLES[Math.floor(Math.random() * SAMPLE_TITLES.length)], type, status: weightedRandom(STATUSES, STATUS_WEIGHTS), copy: 'דוגמת קופי.', explanation: 'הסבר.', slides: makeSlides(type) });
       });
       [1, 3, 5, 7, 9, 11].forEach(idx => {
-        tasks.push({ id: ++taskId, day: 25, client: CLIENTS[idx], title: SAMPLE_TITLES[Math.floor(Math.random() * SAMPLE_TITLES.length)], type: TYPES[Math.floor(Math.random() * TYPES.length)], status: weightedRandom(STATUSES, STATUS_WEIGHTS), copy: 'דוגמת קופי.', explanation: 'הסבר.' });
+        const type = TYPES[Math.floor(Math.random() * TYPES.length)];
+        tasks.push({ id: ++taskId, day: 25, client: CLIENTS[idx], title: SAMPLE_TITLES[Math.floor(Math.random() * SAMPLE_TITLES.length)], type, status: weightedRandom(STATUSES, STATUS_WEIGHTS), copy: 'דוגמת קופי.', explanation: 'הסבר.', slides: makeSlides(type) });
       });
       [10, 14, 18, 22, 25].forEach(day => {
         for (let i = 0; i < 2; i++) {
-          tasks.push({ id: ++taskId, day, client: CLIENTS[Math.floor(Math.random() * CLIENTS.length)], title: SAMPLE_TITLES[Math.floor(Math.random() * SAMPLE_TITLES.length)], type: TYPES[Math.floor(Math.random() * TYPES.length)], status: 'archived', copy: 'נגנז.', explanation: '.' });
+          tasks.push({ id: ++taskId, day, client: CLIENTS[Math.floor(Math.random() * CLIENTS.length)], title: SAMPLE_TITLES[Math.floor(Math.random() * SAMPLE_TITLES.length)], type: TYPES[Math.floor(Math.random() * TYPES.length)], status: 'archived', copy: 'נגנז.', explanation: '.', slides: [] });
         }
       });
       return tasks;
@@ -1010,8 +1001,8 @@
 
     let TASKS = generateMonthTasks();
     let CURRENT_MODE = 'tile';
-    let CURRENT_CLIENT = null; // null = Master View, else client slug
-    let CURRENT_TASK = null; // for modal
+    let CURRENT_CLIENT = null;
+    let CURRENT_TASK = null;
 
     function tasksForDay(day) {
       let filtered = TASKS.filter(t => t.day === day);
@@ -1024,15 +1015,18 @@
         HEBREW_DAYS.map((d, i) => `<div class="wd ${i >= 5 ? 'weekend' : ''}">${d}</div>`).join('');
     }
 
-    function renderTile(t, dayNum) {
-      const isArchived = t.status === 'archived';
-      const tooltipData = JSON.stringify({
+    function getTooltipData(t, dayNum) {
+      return JSON.stringify({
         client: t.client.name, clientColor: t.client.color, title: t.title,
         type: TYPE_LABELS[t.type], status: STATUS_LABELS[t.status], day: dayNum,
       }).replace(/"/g, '&quot;');
+    }
+
+    function renderTile(t, dayNum) {
+      const isArchived = t.status === 'archived';
       return `<div class="tile ${isArchived ? 'is-archived' : ''}"
         style="--client-color:${t.client.color};--client-tint:${tint(t.client.color, 0.12)};--client-tint-strong:${tint(t.client.color, 0.20)}"
-        data-tooltip="${tooltipData}"
+        data-tooltip="${getTooltipData(t, dayNum)}"
         onclick="event.stopPropagation(); openModalById(${t.id})"
         onmouseenter="showTooltip(event, this)"
         onmouseleave="hideTooltip()"
@@ -1050,9 +1044,7 @@
       const archived = tasks.filter(t => t.status === 'archived');
       let html = '<div class="tile-grid">';
       html += active.map(t => renderTile(t, dayNum)).join('');
-      if (archived.length > 0) {
-        html += `<div class="tile-more-archived" onclick="event.stopPropagation(); alert('פתיחת ${archived.length} פריטים נגנזים')">+${archived.length} נגנזים</div>`;
-      }
+      if (archived.length > 0) html += `<div class="tile-more-archived" onclick="event.stopPropagation(); alert('פתיחת ${archived.length} נגנזים')">+${archived.length} נגנזים</div>`;
       html += '</div>';
       return html;
     }
@@ -1061,7 +1053,11 @@
       const isArchived = t.status === 'archived';
       return `<div class="task-chip ${isArchived ? 'is-archived' : ''}"
         style="--client-color:${t.client.color};--client-tint:${tint(t.client.color, 0.10)};--client-tint-strong:${tint(t.client.color, 0.20)}"
-        onclick="event.stopPropagation(); openModalById(${t.id})">
+        data-tooltip="${getTooltipData(t, dayNum)}"
+        onclick="event.stopPropagation(); openModalById(${t.id})"
+        onmouseenter="showTooltip(event, this)"
+        onmouseleave="hideTooltip()"
+        onmousemove="moveTooltip(event)">
         <div class="task-chip-row1">
           <span class="task-client">${t.client.name}</span>
           <span class="task-status" style="background:${STATUS_COLORS[t.status]}"></span>
@@ -1094,9 +1090,7 @@
           </div>`;
         });
       }
-      if (archived.length > 0) {
-        html += `<div class="task-more-archived" onclick="event.stopPropagation(); alert('פתיחת ${archived.length} פריטים נגנזים')">+${archived.length} נגנזים</div>`;
-      }
+      if (archived.length > 0) html += `<div class="task-more-archived" onclick="event.stopPropagation(); alert('פתיחת ${archived.length} נגנזים')">+${archived.length} נגנזים</div>`;
       return html;
     }
 
@@ -1129,13 +1123,12 @@
           const dataAttr = inMonth && dayNum === TODAY ? `data-date="${dayNum}.5"` : '';
           html += `<div class="${classes.join(' ')}" ${dataAttr}>`;
           if (inMonth) {
-            const dayTasks = tasksForDay(dayNum);
             html += `<div class="cell-head">
               <span class="cell-num">${dayNum}</span>
               <span class="cell-heb">${hebrewDate(dayNum)}</span>
             </div>`;
-            html += `<div class="cell-body">${renderer(dayTasks, dayNum)}</div>`;
-            html += `<button class="cell-add-btn" onclick="event.stopPropagation(); addTask(${dayNum})" title="הוסף משימה ליום ${dayNum}">+</button>`;
+            html += `<div class="cell-body">${renderer(tasksForDay(dayNum), dayNum)}</div>`;
+            html += `<button class="cell-add-btn" onclick="event.stopPropagation(); addTask(${dayNum})">+</button>`;
           } else {
             const displayNum = dayNum < 1 ? (30 + dayNum) : (dayNum - daysInMonth);
             html += `<div class="cell-head"><span class="cell-num">${displayNum}</span></div>`;
@@ -1156,7 +1149,7 @@
       document.getElementById('stats-chip').innerHTML = `<strong>${clientCount}</strong> ${CURRENT_CLIENT ? 'לקוח' : 'לקוחות'} · <strong>${active}</strong> משימות`;
     }
 
-    /* ===== CLIENT DROPDOWN ===== */
+    /* CLIENT DROPDOWN */
     function buildClientMenu() {
       const menu = document.getElementById('client-menu');
       const counts = {};
@@ -1177,15 +1170,18 @@
         </div>`;
       });
       menu.innerHTML = html;
+
+      // also populate upload target select
+      const targetSelect = document.getElementById('upload-target-select');
+      let optHtml = '<option value="">בחר לקוח...</option>';
+      CLIENTS.forEach(c => { optHtml += `<option value="${c.slug}">${c.name}</option>`; });
+      targetSelect.innerHTML = optHtml;
     }
 
     function selectClient(slug) {
       CURRENT_CLIENT = slug;
-      const trigger = document.getElementById('client-trigger');
-      const menu = document.getElementById('client-menu');
-      trigger.classList.remove('open');
-      menu.classList.remove('open');
-
+      document.getElementById('client-trigger').classList.remove('open');
+      document.getElementById('client-menu').classList.remove('open');
       if (slug === null) {
         document.getElementById('trigger-dot').style.background = 'var(--accent-cyan)';
         document.getElementById('trigger-name').textContent = 'כל הלקוחות (Master)';
@@ -1198,24 +1194,21 @@
         document.getElementById('page-title-label').textContent = client.name;
         document.getElementById('page-title-context').textContent = 'גאנט חודשי';
       }
-
       buildClientMenu();
       renderGrid();
     }
 
     document.getElementById('client-trigger').addEventListener('click', (e) => {
       e.stopPropagation();
-      const trigger = document.getElementById('client-trigger');
-      const menu = document.getElementById('client-menu');
-      trigger.classList.toggle('open');
-      menu.classList.toggle('open');
+      document.getElementById('client-trigger').classList.toggle('open');
+      document.getElementById('client-menu').classList.toggle('open');
     });
     document.addEventListener('click', () => {
       document.getElementById('client-trigger').classList.remove('open');
       document.getElementById('client-menu').classList.remove('open');
     });
 
-    /* ===== TOOLTIP ===== */
+    /* TOOLTIP */
     const tooltip = document.getElementById('tooltip');
     function showTooltip(e, el) {
       const data = JSON.parse(el.dataset.tooltip.replace(/&quot;/g, '"'));
@@ -1243,7 +1236,7 @@
     window.moveTooltip = moveTooltip;
     window.hideTooltip = hideTooltip;
 
-    /* ===== MODAL (wide, like the skill) ===== */
+    /* MODAL */
     function openModalById(taskId) {
       const t = TASKS.find(x => x.id === taskId);
       if (!t) return;
@@ -1261,52 +1254,75 @@
       document.getElementById('modal-copy').value = t.copy || '';
       document.getElementById('modal-explanation').value = t.explanation || '';
 
-      // build media slots
       const sizeInfo = TYPE_SIZES[t.type];
-      const slotCount = sizeInfo.slots;
-      document.getElementById('modal-media-label').innerHTML = `🖼 מדיה <span style="margin-inline-start:8px;font-size:10px;color:var(--accent-cyan);background:rgba(103,232,249,0.1);padding:2px 8px;border-radius:4px">${sizeInfo.label}</span>`;
+      document.getElementById('modal-media-label').innerHTML = `🖼 מדיה ראשית <span style="margin-inline-start:8px;font-size:10px;color:var(--accent-cyan);background:rgba(103,232,249,0.1);padding:2px 8px;border-radius:4px">${sizeInfo.label}</span>`;
 
-      const grid = document.getElementById('modal-media-grid');
-      let mediaHtml = '';
-      for (let i = 0; i < slotCount; i++) {
-        const hasImage = Math.random() > 0.4;
-        if (hasImage) {
-          mediaHtml += `<div class="media-slot has-image" style="--client-color:${t.client.color}">
-            <div class="media-slot-head" style="padding:10px 14px 0">
-              <div class="media-slot-label">
-                <span class="media-slot-label-num">${i + 1}</span>
-                ${t.type === 'carousel' ? `שקף ${i + 1}` : 'תמונה'}
-              </div>
-              <span class="media-slot-size">${sizeInfo.label}</span>
+      // main media (1 slot - cover image)
+      const mediaGrid = document.getElementById('modal-media-grid');
+      const hasImage = Math.random() > 0.4;
+      mediaGrid.innerHTML = hasImage ?
+        `<div class="media-slot has-image" style="--client-color:${t.client.color}">
+          <div class="media-slot-head" style="padding:10px 14px 0">
+            <div class="media-slot-label"><span class="media-slot-label-num">★</span>תמונת כיסוי</div>
+            <span class="media-slot-size">${sizeInfo.label}</span>
+          </div>
+          <div class="media-slot-image" style="--aspect:${sizeInfo.aspect};--client-color:${t.client.color}">★</div>
+          <div class="media-slot-actions">
+            <button class="media-slot-action">החלף</button>
+            <button class="media-slot-action">הורד</button>
+            <button class="media-slot-action danger">מחק</button>
+          </div>
+        </div>` :
+        `<div class="media-slot">
+          <div class="media-slot-head">
+            <div class="media-slot-label"><span class="media-slot-label-num">★</span>תמונת כיסוי</div>
+            <span class="media-slot-size">${sizeInfo.label}</span>
+          </div>
+          <div class="media-slot-placeholder" style="--aspect:${sizeInfo.aspect}">
+            <div class="media-slot-placeholder-icon">⬆</div>
+            <div class="media-slot-placeholder-text">העלה תמונה</div>
+            <div class="media-slot-placeholder-hint">או גרור לכאן</div>
+          </div>
+        </div>`;
+
+      // SLIDES section (only for carousel)
+      const slidesSection = document.getElementById('slides-section');
+      if (t.type === 'carousel' && t.slides && t.slides.length > 0) {
+        slidesSection.style.display = 'block';
+        document.getElementById('slides-count').textContent = `${t.slides.length} שקפים`;
+        const slidesList = document.getElementById('slides-list');
+        let slidesHtml = '';
+        t.slides.forEach((slide, idx) => {
+          slidesHtml += `<div class="slide-card">
+            <div class="slide-card-preview" style="--aspect:${sizeInfo.aspect};--client-color:${t.client.color}">
+              <span class="slide-card-preview-num">שקף ${idx + 1}</span>
+              ${idx + 1}
             </div>
-            <div class="media-slot-image" style="--aspect:${sizeInfo.aspect};--client-color:${t.client.color}">${i + 1}</div>
-            <div class="media-slot-actions">
-              <button class="media-slot-action">החלף</button>
-              <button class="media-slot-action">הורד</button>
-              <button class="media-slot-action danger">מחק</button>
+            <div class="slide-card-fields">
+              <div>
+                <div class="slide-field-label">טקסט ראשי על הוויזואל <span class="badge-type visual">visual</span></div>
+                <textarea class="copy-textarea small" data-slide="${idx}" data-field="primary">${slide.primary || ''}</textarea>
+              </div>
+              <div>
+                <div class="slide-field-label">טקסט משני <span class="badge-type visual">visual</span></div>
+                <textarea class="copy-textarea small" data-slide="${idx}" data-field="secondary">${slide.secondary || ''}</textarea>
+              </div>
+              <div>
+                <div class="slide-field-label">טקסט קטן (פירוט/מקור) <span class="badge-type visual">visual</span></div>
+                <textarea class="copy-textarea small" data-slide="${idx}" data-field="small">${slide.small || ''}</textarea>
+              </div>
+              <div>
+                <div class="slide-field-label">קופי תיאור השקף <span class="badge-type caption">caption</span></div>
+                <textarea class="copy-textarea small" data-slide="${idx}" data-field="copy">${slide.copy || ''}</textarea>
+              </div>
             </div>
           </div>`;
-        } else {
-          mediaHtml += `<div class="media-slot">
-            <div class="media-slot-head">
-              <div class="media-slot-label">
-                <span class="media-slot-label-num">${i + 1}</span>
-                ${t.type === 'carousel' ? `שקף ${i + 1}` : 'תמונה'}
-              </div>
-              <span class="media-slot-size">${sizeInfo.label}</span>
-            </div>
-            <div class="media-slot-placeholder" style="--aspect:${sizeInfo.aspect}">
-              <div class="media-slot-placeholder-icon">⬆</div>
-              <div class="media-slot-placeholder-text">העלה תמונה</div>
-              <div class="media-slot-placeholder-hint">או גרור לכאן</div>
-            </div>
-          </div>`;
-        }
+        });
+        slidesHtml += `<button class="btn btn-secondary" style="margin-top:8px">+ הוסף שקף (עד 10)</button>`;
+        slidesList.innerHTML = slidesHtml;
+      } else {
+        slidesSection.style.display = 'none';
       }
-      if (t.type === 'carousel') {
-        mediaHtml += `<button class="btn btn-secondary" style="margin-top:8px;width:100%">+ הוסף שקף (עד 10)</button>`;
-      }
-      grid.innerHTML = mediaHtml;
 
       document.getElementById('modal').classList.add('open');
     }
@@ -1318,6 +1334,12 @@
         CURRENT_TASK.status = document.getElementById('modal-status-select').value;
         CURRENT_TASK.copy = document.getElementById('modal-copy').value;
         CURRENT_TASK.explanation = document.getElementById('modal-explanation').value;
+        // save slides
+        document.querySelectorAll('#slides-list textarea').forEach(ta => {
+          const slideIdx = parseInt(ta.dataset.slide);
+          const field = ta.dataset.field;
+          if (CURRENT_TASK.slides[slideIdx]) CURRENT_TASK.slides[slideIdx][field] = ta.value;
+        });
         renderGrid();
         buildClientMenu();
         showSyncBanner();
@@ -1328,16 +1350,26 @@
       if (e.target.id === 'modal') closeModal();
     });
 
+    /* UPLOAD MODAL */
+    window.openUploadModal = () => {
+      // preselect current client if in client view
+      const sel = document.getElementById('upload-target-select');
+      sel.value = CURRENT_CLIENT || '';
+      document.getElementById('upload-modal').classList.add('open');
+    };
+    window.closeUploadModal = () => document.getElementById('upload-modal').classList.remove('open');
+    document.getElementById('upload-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'upload-modal') closeUploadModal();
+    });
+
     function showSyncBanner() {
       const b = document.getElementById('sync-banner');
       b.classList.add('show');
       setTimeout(() => b.classList.remove('show'), 2200);
     }
-    window.addTask = function(day) {
-      alert(`הוסף משימה ליום ${day}.5.2026\n\nבמערכת האמיתית - form להוספת רעיון חדש.`);
-    };
+    window.addTask = (day) => alert(`הוסף משימה ליום ${day}.5.2026`);
 
-    /* ===== MODE SWITCHER ===== */
+    /* MODE SWITCHER */
     document.querySelectorAll('.mode-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
@@ -1345,16 +1377,15 @@
         CURRENT_MODE = btn.dataset.mode;
         const desc = document.getElementById('mode-desc');
         if (CURRENT_MODE === 'tile') {
-          desc.innerHTML = '<strong>Tile View</strong> — קוביות קומפקטיות. Hover מציג tooltip, Click נכנס למשימה. דחיסות מקסימלית.';
+          desc.innerHTML = '<strong>Tile View</strong> — קוביות קומפקטיות. Hover מציג tooltip מפורט. דחיסות מקסימלית.';
         } else {
-          desc.innerHTML = '<strong>List View</strong> — chips אופקיים, כותרת המשימה גלויה בלי hover. מקובץ לפי סטטוס. נוח לעבודה עמוקה.';
+          desc.innerHTML = '<strong>List View</strong> — chips אופקיים, כותרת גלויה. Hover עדיין מציג tooltip מפורט. מקובץ לפי סטטוס.';
         }
         renderGrid();
         hideTooltip();
       });
     });
 
-    /* ===== INIT ===== */
     renderWeekdays();
     renderGrid();
     buildClientMenu();
