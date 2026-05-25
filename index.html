@@ -725,12 +725,24 @@
         <span class="badge">DESIGN LOCK</span>
       </div>
       <div class="pro-recommendation-lead">
-        כל הפיצ'רים מוטמעים. <strong>Tile/List + Hover Tooltip בשניהם</strong> · <strong>Client Dropdown</strong> למעבר בין Master ולקוח · <strong>מודאל מלא כמו בסקיל</strong> (3 סוגי קופי לכל שקף: ראשי/משני/קטן + קופי שקף) · <strong>Smart Upload AI</strong> (PDF/PPTX/DOCX/Google Slides/Google Docs/תמונות/קישורים) · <strong>סנכרון אחיד</strong> בכל התצוגות.
+        תצוגה אחת חכמה. <strong>Tile קומפקטי (שורה אחת)</strong> עם <strong>קיבוץ אוטומטי לפי סטטוס</strong> ביום עמוס · <strong>Client Dropdown</strong> למעבר בין Master ולקוח · <strong>מודאל זהה לסקיל</strong> (קופי נלווה + מדיה רב-תמונתית) · <strong>Smart Upload AI</strong> (PDF/PPTX/DOCX/Google/תמונות/קישורים) · <strong>Sync אחיד</strong> בכל התצוגות.
       </div>
 
       <div class="explanation-grid">
         <div class="explain-card">
           <span class="explain-card-num">1</span>
+          <div class="explain-card-title"><span class="emoji">▣</span> Tile חכם עם קיבוץ</div>
+          <ul>
+            <li>קוביה של שורה אחת: <strong>● נקודה · שם לקוח · אות סוג</strong></li>
+            <li><strong>≤2 משימות ביום</strong> → flat, בלי headers</li>
+            <li><strong>3+ משימות</strong> → קיבוץ אוטומטי לפי סטטוס (לאישור → בעבודה → בעיצוב → אושר)</li>
+            <li>Hover על קוביה → tooltip עם שם משימה ופרטים</li>
+            <li>Click → פותח מודאל מלא</li>
+          </ul>
+        </div>
+
+        <div class="explain-card">
+          <span class="explain-card-num">2</span>
           <div class="explain-card-title"><span class="emoji">📤</span> Smart Upload (AI)</div>
           <ul>
             <li><strong>כפתור צהוב</strong> בראש - "העלאת תוכן"</li>
@@ -743,25 +755,14 @@
         </div>
 
         <div class="explain-card">
-          <span class="explain-card-num">2</span>
-          <div class="explain-card-title"><span class="emoji">🖱</span> Hover Tooltip בכל מקום</div>
-          <ul>
-            <li>Hover על <strong>tile</strong> → tooltip מפורט</li>
-            <li>Hover על <strong>chip ב-List View</strong> → tooltip מפורט</li>
-            <li>מציג: לקוח · משימה · סוג · סטטוס · תאריך</li>
-            <li>Click → פותח מודאל מלא</li>
-          </ul>
-        </div>
-
-        <div class="explain-card">
           <span class="explain-card-num">3</span>
-          <div class="explain-card-title"><span class="emoji">🔲</span> מודאל מלא כמו בסקיל</div>
+          <div class="explain-card-title"><span class="emoji">🔲</span> מודאל זהה לסקיל</div>
           <ul>
-            <li><strong>צד ימין</strong>: סטטוס · קופי נלווה · הסבר</li>
-            <li><strong>צד שמאל</strong>: מדיה ראשית עם הנחיית מידה</li>
-            <li><strong>מתחת</strong>: שקפים (לקרוסלה)</li>
-            <li>כל שקף: 3 סוגי קופי (ראשי / משני / קטן) + קופי שקף</li>
-            <li>תמונה לכל שקף עם הנחיית מידה</li>
+            <li><strong>Header</strong>: לקוח · סוג · כותרת + תאריכים</li>
+            <li><strong>סטטוס dropdown</strong> בולט</li>
+            <li><strong>הסבר קצר</strong> (קופסת תכלת)</li>
+            <li><strong>אזור עיקרי</strong>: קופי נלווה (textarea) + ויזואל (תמונות מרובות עד 10)</li>
+            <li>הנחיות מידה: 1080×1080 (פוסט/קרוסלה) · 9:16 (סטורי/ריל)</li>
           </ul>
         </div>
 
@@ -775,26 +776,6 @@
             <li>במערכת האמיתית: Realtime sync תוך 2 שניות</li>
           </ul>
         </div>
-      </div>
-    </div>
-
-    <!-- MODE SWITCHER -->
-    <div class="mode-switcher-bar">
-      <div class="mode-switcher-info">
-        <div class="mode-switcher-info-title">בחר מצב תצוגה</div>
-        <div class="mode-switcher-info-desc" id="mode-desc">
-          <strong>Tile View</strong> — קוביות קומפקטיות. Hover מציג tooltip מפורט, Click נכנס למשימה. דחיסות מקסימלית.
-        </div>
-      </div>
-      <div class="mode-switcher">
-        <button class="mode-btn active" data-mode="tile">
-          <span class="mode-btn-icon">▣</span>
-          <span>Tile View</span>
-        </button>
-        <button class="mode-btn" data-mode="list">
-          <span class="mode-btn-icon">≡</span>
-          <span>List View</span>
-        </button>
       </div>
     </div>
 
@@ -1135,7 +1116,6 @@
     }
 
     let TASKS = generateMonthTasks();
-    let CURRENT_MODE = 'tile';
     let CURRENT_CLIENT = null;
     let CURRENT_TASK = null;
 
@@ -1176,40 +1156,15 @@
     function renderCellBodyTile(tasks, dayNum) {
       const active = tasks.filter(t => t.status !== 'archived');
       const archived = tasks.filter(t => t.status === 'archived');
-      let html = '<div class="tile-grid">';
-      html += active.map(t => renderTile(t, dayNum)).join('');
-      if (archived.length > 0) html += `<div class="tile-more-archived" onclick="event.stopPropagation(); alert('פתיחת ${archived.length} נגנזים')">+${archived.length} נגנזים</div>`;
-      html += '</div>';
-      return html;
-    }
-
-    function renderChipList(t, dayNum) {
-      const isArchived = t.status === 'archived';
-      return `<div class="task-chip ${isArchived ? 'is-archived' : ''}"
-        style="--client-color:${t.client.color};--client-tint:${tint(t.client.color, 0.10)};--client-tint-strong:${tint(t.client.color, 0.20)}"
-        data-tooltip="${getTooltipData(t, dayNum)}"
-        onclick="event.stopPropagation(); openModalById(${t.id})"
-        onmouseenter="showTooltip(event, this)"
-        onmouseleave="hideTooltip()"
-        onmousemove="moveTooltip(event)">
-        <div class="task-chip-row1">
-          <span class="task-client">${t.client.name}</span>
-          <span class="task-status" style="background:${STATUS_COLORS[t.status]}"></span>
-        </div>
-        <div class="task-chip-row2">
-          <span class="task-type-letter">${TYPE_LETTERS[t.type]}</span>
-          <span class="task-title">${t.title}</span>
-        </div>
-      </div>`;
-    }
-
-    function renderCellBodyList(tasks, dayNum) {
-      const active = tasks.filter(t => t.status !== 'archived');
-      const archived = tasks.filter(t => t.status === 'archived');
       let html = '';
+
+      // ≤2 tasks → flat (no status headers)
       if (active.length <= 2) {
-        html += active.map(t => renderChipList(t, dayNum)).join('');
+        html += '<div class="tile-grid">';
+        html += active.map(t => renderTile(t, dayNum)).join('');
+        html += '</div>';
       } else {
+        // 3+ tasks → grouped by status (pending → work → design → approved)
         const grouped = {};
         STATUS_ORDER.forEach(s => grouped[s] = []);
         active.forEach(t => grouped[t.status].push(t));
@@ -1220,11 +1175,14 @@
             <div class="status-group-head" style="--status-color:${STATUS_COLORS[status]}">
               <span class="dot"></span>${STATUS_LABELS_SHORT[status]} · ${items.length}
             </div>
-            <div class="status-group-items">${items.map(t => renderChipList(t, dayNum)).join('')}</div>
+            <div class="tile-grid">${items.map(t => renderTile(t, dayNum)).join('')}</div>
           </div>`;
         });
       }
-      if (archived.length > 0) html += `<div class="task-more-archived" onclick="event.stopPropagation(); alert('פתיחת ${archived.length} נגנזים')">+${archived.length} נגנזים</div>`;
+
+      if (archived.length > 0) {
+        html += `<div class="tile-more-archived" onclick="event.stopPropagation(); alert('פתיחת ${archived.length} נגנזים')">+${archived.length} נגנזים</div>`;
+      }
       return html;
     }
 
@@ -1234,7 +1192,7 @@
       const daysInMonth = 31;
       const totalCells = Math.ceil((firstDow + daysInMonth) / 7) * 7;
       const weeksCount = totalCells / 7;
-      const renderer = CURRENT_MODE === 'tile' ? renderCellBodyTile : renderCellBodyList;
+      const renderer = renderCellBodyTile;
 
       let html = '';
       for (let w = 0; w < weeksCount; w++) {
@@ -1486,23 +1444,6 @@
       setTimeout(() => b.classList.remove('show'), 2200);
     }
     window.addTask = (day) => alert(`הוסף משימה ליום ${day}.5.2026`);
-
-    /* MODE SWITCHER */
-    document.querySelectorAll('.mode-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        CURRENT_MODE = btn.dataset.mode;
-        const desc = document.getElementById('mode-desc');
-        if (CURRENT_MODE === 'tile') {
-          desc.innerHTML = '<strong>Tile View</strong> — קוביות קומפקטיות. Hover מציג tooltip מפורט. דחיסות מקסימלית.';
-        } else {
-          desc.innerHTML = '<strong>List View</strong> — chips אופקיים, כותרת גלויה. Hover עדיין מציג tooltip מפורט. מקובץ לפי סטטוס.';
-        }
-        renderGrid();
-        hideTooltip();
-      });
-    });
 
     renderWeekdays();
     renderGrid();
