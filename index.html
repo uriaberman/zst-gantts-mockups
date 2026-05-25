@@ -93,13 +93,116 @@
     .stats-chip { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: var(--ink-soft); background: var(--paper-2); border: 1px solid var(--border); border-radius: 999px; padding: 6px 14px; }
     .stats-chip strong { color: var(--ink); font-weight: 700; }
 
-    /* PRO RECOMMENDATION */
-    .pro-recommendation { background: var(--paper); border: 1px solid var(--border); border-radius: 14px; padding: 22px 26px; margin-block-end: 18px; position: relative; overflow: hidden; }
-    .pro-recommendation::before { content: ''; position: absolute; inset-block-start: 0; inset-inline-start: 0; inset-block-end: 0; width: 4px; background: var(--accent-cyan); }
-    .pro-recommendation-title { font-family: var(--font-he); font-size: 16px; font-weight: 800; color: var(--accent-cyan); margin-block-end: 8px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    /* GUIDE (collapsible) */
+    .pro-recommendation { background: var(--paper); border: 1px solid var(--border); border-radius: 14px; margin-block-end: 18px; position: relative; overflow: hidden; transition: all 0.25s ease; }
+    .pro-recommendation::before { content: ''; position: absolute; inset-block-start: 0; inset-inline-start: 0; inset-block-end: 0; width: 4px; background: var(--accent-cyan); z-index: 1; }
+    .pro-recommendation-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 26px;
+      cursor: pointer;
+      transition: background 0.15s ease;
+      position: relative;
+      z-index: 2;
+    }
+    .pro-recommendation-header:hover { background: rgba(103,232,249,0.04); }
+    .pro-recommendation.collapsed .pro-recommendation-header { padding: 12px 26px; }
+    .pro-recommendation-content {
+      padding: 0 26px 22px;
+      max-height: 1500px;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.25s ease, opacity 0.2s ease;
+      opacity: 1;
+    }
+    .pro-recommendation.collapsed .pro-recommendation-content {
+      max-height: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      opacity: 0;
+    }
+    .pro-recommendation-title {
+      font-family: var(--font-he);
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--accent-cyan);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
     .pro-recommendation-title .badge { background: var(--accent-cyan); color: var(--bg); font-size: 10px; font-weight: 800; padding: 3px 9px; border-radius: 6px; letter-spacing: 0.06em; }
+    .guide-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--paper-2);
+      border: 1px solid var(--border);
+      color: var(--ink-soft);
+      padding: 6px 12px;
+      font-family: var(--font-he);
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .guide-toggle:hover { color: var(--ink); border-color: var(--accent-cyan); background: var(--paper-3); }
+    .guide-toggle .chevron { transition: transform 0.2s ease; }
+    .pro-recommendation.collapsed .guide-toggle .chevron { transform: rotate(180deg); }
     .pro-recommendation-lead { font-size: 13px; color: var(--ink); line-height: 1.6; margin-block-end: 16px; max-width: 1080px; }
     .pro-recommendation-lead strong { color: var(--accent-cyan); }
+
+    /* Quick tips section inside guide */
+    .quick-tips {
+      margin-block-start: 16px;
+      padding: 14px 18px;
+      background: rgba(250,204,21,0.05);
+      border: 1px solid rgba(250,204,21,0.2);
+      border-radius: 10px;
+    }
+    .quick-tips-title {
+      font-family: var(--font-he);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--gold);
+      margin-block-end: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .quick-tips-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 8px 16px;
+    }
+    .quick-tips-list li {
+      list-style: none;
+      font-size: 11.5px;
+      color: var(--ink-soft);
+      line-height: 1.5;
+      padding-inline-start: 22px;
+      position: relative;
+    }
+    .quick-tips-list li::before {
+      content: '💡';
+      position: absolute;
+      inset-inline-start: 0;
+      font-size: 12px;
+      top: 0;
+    }
+    .quick-tips-list strong { color: var(--ink); font-weight: 700; }
+    .quick-tips-list kbd {
+      background: var(--paper-3);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-family: var(--font-en);
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--accent-cyan);
+    }
     .explanation-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
     .explain-card { background: var(--paper-3); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; position: relative; }
     .explain-card-num { position: absolute; inset-block-start: -8px; inset-inline-end: 12px; width: 24px; height: 24px; border-radius: 50%; background: var(--accent-cyan); color: var(--bg); display: grid; place-items: center; font-family: var(--font-en); font-size: 12px; font-weight: 800; }
@@ -717,13 +820,21 @@
       </div>
     </div>
 
-    <!-- PRO RECOMMENDATION -->
-    <div class="pro-recommendation">
-      <div class="pro-recommendation-title">
-        <span>🎯</span>
-        <span>הפתרון הסופי - v7</span>
-        <span class="badge">DESIGN LOCK</span>
+    <!-- GUIDE (collapsible) -->
+    <div class="pro-recommendation" id="guide">
+      <div class="pro-recommendation-header" onclick="toggleGuide()">
+        <div class="pro-recommendation-title">
+          <span>🎓</span>
+          <span>מדריך השימוש במערכת</span>
+          <span class="badge">GUIDE</span>
+        </div>
+        <button class="guide-toggle" onclick="event.stopPropagation(); toggleGuide()">
+          <span class="guide-toggle-text">הסתר</span>
+          <svg class="chevron" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
       </div>
+
+      <div class="pro-recommendation-content">
       <div class="pro-recommendation-lead">
         תצוגה אחת חכמה. <strong>Tile קומפקטי (שורה אחת)</strong> עם <strong>קיבוץ אוטומטי לפי סטטוס</strong> ביום עמוס · <strong>Client Dropdown</strong> למעבר בין Master ולקוח · <strong>מודאל זהה לסקיל</strong> (קופי נלווה + מדיה רב-תמונתית) · <strong>Smart Upload AI</strong> (PDF/PPTX/DOCX/Google/תמונות/קישורים) · <strong>Sync אחיד</strong> בכל התצוגות.
       </div>
@@ -777,6 +888,28 @@
           </ul>
         </div>
       </div>
+
+      <!-- QUICK TIPS -->
+      <div class="quick-tips">
+        <div class="quick-tips-title">
+          <span>⚡</span>
+          <span>טיפים מהירים לשימוש יומיומי</span>
+        </div>
+        <ul class="quick-tips-list">
+          <li><strong>סקירה מהירה</strong> - <kbd>Hover</kbd> על קוביה מציג tooltip עם כותרת המשימה ופרטים מלאים</li>
+          <li><strong>פתיחת משימה</strong> - <kbd>Click</kbd> על קוביה פותח מודאל מלא לעריכה</li>
+          <li><strong>הוספת משימה ליום</strong> - <kbd>Hover</kbd> על cell של יום → כפתור <kbd>+</kbd> כחול בפינה</li>
+          <li><strong>מעבר ללקוח ספציפי</strong> - לחץ על "כל הלקוחות (Master)" בראש → בחר לקוח</li>
+          <li><strong>חזרה ל-Master View</strong> - באותו dropdown → "כל הלקוחות"</li>
+          <li><strong>העלאת גאנט מ-Word/PDF</strong> - לחץ על הכפתור הצהוב "📤 העלאת תוכן" → גרור קובץ</li>
+          <li><strong>שמירת קופי</strong> - במודאל → כפתור "💾 שמור קופי" באזור הקופי</li>
+          <li><strong>שינוי סטטוס</strong> - במודאל → dropdown "סטטוס" בראש</li>
+          <li><strong>החלפת תמונה</strong> - במודאל → לחץ "↻ החלף" מתחת לתמונה</li>
+          <li><strong>פריטים נגנזים</strong> - מופיעים מתחת תחת "+N נגנזים" - לחץ לפתיחה</li>
+        </ul>
+      </div>
+
+      </div><!-- /pro-recommendation-content -->
     </div>
 
     <!-- LEGEND -->
@@ -1444,6 +1577,21 @@
       setTimeout(() => b.classList.remove('show'), 2200);
     }
     window.addTask = (day) => alert(`הוסף משימה ליום ${day}.5.2026`);
+
+    /* GUIDE TOGGLE - collapsible with localStorage memory */
+    window.toggleGuide = function() {
+      const guide = document.getElementById('guide');
+      const isCollapsed = guide.classList.toggle('collapsed');
+      document.querySelector('.guide-toggle-text').textContent = isCollapsed ? 'הצג' : 'הסתר';
+      try { localStorage.setItem('gantts-guide-collapsed', isCollapsed ? '1' : '0'); } catch(e) {}
+    };
+    // Restore guide state on load (default = open in mockup, closed in real app)
+    try {
+      if (localStorage.getItem('gantts-guide-collapsed') === '1') {
+        document.getElementById('guide').classList.add('collapsed');
+        document.querySelector('.guide-toggle-text').textContent = 'הצג';
+      }
+    } catch(e) {}
 
     renderWeekdays();
     renderGrid();
