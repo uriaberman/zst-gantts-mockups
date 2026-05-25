@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZST Gantts System | Master View v5 — Tiles vs List</title>
+  <title>ZST Gantts System | Master + Per-Client View</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -25,16 +25,124 @@
     body { font-family: var(--font); direction: rtl; background: var(--bg); color: var(--ink); font-size: 14px; line-height: 1.55; min-height: 100vh; -webkit-font-smoothing: antialiased; }
     .page { max-width: 1680px; margin: 0 auto; padding: 24px 28px 48px; }
 
-    /* HEADER */
-    .header { position: relative; display: flex; align-items: center; justify-content: space-between; padding: 22px 30px; gap: 24px; background: linear-gradient(90deg, rgba(103,232,249,0.07) 0%, rgba(103,232,249,0.02) 50%, transparent 100%), var(--paper); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow-md); margin-bottom: 18px; overflow: hidden; flex-wrap: wrap; }
-    .header::before { content: ''; position: absolute; inset-inline-start: 0; inset-block-start: 0; inset-block-end: 0; width: 3px; background: linear-gradient(180deg, var(--accent-cyan) 0%, rgba(103,232,249,0.3) 100%); box-shadow: 0 0 14px rgba(103,232,249,0.55); }
-    .brand { display: flex; align-items: center; gap: 14px; }
-    .brand-logo { width: 46px; height: 46px; background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--gold) 100%); border-radius: 11px; display: grid; place-items: center; color: var(--bg); font-weight: 800; font-size: 1.05rem; }
-    .brand-text h1 { font-family: var(--font-he); font-size: 22px; font-weight: 700; letter-spacing: -0.015em; line-height: 1.1; display: flex; align-items: center; gap: 10px; }
+    /* HEADER - NO ANIMATIONS */
+    .header { position: relative; display: flex; align-items: center; justify-content: space-between; padding: 22px 30px; gap: 24px; background: var(--paper); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow-md); margin-bottom: 18px; overflow: hidden; flex-wrap: wrap; }
+    .header::before { content: ''; position: absolute; inset-inline-start: 0; inset-block-start: 0; inset-block-end: 0; width: 3px; background: var(--accent-cyan); }
+    .brand { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+    .brand-logo { width: 46px; height: 46px; background: var(--accent-cyan); border-radius: 11px; display: grid; place-items: center; color: var(--bg); font-weight: 800; font-size: 1.05rem; }
+    .brand-text h1 { font-family: var(--font-he); font-size: 22px; font-weight: 700; letter-spacing: -0.015em; line-height: 1.1; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     .brand-text h1 .label { color: var(--accent-cyan); font-weight: 700; }
-    .brand-text h1 .sep { width: 6px; height: 6px; background: var(--accent-cyan); border-radius: 2px; box-shadow: 0 0 12px rgba(103,232,249,0.55); }
+    .brand-text h1 .sep { width: 6px; height: 6px; background: var(--accent-cyan); border-radius: 2px; }
     .brand-text .header-meta-label { font-family: var(--font-en); font-size: 10px; font-weight: 500; letter-spacing: 0.32em; text-transform: uppercase; color: var(--accent-cyan); margin-block-end: 4px; display: block; }
     .brand-text .hint { font-size: 11px; color: var(--ink-mute); margin-block-start: 4px; }
+
+    /* CLIENT DROPDOWN (new!) */
+    .client-selector {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+    }
+    .client-selector-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--paper-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 16px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      min-width: 240px;
+      font-family: var(--font-he);
+    }
+    .client-selector-trigger:hover {
+      border-color: var(--accent-cyan);
+      background: var(--paper-4);
+    }
+    .client-selector-trigger.open {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 0 2px rgba(103,232,249,0.2);
+    }
+    .client-selector-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-mute);
+    }
+    .client-selector-current {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+    }
+    .client-selector-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--accent-cyan);
+    }
+    .client-selector-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .client-selector-arrow {
+      color: var(--accent-cyan);
+      transition: transform 0.2s ease;
+    }
+    .client-selector-trigger.open .client-selector-arrow {
+      transform: rotate(180deg);
+    }
+    .client-selector-menu {
+      position: absolute;
+      inset-block-start: calc(100% + 6px);
+      inset-inline-start: 0;
+      min-width: 280px;
+      max-height: 420px;
+      overflow-y: auto;
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      box-shadow: var(--shadow-lg);
+      padding: 5px;
+      z-index: 50;
+      display: none;
+    }
+    .client-selector-menu.open { display: block; }
+    .client-selector-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.12s ease;
+      font-size: 13px;
+      color: var(--ink);
+      font-family: var(--font-he);
+    }
+    .client-selector-option:hover { background: var(--paper-3); }
+    .client-selector-option.active { background: rgba(103,232,249,0.1); color: var(--accent-cyan); font-weight: 600; }
+    .client-selector-option-dot {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .client-selector-option-count {
+      margin-inline-start: auto;
+      font-family: var(--font-en);
+      font-size: 11px;
+      color: var(--ink-mute);
+      background: rgba(148,163,184,0.08);
+      padding: 1px 7px;
+      border-radius: 999px;
+    }
+    .client-selector-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 4px 6px;
+    }
+
     .header-right { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
     .month-picker { display: inline-flex; align-items: center; gap: 8px; background: var(--paper-2); border: 1px solid var(--border); border-radius: 10px; padding: 6px 14px; }
     .month-picker-label { font-family: var(--font-he); font-size: 10px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-mute); }
@@ -42,10 +150,10 @@
     .stats-chip { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: var(--ink-soft); background: var(--paper-2); border: 1px solid var(--border); border-radius: 999px; padding: 6px 14px; }
     .stats-chip strong { color: var(--ink); font-weight: 700; }
 
-    /* PRO RECOMMENDATION BLOCK */
+    /* PRO RECOMMENDATION */
     .pro-recommendation {
-      background: linear-gradient(180deg, rgba(103,232,249,0.08) 0%, rgba(103,232,249,0.02) 100%);
-      border: 1px solid rgba(103,232,249,0.3);
+      background: var(--paper);
+      border: 1px solid var(--border);
       border-radius: 14px;
       padding: 22px 26px;
       margin-block-end: 18px;
@@ -57,7 +165,7 @@
       position: absolute;
       inset-block-start: 0; inset-inline-start: 0; inset-block-end: 0;
       width: 4px;
-      background: linear-gradient(180deg, var(--accent-cyan), transparent);
+      background: var(--accent-cyan);
     }
     .pro-recommendation-title {
       font-family: var(--font-he);
@@ -68,6 +176,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      flex-wrap: wrap;
     }
     .pro-recommendation-title .badge {
       background: var(--accent-cyan);
@@ -81,17 +190,15 @@
     .pro-recommendation-lead {
       font-size: 13px;
       color: var(--ink);
-      line-height: 1.55;
+      line-height: 1.6;
       margin-block-end: 16px;
-      max-width: 980px;
+      max-width: 1080px;
     }
     .pro-recommendation-lead strong { color: var(--accent-cyan); }
-
     .explanation-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 12px;
-      margin-block-start: 8px;
     }
     .explain-card {
       background: var(--paper-3);
@@ -113,226 +220,60 @@
       font-family: var(--font-en);
       font-size: 12px;
       font-weight: 800;
-      box-shadow: 0 4px 12px rgba(103,232,249,0.35);
     }
-    .explain-card-title {
-      font-family: var(--font-he);
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--ink);
-      margin-block-end: 8px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
+    .explain-card-title { font-family: var(--font-he); font-size: 13px; font-weight: 700; color: var(--ink); margin-block-end: 8px; display: flex; align-items: center; gap: 6px; }
     .explain-card-title .emoji { font-size: 16px; }
-    .explain-card ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
-    .explain-card li {
-      font-size: 11.5px;
-      color: var(--ink-soft);
-      line-height: 1.45;
-      padding-inline-start: 14px;
-      position: relative;
-    }
-    .explain-card li::before {
-      content: '◆';
-      position: absolute;
-      inset-inline-start: 0;
-      color: var(--accent-cyan);
-      font-size: 7px;
-      top: 5px;
-    }
+    .explain-card ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 5px; }
+    .explain-card li { font-size: 11.5px; color: var(--ink-soft); line-height: 1.45; padding-inline-start: 14px; position: relative; }
+    .explain-card li::before { content: '◆'; position: absolute; inset-inline-start: 0; color: var(--accent-cyan); font-size: 7px; top: 5px; }
     .explain-card li strong { color: var(--ink); font-weight: 600; }
 
-    .scenarios-block {
-      background: var(--paper);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 18px 22px;
-      margin-block-end: 18px;
-    }
-    .scenarios-title {
-      font-family: var(--font-he);
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--ink);
-      margin-block-end: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .scenarios-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 10px;
-    }
-    .scenario {
-      background: var(--paper-3);
-      border: 1px solid var(--border);
-      border-inline-start: 3px solid var(--accent-cyan);
-      border-radius: 8px;
-      padding: 10px 14px;
-      font-size: 11.5px;
-      color: var(--ink-soft);
-      line-height: 1.5;
-    }
-    .scenario.tile { border-inline-start-color: var(--accent-cyan); }
-    .scenario.list { border-inline-start-color: var(--gold); }
-    .scenario-when {
-      font-family: var(--font-he);
-      font-size: 10px;
-      font-weight: 800;
-      color: var(--ink);
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      margin-block-end: 4px;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-    .scenario-when .badge-mode {
-      font-size: 9px;
-      padding: 1px 6px;
-      border-radius: 4px;
-      background: rgba(103,232,249,0.15);
-      color: var(--accent-cyan);
-      border: 1px solid rgba(103,232,249,0.3);
-    }
-    .scenario.list .badge-mode { background: rgba(250,204,21,0.15); color: var(--gold); border-color: rgba(250,204,21,0.3); }
-
-    /* Anatomy labels (numbered annotations on the grid) */
-    .anatomy-floating {
-      position: absolute;
-      width: 22px; height: 22px;
-      border-radius: 50%;
-      background: var(--accent-cyan);
-      color: var(--bg);
-      display: grid;
-      place-items: center;
-      font-family: var(--font-en);
-      font-size: 11px;
-      font-weight: 800;
-      z-index: 8;
-      pointer-events: none;
-      box-shadow: 0 0 0 3px var(--paper), 0 4px 12px rgba(103,232,249,0.4);
-      animation: pulse-soft 2.5s ease-in-out infinite;
-    }
-    @keyframes pulse-soft {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.12); }
-    }
-
     /* MODE SWITCHER */
-    .mode-switcher-bar {
-      background: var(--paper);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 14px 18px;
-      margin-block-end: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-      flex-wrap: wrap;
-    }
-    .mode-switcher-info {
-      flex: 1;
-      min-width: 280px;
-    }
-    .mode-switcher-info-title {
-      font-family: var(--font-he);
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--ink);
-      margin-block-end: 3px;
-    }
-    .mode-switcher-info-desc {
-      font-size: 11.5px;
-      color: var(--ink-soft);
-      line-height: 1.45;
-    }
-    .mode-switcher {
-      display: flex;
-      gap: 4px;
-      background: var(--paper-3);
-      padding: 5px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-    }
-    .mode-btn {
-      background: transparent;
-      border: 1px solid transparent;
-      color: var(--ink-soft);
-      padding: 9px 18px;
-      font-family: var(--font-he);
-      font-size: 13px;
-      font-weight: 600;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+    .mode-switcher-bar { background: var(--paper); border: 1px solid var(--border); border-radius: 14px; padding: 14px 18px; margin-block-end: 18px; display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap; }
+    .mode-switcher-info { flex: 1; min-width: 280px; }
+    .mode-switcher-info-title { font-family: var(--font-he); font-size: 13px; font-weight: 700; color: var(--ink); margin-block-end: 3px; }
+    .mode-switcher-info-desc { font-size: 11.5px; color: var(--ink-soft); line-height: 1.45; }
+    .mode-switcher { display: flex; gap: 4px; background: var(--paper-3); padding: 5px; border-radius: 12px; border: 1px solid var(--border); }
+    .mode-btn { background: transparent; border: 1px solid transparent; color: var(--ink-soft); padding: 9px 18px; font-family: var(--font-he); font-size: 13px; font-weight: 600; border-radius: 8px; cursor: pointer; transition: all 0.15s ease; display: flex; align-items: center; gap: 8px; }
     .mode-btn:hover { color: var(--ink); background: var(--paper-2); }
     .mode-btn.active { background: var(--accent-cyan); color: var(--bg); font-weight: 700; }
-    .mode-btn-icon {
-      width: 18px; height: 18px;
-      display: grid;
-      place-items: center;
-      font-size: 14px;
-    }
-    .mode-btn-tag {
-      font-size: 9px;
-      font-weight: 800;
-      color: var(--gold);
-      background: rgba(250,204,21,0.12);
-      border: 1px solid rgba(250,204,21,0.35);
-      padding: 1px 6px;
-      border-radius: 999px;
-      letter-spacing: 0.04em;
-    }
-    .mode-btn.active .mode-btn-tag {
-      background: var(--bg);
-      color: var(--gold);
-      border-color: rgba(11,18,32,0.3);
-    }
+    .mode-btn-icon { width: 18px; height: 18px; display: grid; place-items: center; font-size: 14px; }
 
-    /* CONTROLS */
+    /* LEGEND */
     .controls { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; flex-wrap: wrap; }
     .legend { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; padding: 8px 16px; background: var(--paper); border: 1px solid var(--border); border-radius: 999px; }
     .legend-label { font-family: var(--font-he); font-size: 10.5px; font-weight: 700; color: var(--ink-mute); letter-spacing: 0.08em; padding: 3px 9px; background: rgba(148,163,184,0.08); border-radius: 8px; }
     .legend-chip { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--ink); }
     .legend-chip .sw { width: 11px; height: 11px; border-radius: 50%; }
-    .legend-chip .type-letter {
-      width: 18px; height: 18px;
-      display: grid; place-items: center;
-      border-radius: 4px;
-      font-family: var(--font-he);
-      font-size: 10px;
-      font-weight: 800;
-      background: rgba(103,232,249,0.15);
-      color: var(--accent-cyan);
-      border: 1px solid rgba(103,232,249,0.3);
-    }
+    .legend-chip .type-letter { width: 18px; height: 18px; display: grid; place-items: center; border-radius: 4px; font-family: var(--font-he); font-size: 10px; font-weight: 800; background: rgba(103,232,249,0.15); color: var(--accent-cyan); border: 1px solid rgba(103,232,249,0.3); }
     .legend-divider { width: 1px; height: 18px; background: var(--border); }
 
-    /* VIEW FRAME */
-    .view-frame { background: var(--paper); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow-md); padding: 16px; }
+    /* SYNC BANNER (shown briefly after edits) */
+    .sync-banner {
+      position: fixed;
+      inset-block-start: 20px;
+      inset-inline-start: 20px;
+      background: var(--status-approved);
+      color: var(--bg);
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-family: var(--font-he);
+      font-size: 13px;
+      font-weight: 700;
+      box-shadow: 0 8px 24px rgba(34,197,94,0.4);
+      z-index: 2000;
+      opacity: 0;
+      transform: translateX(-30px);
+      transition: all 0.3s ease;
+      pointer-events: none;
+    }
+    .sync-banner.show { opacity: 1; transform: translateX(0); pointer-events: auto; }
 
-    /* WEEKDAYS */
+    /* GRID */
+    .view-frame { background: var(--paper); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow-md); padding: 16px; }
     .weekdays { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-bottom: 6px; }
     .wd { text-align: center; font-family: var(--font); font-size: 12px; font-weight: 600; color: var(--ink-soft); padding: 6px 0; letter-spacing: 0.04em; }
     .wd.weekend { color: var(--gold); }
-
-    /* MONTH GRID */
     .month-grid { display: flex; flex-direction: column; gap: 6px; }
     .week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; align-items: stretch; }
 
@@ -358,10 +299,10 @@
     .cell.very-busy { min-height: 380px; }
     .cell.is-today {
       border-color: var(--gold);
-      box-shadow: 0 0 0 2px var(--gold), 0 0 20px rgba(250,204,21,0.25);
+      box-shadow: 0 0 0 2px var(--gold);
       overflow: visible;
       min-height: 440px;
-      background: linear-gradient(180deg, rgba(250,204,21,0.04) 0%, var(--paper-2) 30%);
+      background: var(--paper-2);
     }
     .cell.is-today::after {
       content: 'היום · ' attr(data-date);
@@ -378,77 +319,28 @@
       border-radius: 999px;
       letter-spacing: 0.05em;
       z-index: 3;
-      box-shadow: 0 2px 8px rgba(250,204,21,0.45);
       white-space: nowrap;
     }
-
     .cell-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 6px; padding-bottom: 7px; border-bottom: 1px solid rgba(148,163,184,0.1); min-height: 28px; }
     .cell-num { font-family: var(--font-en); font-size: 17px; font-weight: 600; color: var(--ink); line-height: 1; }
     .cell.is-today .cell-num { color: var(--gold); font-weight: 800; font-size: 19px; }
     .cell-heb { font-family: var(--font-he); font-size: 10.5px; color: var(--ink-soft); font-weight: 500; text-align: end; line-height: 1.3; }
-    .cell-count { font-family: var(--font-en); font-size: 10px; font-weight: 700; color: var(--accent-cyan); background: rgba(103,232,249,0.10); border: 1px solid rgba(103,232,249,0.25); padding: 1px 7px; border-radius: 999px; }
-    .cell.busy .cell-count, .cell.very-busy .cell-count, .cell.is-today .cell-count { background: var(--gold); color: var(--bg); border-color: var(--gold); }
-
     .cell-body { display: flex; flex-direction: column; gap: 4px; flex: 1; padding-top: 2px; overflow: hidden; }
 
     /* + button on hover */
-    .cell-add-btn {
-      position: absolute;
-      inset-block-end: 6px;
-      inset-inline-start: 6px;
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      background: var(--accent-cyan);
-      color: var(--bg);
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-      font-weight: 700;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 12px rgba(103,232,249,0.4);
-      transition: transform 0.15s ease;
-      z-index: 5;
-    }
+    .cell-add-btn { position: absolute; inset-block-end: 6px; inset-inline-start: 6px; width: 26px; height: 26px; border-radius: 50%; background: var(--accent-cyan); color: var(--bg); border: none; cursor: pointer; font-size: 16px; font-weight: 700; display: none; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(103,232,249,0.4); transition: transform 0.15s ease; z-index: 5; }
     .cell:hover .cell-add-btn { display: flex; }
     .cell-add-btn:hover { transform: scale(1.15); }
     .cell.outside .cell-add-btn { display: none !important; }
 
-    /* =================================================== */
-    /* LIST MODE (v4 — for reference / fallback)           */
-    /* =================================================== */
+    /* LIST MODE */
     .status-group { display: flex; flex-direction: column; gap: 3px; }
     .status-group + .status-group { margin-block-start: 5px; }
-    .status-group-head {
-      display: flex; align-items: center; gap: 6px;
-      font-family: var(--font-he);
-      font-size: 10px; font-weight: 800;
-      color: var(--status-color);
-      text-transform: uppercase; letter-spacing: 0.06em;
-      padding: 2px 4px; margin-block-start: 2px;
-    }
-    .status-group-head .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--status-color); box-shadow: 0 0 6px var(--status-color); }
+    .status-group-head { display: flex; align-items: center; gap: 6px; font-family: var(--font-he); font-size: 10px; font-weight: 800; color: var(--status-color); text-transform: uppercase; letter-spacing: 0.06em; padding: 2px 4px; margin-block-start: 2px; }
+    .status-group-head .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--status-color); }
     .status-group-items { display: flex; flex-direction: column; gap: 4px; }
-
-    .task-chip {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      padding: 7px 9px 7px 10px;
-      background: linear-gradient(155deg, var(--client-tint) 0%, transparent 70%);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-inline-start: 5px solid var(--client-color);
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.12s ease;
-    }
-    .task-chip:hover {
-      background: linear-gradient(155deg, var(--client-tint-strong) 0%, var(--client-tint) 100%);
-      border-color: var(--client-color);
-      transform: translateX(-2px);
-    }
+    .task-chip { display: flex; flex-direction: column; gap: 2px; padding: 7px 9px 7px 10px; background: linear-gradient(155deg, var(--client-tint) 0%, transparent 70%); border: 1px solid rgba(255,255,255,0.06); border-inline-start: 5px solid var(--client-color); border-radius: 6px; cursor: pointer; transition: all 0.12s ease; }
+    .task-chip:hover { background: linear-gradient(155deg, var(--client-tint-strong) 0%, var(--client-tint) 100%); border-color: var(--client-color); transform: translateX(-2px); }
     .task-chip.is-archived { opacity: 0.5; filter: grayscale(0.5); }
     .task-chip-row1 { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
     .task-client { font-family: var(--font-he); font-size: 11px; font-weight: 500; color: var(--ink-soft); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
@@ -457,192 +349,310 @@
     .task-type-letter { width: 18px; height: 18px; display: grid; place-items: center; border-radius: 4px; background: rgba(255,255,255,0.06); color: var(--ink); font-family: var(--font-he); font-size: 11px; font-weight: 800; flex-shrink: 0; line-height: 1; }
     .task-title { font-family: var(--font-he); font-size: 13px; font-weight: 600; color: var(--ink); line-height: 1.25; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
 
-    /* =================================================== */
-    /* TILE MODE (NEW — what Uria asked for)               */
-    /* =================================================== */
-    .tile-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 4px;
-      flex: 1;
-      align-content: start;
-    }
-    .cell.is-today .tile-grid,
-    .cell.very-busy .tile-grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
-
-    .tile {
-      background: linear-gradient(155deg, var(--client-tint) 0%, var(--client-tint-strong) 100%);
-      border: 1px solid var(--client-color);
-      border-radius: 6px;
-      padding: 5px 6px 5px 7px;
-      cursor: pointer;
-      transition: all 0.12s ease;
-      position: relative;
-      min-height: 48px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 2px;
-      overflow: hidden;
-    }
-    .tile::before {
-      content: '';
-      position: absolute;
-      inset-inline-start: 0;
-      inset-block-start: 0;
-      inset-block-end: 0;
-      width: 3px;
-      background: var(--client-color);
-    }
-    .tile:hover {
-      transform: translateY(-2px) scale(1.02);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.4), 0 0 0 1px var(--client-color);
-      z-index: 10;
-    }
+    /* TILE MODE */
+    .tile-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; flex: 1; align-content: start; }
+    .cell.is-today .tile-grid, .cell.very-busy .tile-grid { grid-template-columns: repeat(3, 1fr); }
+    .tile { background: linear-gradient(155deg, var(--client-tint) 0%, var(--client-tint-strong) 100%); border: 1px solid var(--client-color); border-radius: 6px; padding: 5px 6px 5px 7px; cursor: pointer; transition: all 0.12s ease; position: relative; min-height: 48px; display: flex; flex-direction: column; justify-content: space-between; gap: 2px; overflow: hidden; }
+    .tile::before { content: ''; position: absolute; inset-inline-start: 0; inset-block-start: 0; inset-block-end: 0; width: 3px; background: var(--client-color); }
+    .tile:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 6px 16px rgba(0,0,0,0.4), 0 0 0 1px var(--client-color); z-index: 10; }
     .tile.is-archived { opacity: 0.4; filter: grayscale(0.6); }
-    .tile-client {
-      font-family: var(--font-he);
-      font-size: 10.5px;
-      font-weight: 600;
-      color: var(--ink);
-      line-height: 1.2;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      padding-inline-start: 4px;
-    }
-    .tile-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 4px;
-      padding-inline-start: 4px;
-    }
-    .tile-type {
-      width: 16px; height: 16px;
-      display: grid; place-items: center;
-      border-radius: 3px;
-      background: rgba(255,255,255,0.15);
-      color: var(--ink);
-      font-family: var(--font-he);
-      font-size: 9px;
-      font-weight: 800;
-      line-height: 1;
-    }
-    .tile-status {
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      box-shadow: 0 0 0 1.5px rgba(0,0,0,0.3);
-    }
+    .tile-client { font-family: var(--font-he); font-size: 10.5px; font-weight: 600; color: var(--ink); line-height: 1.2; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; padding-inline-start: 4px; }
+    .tile-footer { display: flex; align-items: center; justify-content: space-between; gap: 4px; padding-inline-start: 4px; }
+    .tile-type { width: 16px; height: 16px; display: grid; place-items: center; border-radius: 3px; background: rgba(255,255,255,0.15); color: var(--ink); font-family: var(--font-he); font-size: 9px; font-weight: 800; line-height: 1; }
+    .tile-status { width: 7px; height: 7px; border-radius: 50%; box-shadow: 0 0 0 1.5px rgba(0,0,0,0.3); }
+    .tile-more-archived, .task-more-archived { grid-column: 1 / -1; font-family: var(--font-he); font-size: 10px; font-weight: 600; color: var(--ink-mute); text-align: center; padding: 4px 0; background: rgba(148,163,184,0.04); border-radius: 5px; cursor: pointer; border: 1px dashed rgba(148,163,184,0.15); }
+    .tile-more-archived:hover, .task-more-archived:hover { color: var(--ink-soft); background: rgba(148,163,184,0.08); }
 
-    /* Archived collapsible (tile mode) */
-    .tile-more-archived {
-      grid-column: 1 / -1;
-      font-family: var(--font-he);
-      font-size: 10px;
-      font-weight: 600;
-      color: var(--ink-mute);
-      text-align: center;
-      padding: 4px 0;
-      background: rgba(148,163,184,0.04);
-      border-radius: 5px;
-      cursor: pointer;
-      border: 1px dashed rgba(148,163,184,0.15);
-    }
-    .tile-more-archived:hover {
-      color: var(--ink-soft);
-      background: rgba(148,163,184,0.08);
-    }
+    /* TOOLTIP */
+    .tile-tooltip { position: fixed; background: var(--paper); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); z-index: 100; min-width: 220px; max-width: 320px; pointer-events: none; opacity: 0; transform: translateY(4px); transition: opacity 0.15s ease, transform 0.15s ease; }
+    .tile-tooltip.visible { opacity: 1; transform: translateY(0); }
+    .tile-tooltip::before { content: ''; position: absolute; inset-block-start: 0; inset-inline-end: 0; inset-inline-start: 0; block-size: 3px; background: var(--client-color); border-radius: 10px 10px 0 0; }
+    .tooltip-client { font-family: var(--font-he); font-size: 13px; font-weight: 700; color: var(--ink); margin-block-end: 4px; }
+    .tooltip-title { font-family: var(--font-he); font-size: 14px; font-weight: 600; color: var(--accent-cyan); margin-block-end: 10px; line-height: 1.3; }
+    .tooltip-row { display: flex; align-items: center; gap: 8px; font-size: 11.5px; color: var(--ink-soft); margin-block-end: 4px; }
+    .tooltip-row strong { color: var(--ink-mute); font-weight: 700; font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em; min-width: 50px; }
+    .tooltip-hint { margin-block-start: 8px; padding-block-start: 8px; border-block-start: 1px solid var(--border); font-size: 10.5px; color: var(--ink-mute); text-align: center; }
 
-    /* =================================================== */
-    /* TOOLTIP (custom hover popup — works in TILE mode)   */
-    /* =================================================== */
-    .tile-tooltip {
-      position: fixed;
+    /* ====================================================== */
+    /* WIDE MODAL — like the skill (2 columns: copy + media)  */
+    /* ====================================================== */
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(7,16,31,0.88); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 24px; }
+    .modal-backdrop.open { display: flex; }
+    .modal-wide {
       background: var(--paper);
       border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 12px 14px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-      z-index: 100;
-      min-width: 220px;
-      max-width: 320px;
-      pointer-events: none;
-      opacity: 0;
-      transform: translateY(4px);
-      transition: opacity 0.15s ease, transform 0.15s ease;
+      border-radius: 16px;
+      max-width: 1100px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
     }
-    .tile-tooltip.visible {
-      opacity: 1;
-      transform: translateY(0);
+    .modal-wide-header {
+      display: flex;
+      align-items: stretch;
+      gap: 16px;
+      padding: 22px 26px 18px;
+      border-block-end: 1px solid var(--border);
+      position: relative;
     }
-    .tile-tooltip::before {
-      content: '';
-      position: absolute;
-      inset-block-start: 0;
-      inset-inline-end: 0;
-      inset-inline-start: 0;
-      block-size: 3px;
-      background: var(--client-color);
-      border-radius: 10px 10px 0 0;
-    }
-    .tooltip-client {
-      font-family: var(--font-he);
-      font-size: 13px;
+    .modal-color-bar { width: 5px; border-radius: 3px; flex-shrink: 0; }
+    .modal-titles { flex: 1; }
+    .modal-eyebrow {
+      font-family: var(--font-en);
+      font-size: 10px;
       font-weight: 700;
-      color: var(--ink);
-      margin-block-end: 4px;
-    }
-    .tooltip-title {
-      font-family: var(--font-he);
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--accent-cyan);
-      margin-block-end: 10px;
-      line-height: 1.3;
-    }
-    .tooltip-row {
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-mute);
+      margin-block-end: 6px;
       display: flex;
       align-items: center;
       gap: 8px;
-      font-size: 11.5px;
-      color: var(--ink-soft);
-      margin-block-end: 4px;
     }
-    .tooltip-row strong {
-      color: var(--ink-mute);
+    .modal-eyebrow-chip {
+      background: rgba(103,232,249,0.12);
+      color: var(--accent-cyan);
+      padding: 2px 7px;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+      font-size: 9px;
+    }
+    .modal-title-big {
+      font-family: var(--font-he);
+      font-size: 22px;
       font-weight: 700;
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      min-width: 50px;
+      color: var(--ink);
+      line-height: 1.2;
+      margin-block-end: 6px;
     }
-    .tooltip-hint {
-      margin-block-start: 8px;
-      padding-block-start: 8px;
-      border-block-start: 1px solid var(--border);
-      font-size: 10.5px;
-      color: var(--ink-mute);
-      text-align: center;
-      letter-spacing: 0.02em;
+    .modal-subtitle-row {
+      font-family: var(--font-he);
+      font-size: 13px;
+      color: var(--ink-soft);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .modal-subtitle-row .dot-sep { color: var(--ink-faint); }
+    .modal-close-x {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      background: var(--paper-2);
+      border: 1px solid var(--border);
+      color: var(--ink-soft);
+      cursor: pointer;
+      font-size: 20px;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      transition: all 0.15s ease;
+    }
+    .modal-close-x:hover { background: var(--paper-3); color: var(--ink); border-color: var(--accent-cyan); }
+
+    .modal-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+    .modal-col {
+      padding: 22px 26px;
+    }
+    .modal-col-right { border-inline-start: 1px solid var(--border); }
+    @media (max-width: 760px) {
+      .modal-body { grid-template-columns: 1fr; }
+      .modal-col-right { border-inline-start: none; border-block-start: 1px solid var(--border); }
     }
 
-    /* MODAL */
-    .modal-backdrop { position: fixed; inset: 0; background: rgba(7,16,31,0.85); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 24px; }
-    .modal-backdrop.open { display: flex; }
-    .modal { background: var(--paper); border: 1px solid var(--border); border-radius: 16px; max-width: 580px; width: 100%; padding: 28px; box-shadow: var(--shadow-lg); }
-    .modal-head { display: flex; align-items: center; gap: 14px; margin-block-end: 18px; }
-    .modal-color-bar { width: 6px; align-self: stretch; border-radius: 3px; }
-    .modal-title { font-family: var(--font-he); font-size: 19px; font-weight: 700; line-height: 1.2; }
-    .modal-subtitle { font-size: 12px; color: var(--ink-soft); margin-block-start: 4px; }
-    .modal-row { display: flex; gap: 8px; align-items: center; margin-block-end: 10px; padding: 11px 14px; background: var(--paper-2); border-radius: 8px; font-size: 13px; color: var(--ink); }
-    .modal-row strong { color: var(--ink-mute); font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; min-width: 86px; }
-    .modal-close { background: var(--accent-cyan); color: var(--bg); border: none; padding: 11px 20px; font-family: var(--font-he); font-size: 13px; font-weight: 700; border-radius: 10px; cursor: pointer; width: 100%; margin-top: 10px; }
-    .modal-close:hover { background: #22D3EE; }
+    .modal-section { margin-block-end: 18px; }
+    .modal-section:last-child { margin-block-end: 0; }
+    .modal-section-label {
+      font-family: var(--font-he);
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--ink-mute);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-block-end: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-dropdown {
+      width: 100%;
+      background: var(--paper-2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: var(--ink);
+      font-family: var(--font-he);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      appearance: none;
+      background-image: linear-gradient(45deg, transparent 50%, var(--accent-cyan) 50%), linear-gradient(135deg, var(--accent-cyan) 50%, transparent 50%);
+      background-position: calc(2% + 0px) 50%, calc(2% + 6px) 50%;
+      background-size: 6px 6px;
+      background-repeat: no-repeat;
+    }
+    .status-dropdown:focus { outline: none; border-color: var(--accent-cyan); }
+
+    .copy-textarea {
+      width: 100%;
+      min-height: 160px;
+      background: var(--paper-2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      color: var(--ink);
+      font-family: var(--font-he);
+      font-size: 13px;
+      line-height: 1.6;
+      resize: vertical;
+      transition: border 0.15s ease;
+    }
+    .copy-textarea:focus { outline: none; border-color: var(--accent-cyan); }
+
+    .modal-actions {
+      display: flex;
+      gap: 8px;
+      margin-block-start: 16px;
+    }
+    .btn { font-family: var(--font-he); font-size: 13px; font-weight: 700; padding: 10px 18px; border-radius: 8px; cursor: pointer; border: 1px solid transparent; transition: all 0.15s ease; }
+    .btn-primary { background: var(--accent-cyan); color: var(--bg); flex: 1; }
+    .btn-primary:hover { background: #22D3EE; }
+    .btn-secondary { background: var(--paper-2); color: var(--ink); border-color: var(--border); }
+    .btn-secondary:hover { background: var(--paper-3); border-color: var(--accent-cyan); }
+
+    /* MEDIA section */
+    .media-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .media-slot {
+      background: var(--paper-2);
+      border: 1.5px dashed var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      transition: all 0.15s ease;
+      cursor: pointer;
+    }
+    .media-slot:hover { border-color: var(--accent-cyan); background: var(--paper-3); }
+    .media-slot.has-image { border-style: solid; border-color: var(--border); padding: 0; overflow: hidden; }
+
+    .media-slot-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-block-end: 8px;
+    }
+    .media-slot-label {
+      font-family: var(--font-he);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .media-slot-label-num {
+      width: 18px; height: 18px;
+      border-radius: 4px;
+      background: var(--accent-cyan);
+      color: var(--bg);
+      display: grid;
+      place-items: center;
+      font-family: var(--font-en);
+      font-size: 10px;
+      font-weight: 800;
+    }
+    .media-slot-size {
+      font-family: var(--font-en);
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--ink-mute);
+      background: rgba(148,163,184,0.08);
+      padding: 2px 7px;
+      border-radius: 4px;
+      letter-spacing: 0.02em;
+    }
+    .media-slot-placeholder {
+      aspect-ratio: var(--aspect, 1 / 1);
+      display: grid;
+      place-items: center;
+      color: var(--ink-mute);
+      font-family: var(--font-he);
+      font-size: 13px;
+      gap: 6px;
+      max-block-size: 280px;
+      margin: 0 auto;
+      width: 100%;
+      max-inline-size: 320px;
+    }
+    .media-slot-placeholder-icon { font-size: 32px; color: var(--accent-cyan); }
+    .media-slot-placeholder-text { font-weight: 600; }
+    .media-slot-placeholder-hint { font-size: 11px; color: var(--ink-faint); }
+
+    /* Mock image */
+    .media-slot-image {
+      width: 100%;
+      aspect-ratio: var(--aspect, 1 / 1);
+      max-block-size: 280px;
+      background: linear-gradient(135deg, var(--client-color) 0%, rgba(20,34,58,0.8) 100%);
+      display: grid;
+      place-items: center;
+      color: var(--bg);
+      font-family: var(--font-he);
+      font-weight: 800;
+      font-size: 24px;
+      position: relative;
+      cursor: pointer;
+    }
+    .media-slot-image::after {
+      content: 'תמונה לדוגמה';
+      position: absolute;
+      inset-block-end: 12px;
+      inset-inline-start: 50%;
+      transform: translateX(-50%);
+      background: rgba(7,16,31,0.7);
+      color: var(--ink);
+      font-size: 10px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 999px;
+      letter-spacing: 0.04em;
+    }
+    .media-slot-actions {
+      display: flex;
+      gap: 6px;
+      padding: 10px 14px;
+      border-block-start: 1px solid var(--border);
+      background: var(--paper-2);
+    }
+    .media-slot-action {
+      flex: 1;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--ink-soft);
+      font-family: var(--font-he);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .media-slot-action:hover { background: var(--paper-3); color: var(--ink); border-color: var(--accent-cyan); }
+    .media-slot-action.danger:hover { border-color: #EF4444; color: #EF4444; }
+
+    /* SCROLL FOR MEDIA */
+    .media-grid-scroll { max-block-size: 60vh; overflow-y: auto; padding-inline-end: 4px; }
+    .media-grid-scroll::-webkit-scrollbar { width: 6px; }
+    .media-grid-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    .media-grid-scroll::-webkit-scrollbar-thumb:hover { background: var(--accent-cyan); }
   </style>
 </head>
 <body>
@@ -654,21 +664,35 @@
       <div class="brand">
         <div class="brand-logo">ZG</div>
         <div class="brand-text">
-          <span class="header-meta-label">ZST · GANTTS SYSTEM · v5</span>
+          <span class="header-meta-label">ZST · GANTTS SYSTEM · v6</span>
           <h1>
-            <span class="label">Tiles vs List</span>
+            <span class="label" id="page-title-label">Master View</span>
             <span class="sep"></span>
-            <span>2 modes זה לצד זה</span>
+            <span id="page-title-context">כל הלקוחות</span>
           </h1>
-          <div class="hint">החלף בין מצבי תצוגה · Hover על tile מציג tooltip · Click נכנס למשימה</div>
+          <div class="hint">לוח שנה אחד · Tile/List · מודאל מלא · מעבר מהיר בין לקוחות</div>
+        </div>
+
+        <!-- CLIENT DROPDOWN (new!) -->
+        <div class="client-selector" id="client-selector">
+          <div class="client-selector-trigger" id="client-trigger">
+            <span class="client-selector-label">תצוגה</span>
+            <div class="client-selector-current">
+              <span class="client-selector-dot" id="trigger-dot"></span>
+              <span class="client-selector-name" id="trigger-name">כל הלקוחות (Master)</span>
+            </div>
+            <svg class="client-selector-arrow" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3.5 5.5L7 9L10.5 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="client-selector-menu" id="client-menu"></div>
         </div>
       </div>
+
       <div class="header-right">
         <div class="month-picker">
           <span class="month-picker-label">חודש</span>
           <span class="month-picker-value">סיוון תשפ״ו · מאי 2026</span>
         </div>
-        <span class="stats-chip"><strong>19</strong> לקוחות · <strong>78</strong> משימות</span>
+        <span class="stats-chip" id="stats-chip"><strong>19</strong> לקוחות · <strong>78</strong> משימות</span>
       </div>
     </div>
 
@@ -676,100 +700,59 @@
     <div class="pro-recommendation">
       <div class="pro-recommendation-title">
         <span>🎯</span>
-        <span>הפתרון המקצועי שאני ממליץ עליו</span>
+        <span>הפתרון המקצועי המוצע</span>
         <span class="badge">RECOMMENDED</span>
       </div>
       <div class="pro-recommendation-lead">
-        לוח שנה חודשי אחד (כמו שאתה רגיל מהסקיל) — עם <strong>2 מצבי תצוגה</strong> שאתה מחליף ביניהם בלחיצה. <strong>Tile View</strong> (ברירת מחדל) — קוביות קטנות צבעוניות עם tooltip ב-hover, לסקירה מהירה של חודש שלם. <strong>List View</strong> — chips אופקיים עם כותרת מלאה, לעבודה עמוקה על משימה ספציפית. שני המודים על אותו לוח, אותם נתונים — רק התצוגה משתנה.
+        לוח שנה חודשי אחד · <strong>2 מצבי תצוגה</strong> (Tile / List) · <strong>Dropdown לקוח</strong> בראש שמאפשר מעבר בין Master View לגאנט של כל לקוח · <strong>מודאל מלא</strong> כשלוחצים על משימה (קופי + מדיה עם הנחיות מידה) · <strong>סנכרון נתונים אחיד</strong> - שינוי בכל מקום משתקף בכל מקום.
       </div>
 
       <div class="explanation-grid">
         <div class="explain-card">
           <span class="explain-card-num">1</span>
-          <div class="explain-card-title"><span class="emoji">▣</span> מה זה Tile View</div>
+          <div class="explain-card-title"><span class="emoji">📋</span> Client Dropdown</div>
           <ul>
-            <li>קוביה <strong>קומפקטית</strong> לכל משימה (~60×50px)</li>
-            <li><strong>שם הלקוח</strong> בולט (חיים בפלוס)</li>
-            <li><strong>אות סוג</strong> מעוצבת (פ/ק/ס/ר)</li>
-            <li><strong>נקודת סטטוס</strong> בפינה</li>
-            <li><strong>2-3 קוביות בשורה</strong> בתוך כל יום</li>
-            <li><strong>Hover</strong> → tooltip עם פרטים מלאים</li>
-            <li><strong>Click</strong> → פותח את המשימה</li>
+            <li><strong>בראש משמאל</strong> - תפריט בחירה</li>
+            <li><strong>דיפולט: Master View</strong> - כל 19 הלקוחות</li>
+            <li>לחיצה על לקוח → רק הגאנט שלו</li>
+            <li>מעבר מהיר בין לקוחות בלי לעזוב את הדף</li>
+            <li>הכותרת והסטטיסטיקה מתעדכנות אוטומטית</li>
           </ul>
         </div>
 
         <div class="explain-card">
           <span class="explain-card-num">2</span>
-          <div class="explain-card-title"><span class="emoji">≡</span> מה זה List View</div>
+          <div class="explain-card-title"><span class="emoji">▣</span> Tile / List</div>
           <ul>
-            <li>Chip אופקי לכל משימה</li>
-            <li><strong>כותרת המשימה גלויה</strong> בלי hover</li>
-            <li><strong>קיבוץ לפי סטטוס</strong> (לאישור → בעבודה → אושר)</li>
-            <li>שם לקוח בקטן + כותרת בולטת</li>
-            <li>הכי קריא לעבודה ממוקדת</li>
-            <li>בימים שקטים (≤2 משימות) - flat, בלי group</li>
+            <li><strong>Tile</strong> - קוביות קומפקטיות (דיפולט)</li>
+            <li><strong>List</strong> - chips אופקיים עם כותרת גלויה</li>
+            <li>Hover על tile → tooltip מלא</li>
+            <li>אותו toggle עובד גם ב-Master וגם בלקוח</li>
           </ul>
         </div>
 
         <div class="explain-card">
           <span class="explain-card-num">3</span>
-          <div class="explain-card-title"><span class="emoji">📅</span> מה משותף לשני המצבים</div>
+          <div class="explain-card-title"><span class="emoji">🔲</span> מודאל מלא</div>
           <ul>
-            <li>לוח שנה <strong>חודשי אחד</strong> (כמו בסקיל)</li>
-            <li><strong>היום (24.5)</strong> בולט עם gold border</li>
-            <li><strong>היום מורחב</strong> אוטומטית ל-440px</li>
-            <li><strong>ימים עמוסים</strong> גם גדלים (5+ → 320px, 8+ → 380px)</li>
-            <li><strong>שבת</strong> מסומנת בזהב</li>
-            <li><strong>+N נגנזים</strong> מתחת (collapsible — לא תופס מקום)</li>
-            <li><strong>+ כפתור</strong> ב-hover על cell להוסיף משימה</li>
+            <li>לחיצה על משימה → <strong>מודאל גדול 2 צדדים</strong></li>
+            <li><strong>צד ימין</strong>: סטטוס + קופי נלווה + שמירה</li>
+            <li><strong>צד שמאל</strong>: מדיה עם הנחיות מידה</li>
+            <li>פוסט=1080×1080 / סטורי+ריל=9:16 / קרוסלה=עד 10</li>
+            <li>אותו מודאל ב-Master וב-Client view</li>
           </ul>
         </div>
 
         <div class="explain-card">
           <span class="explain-card-num">4</span>
-          <div class="explain-card-title"><span class="emoji">📱</span> איך זה עובד בנייד</div>
+          <div class="explain-card-title"><span class="emoji">🔄</span> Sync אחיד</div>
           <ul>
-            <li>נייד = אין hover</li>
-            <li><strong>Tile mode</strong>: tap על קוביה → preview popup</li>
-            <li><strong>Double-tap</strong> → פותח את המשימה</li>
-            <li><strong>List mode</strong>: כל המידע גלוי, tap → modal</li>
-            <li>הצוות בנייד עובד יותר ב-List View</li>
-            <li>אתה בלפטופ - בעיקר Tile View</li>
+            <li>שינוי בלקוח → משתקף ב-Master מיד</li>
+            <li>שינוי ב-Master → משתקף בלקוח מיד</li>
+            <li><strong>Source of truth יחיד</strong> (Supabase DB)</li>
+            <li>במערכת האמיתית: Realtime sync תוך 2 שניות</li>
+            <li>במוקאפ הזה: רענון העמוד מציג את העדכון</li>
           </ul>
-        </div>
-      </div>
-    </div>
-
-    <!-- SCENARIOS -->
-    <div class="scenarios-block">
-      <div class="scenarios-title">
-        <span>💼</span>
-        <span>מתי להשתמש בכל מצב? (תרחישי שימוש)</span>
-      </div>
-      <div class="scenarios-grid">
-        <div class="scenario tile">
-          <div class="scenario-when"><span class="badge-mode">Tile</span> תכנון שבועי</div>
-          סוקרים את החודש הקרוב. רוצים לראות "איפה יש פערים? איפה יש עומס?". המבט הקומפקטי מאפשר לזהות דפוסים מהר.
-        </div>
-        <div class="scenario tile">
-          <div class="scenario-when"><span class="badge-mode">Tile</span> פגישת צוות</div>
-          מציגים על מסך גדול. הצבעים מספרים את הסיפור — כולם רואים מה קורה השבוע בלי לקרוא טקסטים.
-        </div>
-        <div class="scenario tile">
-          <div class="scenario-when"><span class="badge-mode">Tile</span> שיתוף ללקוח</div>
-          הלקוח רואה את הלוח שלו (לא את כולם). המבט הוויזואלי הראשון הוא קל ולא מבלבל.
-        </div>
-        <div class="scenario list">
-          <div class="scenario-when"><span class="badge-mode">List</span> אישור תכנים</div>
-          ליטל עוברת על "ממתין לאישור" של היום. רוצה לראות את הכותרות בלי קליק. List View נותן את זה.
-        </div>
-        <div class="scenario list">
-          <div class="scenario-when"><span class="badge-mode">List</span> כתיבת קופי</div>
-          חגי מתכנן את השבוע - רוצה לראות את הכותרות של כל המשימות שלו ולתכנן מה הוא כותב ראשון.
-        </div>
-        <div class="scenario list">
-          <div class="scenario-when"><span class="badge-mode">List</span> מעבר מהר בנייד</div>
-          בנייד, hover לא עובד. List View מציג הכל בלי צורך לגעת במשהו.
         </div>
       </div>
     </div>
@@ -779,14 +762,13 @@
       <div class="mode-switcher-info">
         <div class="mode-switcher-info-title">בחר מצב תצוגה</div>
         <div class="mode-switcher-info-desc" id="mode-desc">
-          <strong>Tile View</strong> — קוביות קטנות, 2-3 בשורה. רואים שם לקוח + סוג + סטטוס. <strong>Hover</strong> על קוביה מציג tooltip עם פרטים מלאים. <strong>Click</strong> נכנס למשימה. דחיסות מקסימלית.
+          <strong>Tile View</strong> — קוביות קומפקטיות. Hover על קוביה מציג tooltip עם פרטים, Click נכנס למשימה. דחיסות מקסימלית.
         </div>
       </div>
       <div class="mode-switcher">
         <button class="mode-btn active" data-mode="tile">
           <span class="mode-btn-icon">▣</span>
           <span>Tile View</span>
-          <span class="mode-btn-tag">חדש</span>
         </button>
         <button class="mode-btn" data-mode="list">
           <span class="mode-btn-icon">≡</span>
@@ -813,7 +795,7 @@
       </div>
     </div>
 
-    <!-- THE GRID -->
+    <!-- GRID -->
     <div class="view-frame">
       <div class="weekdays" id="weekdays"></div>
       <div class="month-grid" id="grid"></div>
@@ -828,30 +810,83 @@
     <div class="tooltip-row"><strong>סוג</strong><span id="tooltip-type"></span></div>
     <div class="tooltip-row"><strong>סטטוס</strong><span id="tooltip-status"></span></div>
     <div class="tooltip-row"><strong>תאריך</strong><span id="tooltip-date"></span></div>
-    <div class="tooltip-hint">לחץ לפתיחת המשימה המלאה</div>
+    <div class="tooltip-hint">לחץ לפתיחת המשימה</div>
   </div>
 
-  <!-- MODAL -->
+  <!-- WIDE MODAL — like the skill -->
   <div class="modal-backdrop" id="modal">
-    <div class="modal">
-      <div class="modal-head">
-        <div class="modal-color-bar" id="modal-color-bar" style="background:var(--accent-cyan)"></div>
-        <div>
-          <div class="modal-title" id="modal-title">תקציב 2026</div>
-          <div class="modal-subtitle" id="modal-subtitle">עמותת אדוות · 14.5.2026 · פוסט</div>
+    <div class="modal-wide">
+
+      <div class="modal-wide-header">
+        <div class="modal-color-bar" id="modal-color-bar"></div>
+        <div class="modal-titles">
+          <div class="modal-eyebrow">
+            <span id="modal-client-name"></span>
+            <span class="modal-eyebrow-chip" id="modal-type-chip"></span>
+          </div>
+          <div class="modal-title-big" id="modal-title">תקציב 2026</div>
+          <div class="modal-subtitle-row">
+            <span>📅 <span id="modal-date">14.5.2026</span></span>
+            <span class="dot-sep">·</span>
+            <span>תאריך עברי: <span id="modal-heb-date">י"ד אייר</span></span>
+            <span class="dot-sep">·</span>
+            <span id="modal-day-name">יום שני</span>
+          </div>
         </div>
+        <button class="modal-close-x" onclick="closeModal()">×</button>
       </div>
-      <div class="modal-row"><strong>סטטוס</strong>ממתין לאישור</div>
-      <div class="modal-row"><strong>קופי נלווה</strong>תקציב 2026 מאושר - חלוקת המשאבים לפי תוכניות העבודה...</div>
-      <div class="modal-row"><strong>שקפים</strong>3 שקפים בקרוסלה</div>
-      <div class="modal-row"><strong>מדיה</strong>3 תמונות הועלו (1.2 MB)</div>
-      <button class="modal-close" onclick="document.getElementById('modal').classList.remove('open')">סגור</button>
+
+      <div class="modal-body">
+
+        <!-- RIGHT (in RTL) = copy + status + actions -->
+        <div class="modal-col modal-col-right">
+          <div class="modal-section">
+            <div class="modal-section-label">📊 סטטוס</div>
+            <select class="status-dropdown" id="modal-status-select">
+              <option value="work">בעבודה</option>
+              <option value="design">בעיצוב</option>
+              <option value="pending">ממתין לאישור</option>
+              <option value="approved">אושר</option>
+              <option value="archived">נגנז</option>
+            </select>
+          </div>
+
+          <div class="modal-section">
+            <div class="modal-section-label">✏️ קופי נלווה (Caption)</div>
+            <textarea class="copy-textarea" id="modal-copy" placeholder="הקלד כאן את הקופי הנלווה לפוסט..."></textarea>
+          </div>
+
+          <div class="modal-section">
+            <div class="modal-section-label">💡 הסבר קצר (פנימי)</div>
+            <textarea class="copy-textarea" id="modal-explanation" style="min-height: 80px;" placeholder="הסבר הרעיון בקצרה - לעבודה פנימית של הצוות..."></textarea>
+          </div>
+
+          <div class="modal-actions">
+            <button class="btn btn-primary" onclick="saveAndClose()">💾 שמור שינויים</button>
+            <button class="btn btn-secondary" onclick="closeModal()">ביטול</button>
+          </div>
+        </div>
+
+        <!-- LEFT (in RTL) = media -->
+        <div class="modal-col">
+          <div class="modal-section-label" id="modal-media-label">🖼 מדיה</div>
+          <div class="media-grid-scroll">
+            <div class="media-grid" id="modal-media-grid"></div>
+          </div>
+        </div>
+
+      </div>
+
     </div>
   </div>
 
+  <!-- SYNC BANNER -->
+  <div class="sync-banner" id="sync-banner">✓ נשמר וסונכרן בכל התצוגות</div>
+
   <script>
+    // SHORTENED CLIENT NAMES (max 2 words / 1 word)
     const CLIENTS = [
-      { slug: 'adavot', name: 'עמותת אדוות', color: '#67E8F9' },
+      { slug: 'adavot', name: 'אדוות', color: '#67E8F9' },
       { slug: 'haim-plus', name: 'חיים בפלוס', color: '#5EEAD4' },
       { slug: 'shlichut', name: 'שליחות הוראה', color: '#FACC15' },
       { slug: 'forum-takana', name: 'פורום תקנה', color: '#FB923C' },
@@ -859,15 +894,15 @@
       { slug: 'meshek-ahia', name: 'משק אחיה', color: '#86EFAC' },
       { slug: 'agada', name: 'אגדה', color: '#F0ABFC' },
       { slug: 'emuna', name: 'תנועת אמונה', color: '#FDA4AF' },
-      { slug: 'yba78', name: 'ישיבות בני עקיבא', color: '#FBBF24' },
+      { slug: 'bnei-akiva', name: 'בני עקיבא', color: '#FBBF24' },
       { slug: 'liver', name: 'מושתלי כבד', color: '#A78BFA' },
       { slug: 'nevo', name: 'נבו תיירות', color: '#34D399' },
-      { slug: 'yba-merkaz', name: 'יבע מרכז', color: '#F472B6' },
+      { slug: 'yba-merkaz', name: 'יב"ע מרכז', color: '#F472B6' },
       { slug: 'nitzcha', name: 'ניצחה הרוח', color: '#60A5FA' },
       { slug: 'merkaz-katif', name: 'מרכז קטיף', color: '#FCA5A5' },
       { slug: 'charedim-tzava', name: 'חרדים לצבא', color: '#A3E635' },
-      { slug: 'dugri', name: 'דוגרי משרד החוץ', color: '#FDBA74' },
-      { slug: 'gush-katif', name: 'מורשת גוש קטיף', color: '#7DD3FC' },
+      { slug: 'dugri', name: 'דוגרי', color: '#FDBA74' },
+      { slug: 'gush-katif', name: 'גוש קטיף', color: '#7DD3FC' },
       { slug: 'farmina', name: 'פרמינה', color: '#FACC15' },
       { slug: 'echad-bachodesh', name: 'אחד בחודש', color: '#67E8F9' },
     ];
@@ -880,8 +915,8 @@
     }
 
     const STATUSES = ['work', 'design', 'pending', 'approved', 'archived'];
-    const STATUS_LABELS = { work: 'בעבודה', design: 'בעיצוב', pending: 'ממתין לאישור', approved: 'אושר', archived: 'נגנז' };
     const STATUS_LABELS_SHORT = { work: 'בעבודה', design: 'בעיצוב', pending: 'לאישור', approved: 'אושר', archived: 'נגנז' };
+    const STATUS_LABELS = { work: 'בעבודה', design: 'בעיצוב', pending: 'ממתין לאישור', approved: 'אושר', archived: 'נגנז' };
     const STATUS_COLORS = { work: '#3B82F6', design: '#F97316', pending: '#EAB308', approved: '#22C55E', archived: '#6B7280' };
     const STATUS_ORDER = ['pending', 'work', 'design', 'approved', 'archived'];
     const STATUS_WEIGHTS = [0.30, 0.25, 0.20, 0.20, 0.05];
@@ -889,6 +924,12 @@
     const TYPES = ['post', 'carousel', 'story', 'reel'];
     const TYPE_LABELS = { post: 'פוסט', carousel: 'קרוסלה', story: 'סטורי', reel: 'ריל' };
     const TYPE_LETTERS = { post: 'פ', carousel: 'ק', story: 'ס', reel: 'ר' };
+    const TYPE_SIZES = {
+      post: { label: '1080×1080', aspect: '1 / 1', slots: 1 },
+      carousel: { label: '1080×1080', aspect: '1 / 1', slots: 3 },
+      story: { label: '1080×1920 (9:16)', aspect: '9 / 16', slots: 1 },
+      reel: { label: '1080×1920 (9:16)', aspect: '9 / 16', slots: 1 },
+    };
 
     const SAMPLE_TITLES = [
       'תקציב 2026', 'חג השבועות', 'סיכום שבועי', 'מבצע קיץ', 'הכרזה רשמית',
@@ -912,7 +953,6 @@
     const TODAY = 24;
     function dayOfWeek(day) { return (5 + (day - 1)) % 7; }
     function isSaturday(day) { return dayOfWeek(day) === 6; }
-
     function gematria(n) {
       const ones = ['', 'א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ז', 'ח', 'ט'];
       const tens = ['', 'י', 'כ', 'ל', 'מ', 'נ', 'ס', 'ע', 'פ', 'צ'];
@@ -926,15 +966,13 @@
     function hebrewDate(day) {
       const iyarStart = 14;
       const sivanStart = 17;
-      if (day < sivanStart) {
-        return `${gematria(day + iyarStart - 1)} אייר`;
-      } else {
-        return `${gematria(day - sivanStart + 1)} סיון`;
-      }
+      if (day < sivanStart) return `${gematria(day + iyarStart - 1)} אייר`;
+      return `${gematria(day - sivanStart + 1)} סיון`;
     }
 
     function generateMonthTasks() {
       const tasks = [];
+      let taskId = 0;
       CLIENTS.forEach(client => {
         const itemCount = 3 + Math.floor(Math.random() * 4);
         const days = new Set();
@@ -946,36 +984,39 @@
         }
         days.forEach(day => {
           tasks.push({
-            day, client,
+            id: ++taskId, day, client,
             title: SAMPLE_TITLES[Math.floor(Math.random() * SAMPLE_TITLES.length)],
             type: TYPES[Math.floor(Math.random() * TYPES.length)],
             status: weightedRandom(STATUSES, STATUS_WEIGHTS),
+            copy: 'דוגמת קופי נלווה לפוסט. כאן יהיה הטקסט המלא שעולה לסושיאל. הקפטיון יכלול גם אימוג\'ים והאשטגים.\n\n#זליגרשומרון #תוכן',
+            explanation: 'הסבר פנימי על הרעיון - מה הזווית, מה ההוק, מי קהל היעד.',
           });
         });
       });
       const todayClients = [0, 2, 4, 6, 8, 10, 12, 14, 16];
       todayClients.forEach(idx => {
-        tasks.push({ day: 24, client: CLIENTS[idx], title: SAMPLE_TITLES[Math.floor(Math.random() * SAMPLE_TITLES.length)], type: TYPES[Math.floor(Math.random() * TYPES.length)], status: weightedRandom(STATUSES, STATUS_WEIGHTS) });
+        tasks.push({ id: ++taskId, day: 24, client: CLIENTS[idx], title: SAMPLE_TITLES[Math.floor(Math.random() * SAMPLE_TITLES.length)], type: TYPES[Math.floor(Math.random() * TYPES.length)], status: weightedRandom(STATUSES, STATUS_WEIGHTS), copy: 'דוגמת קופי.', explanation: 'הסבר.' });
       });
       [1, 3, 5, 7, 9, 11].forEach(idx => {
-        tasks.push({ day: 25, client: CLIENTS[idx], title: SAMPLE_TITLES[Math.floor(Math.random() * SAMPLE_TITLES.length)], type: TYPES[Math.floor(Math.random() * TYPES.length)], status: weightedRandom(STATUSES, STATUS_WEIGHTS) });
-      });
-      [2, 4, 6].forEach(idx => {
-        tasks.push({ day: 26, client: CLIENTS[idx], title: SAMPLE_TITLES[Math.floor(Math.random() * SAMPLE_TITLES.length)], type: TYPES[Math.floor(Math.random() * TYPES.length)], status: weightedRandom(STATUSES, STATUS_WEIGHTS) });
+        tasks.push({ id: ++taskId, day: 25, client: CLIENTS[idx], title: SAMPLE_TITLES[Math.floor(Math.random() * SAMPLE_TITLES.length)], type: TYPES[Math.floor(Math.random() * TYPES.length)], status: weightedRandom(STATUSES, STATUS_WEIGHTS), copy: 'דוגמת קופי.', explanation: 'הסבר.' });
       });
       [10, 14, 18, 22, 25].forEach(day => {
         for (let i = 0; i < 2; i++) {
-          tasks.push({ day, client: CLIENTS[Math.floor(Math.random() * CLIENTS.length)], title: SAMPLE_TITLES[Math.floor(Math.random() * SAMPLE_TITLES.length)], type: TYPES[Math.floor(Math.random() * TYPES.length)], status: 'archived' });
+          tasks.push({ id: ++taskId, day, client: CLIENTS[Math.floor(Math.random() * CLIENTS.length)], title: SAMPLE_TITLES[Math.floor(Math.random() * SAMPLE_TITLES.length)], type: TYPES[Math.floor(Math.random() * TYPES.length)], status: 'archived', copy: 'נגנז.', explanation: '.' });
         }
       });
       return tasks;
     }
 
-    const TASKS = generateMonthTasks();
+    let TASKS = generateMonthTasks();
     let CURRENT_MODE = 'tile';
+    let CURRENT_CLIENT = null; // null = Master View, else client slug
+    let CURRENT_TASK = null; // for modal
 
     function tasksForDay(day) {
-      return TASKS.filter(t => t.day === day);
+      let filtered = TASKS.filter(t => t.day === day);
+      if (CURRENT_CLIENT) filtered = filtered.filter(t => t.client.slug === CURRENT_CLIENT);
+      return filtered;
     }
 
     function renderWeekdays() {
@@ -983,21 +1024,16 @@
         HEBREW_DAYS.map((d, i) => `<div class="wd ${i >= 5 ? 'weekend' : ''}">${d}</div>`).join('');
     }
 
-    // ============== TILE RENDERER ==============
     function renderTile(t, dayNum) {
       const isArchived = t.status === 'archived';
       const tooltipData = JSON.stringify({
-        client: t.client.name,
-        clientColor: t.client.color,
-        title: t.title,
-        type: TYPE_LABELS[t.type],
-        status: STATUS_LABELS[t.status],
-        day: dayNum,
+        client: t.client.name, clientColor: t.client.color, title: t.title,
+        type: TYPE_LABELS[t.type], status: STATUS_LABELS[t.status], day: dayNum,
       }).replace(/"/g, '&quot;');
       return `<div class="tile ${isArchived ? 'is-archived' : ''}"
         style="--client-color:${t.client.color};--client-tint:${tint(t.client.color, 0.12)};--client-tint-strong:${tint(t.client.color, 0.20)}"
         data-tooltip="${tooltipData}"
-        onclick="event.stopPropagation(); openModal('${t.client.name}','${t.client.color}','${t.title}',${dayNum},'${t.status}','${t.type}')"
+        onclick="event.stopPropagation(); openModalById(${t.id})"
         onmouseenter="showTooltip(event, this)"
         onmouseleave="hideTooltip()"
         onmousemove="moveTooltip(event)">
@@ -1021,12 +1057,11 @@
       return html;
     }
 
-    // ============== LIST RENDERER (v4) ==============
     function renderChipList(t, dayNum) {
       const isArchived = t.status === 'archived';
       return `<div class="task-chip ${isArchived ? 'is-archived' : ''}"
         style="--client-color:${t.client.color};--client-tint:${tint(t.client.color, 0.10)};--client-tint-strong:${tint(t.client.color, 0.20)}"
-        onclick="event.stopPropagation(); openModal('${t.client.name}','${t.client.color}','${t.title}',${dayNum},'${t.status}','${t.type}')">
+        onclick="event.stopPropagation(); openModalById(${t.id})">
         <div class="task-chip-row1">
           <span class="task-client">${t.client.name}</span>
           <span class="task-status" style="background:${STATUS_COLORS[t.status]}"></span>
@@ -1053,8 +1088,7 @@
           if (items.length === 0 || status === 'archived') return;
           html += `<div class="status-group">
             <div class="status-group-head" style="--status-color:${STATUS_COLORS[status]}">
-              <span class="dot"></span>
-              ${STATUS_LABELS_SHORT[status]} · ${items.length}
+              <span class="dot"></span>${STATUS_LABELS_SHORT[status]} · ${items.length}
             </div>
             <div class="status-group-items">${items.map(t => renderChipList(t, dayNum)).join('')}</div>
           </div>`;
@@ -1066,7 +1100,6 @@
       return html;
     }
 
-    // ============== GRID ==============
     function renderGrid() {
       const container = document.getElementById('grid');
       const firstDow = 5;
@@ -1097,10 +1130,8 @@
           html += `<div class="${classes.join(' ')}" ${dataAttr}>`;
           if (inMonth) {
             const dayTasks = tasksForDay(dayNum);
-            const activeCount = dayTasks.filter(t => t.status !== 'archived').length;
             html += `<div class="cell-head">
               <span class="cell-num">${dayNum}</span>
-              ${activeCount > 0 ? `<span class="cell-count">${activeCount}</span>` : ''}
               <span class="cell-heb">${hebrewDate(dayNum)}</span>
             </div>`;
             html += `<div class="cell-body">${renderer(dayTasks, dayNum)}</div>`;
@@ -1114,9 +1145,77 @@
         html += '</div>';
       }
       container.innerHTML = html;
+      updateStats();
     }
 
-    // ============== TOOLTIP ==============
+    function updateStats() {
+      let tasks = TASKS;
+      if (CURRENT_CLIENT) tasks = tasks.filter(t => t.client.slug === CURRENT_CLIENT);
+      const active = tasks.filter(t => t.status !== 'archived').length;
+      const clientCount = CURRENT_CLIENT ? 1 : CLIENTS.length;
+      document.getElementById('stats-chip').innerHTML = `<strong>${clientCount}</strong> ${CURRENT_CLIENT ? 'לקוח' : 'לקוחות'} · <strong>${active}</strong> משימות`;
+    }
+
+    /* ===== CLIENT DROPDOWN ===== */
+    function buildClientMenu() {
+      const menu = document.getElementById('client-menu');
+      const counts = {};
+      CLIENTS.forEach(c => counts[c.slug] = TASKS.filter(t => t.client.slug === c.slug && t.status !== 'archived').length);
+
+      let html = `<div class="client-selector-option ${!CURRENT_CLIENT ? 'active' : ''}" onclick="selectClient(null)">
+        <span class="client-selector-option-dot" style="background:var(--accent-cyan)"></span>
+        <span>כל הלקוחות (Master View)</span>
+        <span class="client-selector-option-count">${TASKS.filter(t => t.status !== 'archived').length}</span>
+      </div>
+      <div class="client-selector-divider"></div>`;
+
+      CLIENTS.forEach(c => {
+        html += `<div class="client-selector-option ${CURRENT_CLIENT === c.slug ? 'active' : ''}" onclick="selectClient('${c.slug}')">
+          <span class="client-selector-option-dot" style="background:${c.color}"></span>
+          <span>${c.name}</span>
+          <span class="client-selector-option-count">${counts[c.slug]}</span>
+        </div>`;
+      });
+      menu.innerHTML = html;
+    }
+
+    function selectClient(slug) {
+      CURRENT_CLIENT = slug;
+      const trigger = document.getElementById('client-trigger');
+      const menu = document.getElementById('client-menu');
+      trigger.classList.remove('open');
+      menu.classList.remove('open');
+
+      if (slug === null) {
+        document.getElementById('trigger-dot').style.background = 'var(--accent-cyan)';
+        document.getElementById('trigger-name').textContent = 'כל הלקוחות (Master)';
+        document.getElementById('page-title-label').textContent = 'Master View';
+        document.getElementById('page-title-context').textContent = 'כל הלקוחות';
+      } else {
+        const client = CLIENTS.find(c => c.slug === slug);
+        document.getElementById('trigger-dot').style.background = client.color;
+        document.getElementById('trigger-name').textContent = client.name;
+        document.getElementById('page-title-label').textContent = client.name;
+        document.getElementById('page-title-context').textContent = 'גאנט חודשי';
+      }
+
+      buildClientMenu();
+      renderGrid();
+    }
+
+    document.getElementById('client-trigger').addEventListener('click', (e) => {
+      e.stopPropagation();
+      const trigger = document.getElementById('client-trigger');
+      const menu = document.getElementById('client-menu');
+      trigger.classList.toggle('open');
+      menu.classList.toggle('open');
+    });
+    document.addEventListener('click', () => {
+      document.getElementById('client-trigger').classList.remove('open');
+      document.getElementById('client-menu').classList.remove('open');
+    });
+
+    /* ===== TOOLTIP ===== */
     const tooltip = document.getElementById('tooltip');
     function showTooltip(e, el) {
       const data = JSON.parse(el.dataset.tooltip.replace(/&quot;/g, '"'));
@@ -1139,28 +1238,106 @@
       tooltip.style.left = x + 'px';
       tooltip.style.top = y + 'px';
     }
-    function hideTooltip() {
-      tooltip.classList.remove('visible');
-    }
+    function hideTooltip() { tooltip.classList.remove('visible'); }
     window.showTooltip = showTooltip;
     window.moveTooltip = moveTooltip;
     window.hideTooltip = hideTooltip;
 
-    // ============== ACTIONS ==============
-    window.addTask = function(day) {
-      alert(`הוסף משימה ליום ${day}.5.2026\n\nבמערכת האמיתית יפתח כאן form להוספת רעיון חדש.`);
-    };
-    window.openModal = function(clientName, clientColor, title, day, status, type) {
-      document.getElementById('modal-color-bar').style.background = clientColor;
-      document.getElementById('modal-title').textContent = title;
-      document.getElementById('modal-subtitle').textContent = `${clientName} · ${day}.5.2026 · ${TYPE_LABELS[type]}`;
+    /* ===== MODAL (wide, like the skill) ===== */
+    function openModalById(taskId) {
+      const t = TASKS.find(x => x.id === taskId);
+      if (!t) return;
+      CURRENT_TASK = t;
+      hideTooltip();
+
+      document.getElementById('modal-color-bar').style.background = t.client.color;
+      document.getElementById('modal-client-name').textContent = t.client.name;
+      document.getElementById('modal-type-chip').textContent = TYPE_LABELS[t.type];
+      document.getElementById('modal-title').textContent = t.title;
+      document.getElementById('modal-date').textContent = `${t.day}.5.2026`;
+      document.getElementById('modal-heb-date').textContent = hebrewDate(t.day);
+      document.getElementById('modal-day-name').textContent = `יום ${HEBREW_DAYS[dayOfWeek(t.day)]}`;
+      document.getElementById('modal-status-select').value = t.status;
+      document.getElementById('modal-copy').value = t.copy || '';
+      document.getElementById('modal-explanation').value = t.explanation || '';
+
+      // build media slots
+      const sizeInfo = TYPE_SIZES[t.type];
+      const slotCount = sizeInfo.slots;
+      document.getElementById('modal-media-label').innerHTML = `🖼 מדיה <span style="margin-inline-start:8px;font-size:10px;color:var(--accent-cyan);background:rgba(103,232,249,0.1);padding:2px 8px;border-radius:4px">${sizeInfo.label}</span>`;
+
+      const grid = document.getElementById('modal-media-grid');
+      let mediaHtml = '';
+      for (let i = 0; i < slotCount; i++) {
+        const hasImage = Math.random() > 0.4;
+        if (hasImage) {
+          mediaHtml += `<div class="media-slot has-image" style="--client-color:${t.client.color}">
+            <div class="media-slot-head" style="padding:10px 14px 0">
+              <div class="media-slot-label">
+                <span class="media-slot-label-num">${i + 1}</span>
+                ${t.type === 'carousel' ? `שקף ${i + 1}` : 'תמונה'}
+              </div>
+              <span class="media-slot-size">${sizeInfo.label}</span>
+            </div>
+            <div class="media-slot-image" style="--aspect:${sizeInfo.aspect};--client-color:${t.client.color}">${i + 1}</div>
+            <div class="media-slot-actions">
+              <button class="media-slot-action">החלף</button>
+              <button class="media-slot-action">הורד</button>
+              <button class="media-slot-action danger">מחק</button>
+            </div>
+          </div>`;
+        } else {
+          mediaHtml += `<div class="media-slot">
+            <div class="media-slot-head">
+              <div class="media-slot-label">
+                <span class="media-slot-label-num">${i + 1}</span>
+                ${t.type === 'carousel' ? `שקף ${i + 1}` : 'תמונה'}
+              </div>
+              <span class="media-slot-size">${sizeInfo.label}</span>
+            </div>
+            <div class="media-slot-placeholder" style="--aspect:${sizeInfo.aspect}">
+              <div class="media-slot-placeholder-icon">⬆</div>
+              <div class="media-slot-placeholder-text">העלה תמונה</div>
+              <div class="media-slot-placeholder-hint">או גרור לכאן</div>
+            </div>
+          </div>`;
+        }
+      }
+      if (t.type === 'carousel') {
+        mediaHtml += `<button class="btn btn-secondary" style="margin-top:8px;width:100%">+ הוסף שקף (עד 10)</button>`;
+      }
+      grid.innerHTML = mediaHtml;
+
       document.getElementById('modal').classList.add('open');
+    }
+
+    window.openModalById = openModalById;
+    window.closeModal = () => document.getElementById('modal').classList.remove('open');
+    window.saveAndClose = () => {
+      if (CURRENT_TASK) {
+        CURRENT_TASK.status = document.getElementById('modal-status-select').value;
+        CURRENT_TASK.copy = document.getElementById('modal-copy').value;
+        CURRENT_TASK.explanation = document.getElementById('modal-explanation').value;
+        renderGrid();
+        buildClientMenu();
+        showSyncBanner();
+      }
+      closeModal();
     };
     document.getElementById('modal').addEventListener('click', (e) => {
-      if (e.target.id === 'modal') document.getElementById('modal').classList.remove('open');
+      if (e.target.id === 'modal') closeModal();
     });
 
-    // ============== MODE SWITCHER ==============
+    function showSyncBanner() {
+      const b = document.getElementById('sync-banner');
+      b.classList.add('show');
+      setTimeout(() => b.classList.remove('show'), 2200);
+    }
+    window.addTask = function(day) {
+      alert(`הוסף משימה ליום ${day}.5.2026\n\nבמערכת האמיתית - form להוספת רעיון חדש.`);
+    };
+
+    /* ===== MODE SWITCHER ===== */
     document.querySelectorAll('.mode-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
@@ -1168,17 +1345,19 @@
         CURRENT_MODE = btn.dataset.mode;
         const desc = document.getElementById('mode-desc');
         if (CURRENT_MODE === 'tile') {
-          desc.innerHTML = '<strong>Tile View</strong> — קוביות קטנות, 2-3 בשורה. רואים שם לקוח + סוג + סטטוס. <strong>Hover</strong> על קוביה מציג tooltip עם פרטים מלאים. <strong>Click</strong> נכנס למשימה. דחיסות מקסימלית.';
+          desc.innerHTML = '<strong>Tile View</strong> — קוביות קומפקטיות. Hover מציג tooltip, Click נכנס למשימה. דחיסות מקסימלית.';
         } else {
-          desc.innerHTML = '<strong>List View</strong> — chips אופקיים, שורה אחת לכל משימה. שם הלקוח + סוג + כותרת המשימה גלויים בלי hover. מקובץ לפי סטטוס. הכי קריא לעבודה עמוקה.';
+          desc.innerHTML = '<strong>List View</strong> — chips אופקיים, כותרת המשימה גלויה בלי hover. מקובץ לפי סטטוס. נוח לעבודה עמוקה.';
         }
         renderGrid();
         hideTooltip();
       });
     });
 
+    /* ===== INIT ===== */
     renderWeekdays();
     renderGrid();
+    buildClientMenu();
   </script>
 </body>
 </html>
