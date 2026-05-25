@@ -28,9 +28,31 @@
     /* HEADER */
     .header { position: relative; display: flex; align-items: center; justify-content: space-between; padding: 22px 30px; gap: 24px; background: var(--paper); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow-md); margin-bottom: 18px; overflow: visible; flex-wrap: wrap; }
     .header::before { content: ''; position: absolute; inset-inline-start: 0; inset-block-start: 0; inset-block-end: 0; width: 3px; background: var(--accent-cyan); }
-    .brand { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
-    .brand-logo { width: 46px; height: 46px; background: var(--accent-cyan); border-radius: 11px; display: grid; place-items: center; color: var(--bg); font-weight: 800; font-size: 1.05rem; }
-    .brand-text h1 { font-family: var(--font-he); font-size: 22px; font-weight: 700; letter-spacing: -0.015em; line-height: 1.1; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .brand { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
+    .brand-block {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+      padding-inline-end: 22px;
+      border-inline-end: 1px solid var(--border);
+    }
+    .brand-logo-img {
+      height: 38px;
+      width: auto;
+      display: block;
+      filter: invert(1) hue-rotate(180deg) brightness(1.05);
+    }
+    .brand-en {
+      font-family: var(--font-en);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      color: var(--accent-cyan);
+      text-transform: uppercase;
+      line-height: 1;
+    }
+    .brand-text h1 { font-family: var(--font-he); font-size: 20px; font-weight: 700; letter-spacing: -0.015em; line-height: 1.1; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     .brand-text h1 .label { color: var(--accent-cyan); font-weight: 700; }
     .brand-text h1 .sep { width: 6px; height: 6px; background: var(--accent-cyan); border-radius: 2px; }
     .brand-text .header-meta-label { font-family: var(--font-en); font-size: 10px; font-weight: 500; letter-spacing: 0.32em; text-transform: uppercase; color: var(--accent-cyan); margin-block-end: 4px; display: block; }
@@ -843,9 +865,11 @@
     <!-- HEADER -->
     <div class="header">
       <div class="brand">
-        <div class="brand-logo">ZG</div>
+        <div class="brand-block">
+          <img src="logo.png" class="brand-logo-img" alt="זליגר שומרון">
+          <div class="brand-en">Gantt System</div>
+        </div>
         <div class="brand-text">
-          <span class="header-meta-label">ZST · GANTTS SYSTEM · v7</span>
           <h1>
             <span class="label" id="page-title-label">Master View</span>
             <span class="sep"></span>
