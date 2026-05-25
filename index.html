@@ -294,17 +294,80 @@
       border: 1px solid var(--client-color);
       border-inline-start-width: 3px;
       border-radius: 5px;
-      cursor: pointer;
+      cursor: grab;
       transition: all 0.12s ease;
       overflow: hidden;
     }
+    .tile:active { cursor: grabbing; }
     .tile:hover {
       transform: translateX(-2px);
       box-shadow: 0 4px 12px rgba(0,0,0,0.35);
       filter: brightness(1.15);
       z-index: 10;
     }
-    .tile.is-archived { opacity: 0.4; filter: grayscale(0.6); }
+    .tile.dragging {
+      opacity: 0.4;
+      transform: scale(0.95);
+      cursor: grabbing;
+    }
+    .tile.is-archived {
+      opacity: 0.4;
+      filter: grayscale(0.6);
+      cursor: not-allowed;
+    }
+
+    /* DROP TARGETS */
+    .cell.drop-target {
+      border-color: var(--accent-cyan) !important;
+      background: rgba(103,232,249,0.18) !important;
+      box-shadow: 0 0 0 2px var(--accent-cyan), 0 0 20px rgba(103,232,249,0.4) !important;
+      transform: scale(1.02);
+      z-index: 5;
+    }
+    .cell.drop-target::before {
+      content: '↓ שחרר כאן';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--accent-cyan);
+      color: var(--bg);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-family: var(--font-he);
+      font-size: 12px;
+      font-weight: 800;
+      z-index: 20;
+      pointer-events: none;
+      white-space: nowrap;
+      box-shadow: 0 4px 12px rgba(103,232,249,0.5);
+    }
+    .cell.drop-target.is-weekend::before {
+      content: '⚠ סוף שבוע - שחרר אם בכוונה';
+      background: var(--gold);
+    }
+    .cell.drop-blocked {
+      border-color: #EF4444 !important;
+      background: rgba(239,68,68,0.10) !important;
+      cursor: not-allowed !important;
+      position: relative;
+    }
+    .cell.drop-blocked::before {
+      content: '✕ תאריך עבר';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: #DC2626;
+      color: #FFFFFF;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-family: var(--font-he);
+      font-size: 12px;
+      font-weight: 800;
+      z-index: 20;
+      pointer-events: none;
+      white-space: nowrap;
+      box-shadow: 0 4px 12px rgba(220,38,38,0.5);
+    }
     .tile-status {
       width: 7px; height: 7px;
       border-radius: 50%;
@@ -898,6 +961,7 @@
         <ul class="quick-tips-list">
           <li><strong>סקירה מהירה</strong> - <kbd>Hover</kbd> על קוביה מציג tooltip עם כותרת המשימה ופרטים מלאים</li>
           <li><strong>פתיחת משימה</strong> - <kbd>Click</kbd> על קוביה פותח מודאל מלא לעריכה</li>
+          <li><strong>גרירה בין ימים</strong> - <kbd>Drag</kbd> קוביה ושחרר ביום אחר (תאריך עבר חסום)</li>
           <li><strong>הוספת משימה ליום</strong> - <kbd>Hover</kbd> על cell של יום → כפתור <kbd>+</kbd> כחול בפינה</li>
           <li><strong>מעבר ללקוח ספציפי</strong> - לחץ על "כל הלקוחות (Master)" בראש → בחר לקוח</li>
           <li><strong>חזרה ל-Master View</strong> - באותו dropdown → "כל הלקוחות"</li>
@@ -1272,11 +1336,16 @@
 
     function renderTile(t, dayNum) {
       const isArchived = t.status === 'archived';
-      // RTL order: status (rightmost), client name (middle), type letter (leftmost)
+      // Archived items are not draggable. Active items can be dragged between days.
+      const draggable = isArchived ? '' : 'draggable="true"';
       return `<div class="tile ${isArchived ? 'is-archived' : ''}"
+        ${draggable}
+        data-task-id="${t.id}"
         style="--client-color:${t.client.color};--client-tint:${tint(t.client.color, 0.12)};--client-tint-strong:${tint(t.client.color, 0.20)}"
         data-tooltip="${getTooltipData(t, dayNum)}"
         onclick="event.stopPropagation(); openModalById(${t.id})"
+        ondragstart="onDragStart(event, ${t.id})"
+        ondragend="onDragEnd(event)"
         onmouseenter="showTooltip(event, this)"
         onmouseleave="hideTooltip()"
         onmousemove="moveTooltip(event)">
@@ -1346,7 +1415,8 @@
             else if (dayNum !== TODAY && activeCount >= 5) classes.push('busy');
           }
           const dataAttr = inMonth && dayNum === TODAY ? `data-date="${dayNum}.5"` : '';
-          html += `<div class="${classes.join(' ')}" ${dataAttr}>`;
+          const dropHandlers = inMonth ? `ondragover="onDragOver(event, ${dayNum})" ondragleave="onDragLeave(event)" ondrop="onDrop(event, ${dayNum})"` : '';
+          html += `<div class="${classes.join(' ')}" ${dataAttr} ${dropHandlers} data-day="${dayNum}">`;
           if (inMonth) {
             html += `<div class="cell-head">
               <span class="cell-num">${dayNum}</span>
@@ -1577,6 +1647,58 @@
       setTimeout(() => b.classList.remove('show'), 2200);
     }
     window.addTask = (day) => alert(`הוסף משימה ליום ${day}.5.2026`);
+
+    /* DRAG & DROP — same behavior as skill (Iron Rule #14):
+       drag task to a new day; past dates are blocked with visual feedback */
+    let DRAGGED_TASK_ID = null;
+    window.onDragStart = function(e, taskId) {
+      DRAGGED_TASK_ID = taskId;
+      e.currentTarget.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+      try { e.dataTransfer.setData('text/plain', String(taskId)); } catch(err) {}
+      hideTooltip();
+    };
+    window.onDragEnd = function(e) {
+      e.currentTarget.classList.remove('dragging');
+      document.querySelectorAll('.cell.drop-target, .cell.drop-blocked').forEach(c => {
+        c.classList.remove('drop-target', 'drop-blocked', 'is-weekend');
+      });
+      DRAGGED_TASK_ID = null;
+    };
+    window.onDragOver = function(e, dayNum) {
+      if (DRAGGED_TASK_ID === null) return;
+      e.preventDefault();
+      const cell = e.currentTarget;
+      if (dayNum < TODAY) {
+        cell.classList.add('drop-blocked');
+        cell.classList.remove('drop-target', 'is-weekend');
+        e.dataTransfer.dropEffect = 'none';
+      } else {
+        cell.classList.add('drop-target');
+        cell.classList.remove('drop-blocked');
+        if (isSaturday(dayNum) || dayOfWeek(dayNum) === 5) cell.classList.add('is-weekend');
+        else cell.classList.remove('is-weekend');
+        e.dataTransfer.dropEffect = 'move';
+      }
+    };
+    window.onDragLeave = function(e) {
+      e.currentTarget.classList.remove('drop-target', 'drop-blocked', 'is-weekend');
+    };
+    window.onDrop = function(e, dayNum) {
+      e.preventDefault();
+      const cell = e.currentTarget;
+      cell.classList.remove('drop-target', 'drop-blocked', 'is-weekend');
+      if (dayNum < TODAY) return;
+      if (DRAGGED_TASK_ID !== null) {
+        const task = TASKS.find(t => t.id === DRAGGED_TASK_ID);
+        if (task && task.day !== dayNum) {
+          task.day = dayNum;
+          renderGrid();
+          buildClientMenu();
+          showSyncBanner();
+        }
+      }
+    };
 
     /* GUIDE TOGGLE - collapsible with localStorage memory */
     window.toggleGuide = function() {
